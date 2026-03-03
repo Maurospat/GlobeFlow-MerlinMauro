@@ -1,0 +1,17 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bali",
+      "description": "Premium Indonesian landscape representing luxury relocation",
+      "imageUrl": "https://picsum.photos/seed/globeflow-hero/1200/800",
+      "imageHint": "indonesia luxury"
+    },
+    {
+      "id": "case-manager-portrait",
+      "description": "Professional case manager portrait",
+      "imageUrl": "https://picsum.photos/seed/manager/400/400",
+      "imageHint": "professional person"
+    }
+  ]
+}
