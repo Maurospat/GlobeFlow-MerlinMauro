@@ -133,7 +133,7 @@ export default function AssetTransferPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-muted-foreground uppercase">Amount</label>
-                <Input value={transfer.amount.toLocaleString()} />
+                <Input value={transfer.amount.toLocaleString()} readOnly />
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold text-muted-foreground uppercase">Currency</label>
