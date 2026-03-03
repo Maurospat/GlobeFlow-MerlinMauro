@@ -21,24 +21,24 @@ import Link from 'next/link';
 
 export default function Dashboard() {
   const { t } = useLanguage();
-  const { documents, progress: actualProgress } = useCase();
+  const { documents, progress: actualProgress, transferStatus } = useCase();
   const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDisplayProgress(actualProgress), 75);
+    const timer = setTimeout(() => setDisplayProgress(actualProgress), 100);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
   // Finde den ersten Schritt, der noch nicht hochgeladen wurde
   const nextStepDoc = documents.find(d => d.status === 'not_uploaded');
   
-  // Zähle alle Dokumente, die bereits hochgeladen wurden (Status ungleich 'not_uploaded')
-  const uploadedDocs = documents.filter(d => d.status !== 'not_uploaded').length;
+  // Zähle alle Dokumente, die bereits hochgeladen wurden
+  const uploadedDocsCount = documents.filter(d => d.status !== 'not_uploaded').length;
   const totalDocs = documents.length;
 
   const stats = [
-    { title: t.dashboard.stats.docs, value: `${uploadedDocs}/${totalDocs}`, status: t.common.active, icon: FileText, href: '/documents' },
-    { title: t.dashboard.stats.transfer, value: '$250k', status: t.common.active, icon: ArrowRightLeft, href: '/transfer' },
+    { title: t.dashboard.stats.docs, value: `${uploadedDocsCount}/${totalDocs}`, status: t.common.active, icon: FileText, href: '/documents' },
+    { title: t.dashboard.stats.transfer, value: '$250k', status: transferStatus === 'completed' ? t.common.approved : t.common.active, icon: ArrowRightLeft, href: '/transfer' },
     { title: t.dashboard.stats.costs, value: '$3,420', status: t.common.pending, icon: Wallet, href: '/costs' },
     { title: t.dashboard.stats.manager, value: t.common.active, status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
@@ -70,9 +70,9 @@ export default function Dashboard() {
               </div>
               <Progress value={displayProgress} className="h-3" />
               <div className="flex gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-500" /> {t.dashboard.milestones.identity}</span>
-                <span className="flex items-center gap-1"><Clock className="w-4 h-4 text-accent" /> {t.dashboard.milestones.financials}</span>
-                <span className="flex items-center gap-1"><AlertCircle className="w-4 h-4 text-slate-300" /> {t.dashboard.milestones.visa}</span>
+                <span className="flex items-center gap-1"><CheckCircle2 className={`w-4 h-4 ${displayProgress > 30 ? 'text-green-500' : 'text-slate-300'}`} /> {t.dashboard.milestones.identity}</span>
+                <span className="flex items-center gap-1"><Clock className={`w-4 h-4 ${displayProgress > 60 ? 'text-green-500' : 'text-accent'}`} /> {t.dashboard.milestones.financials}</span>
+                <span className="flex items-center gap-1"><AlertCircle className={`w-4 h-4 ${displayProgress === 100 ? 'text-green-500' : 'text-slate-300'}`} /> {t.dashboard.milestones.visa}</span>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function Dashboard() {
                   <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10">
                     <stat.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="text-xs font-semibold px-2 py-1 rounded-full bg-accent/10 text-accent-foreground">
+                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${stat.status === t.common.approved ? 'bg-green-100 text-green-700' : 'bg-accent/10 text-accent-foreground'}`}>
                     {stat.status}
                   </span>
                 </div>
@@ -107,22 +107,45 @@ export default function Dashboard() {
             <CardDescription>{t.dashboard.nextStepDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Link href="/documents">
-              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
+            {nextStepDoc ? (
+              <Link href="/documents">
+                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
+                    <div>
+                      <p className="font-semibold">{nextStepDoc.title}</p>
+                      <p className="text-sm text-muted-foreground">{nextStepDoc.whyNeeded}</p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="icon" className="transition-all duration-75"><ArrowRight className="w-4 h-4" /></Button>
+                </div>
+              </Link>
+            ) : transferStatus !== 'completed' ? (
+              <Link href="/transfer">
+                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
+                    <div>
+                      <p className="font-semibold">{t.nav.transfer}</p>
+                      <p className="text-sm text-muted-foreground">{t.dashboard.nextStepTransfer}</p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="icon" className="transition-all duration-75"><ArrowRight className="w-4 h-4" /></Button>
+                </div>
+              </Link>
+            ) : (
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 animate-in fade-in duration-150">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
+                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-green-500 font-bold shadow-sm">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
                   <div>
-                    <p className="font-semibold">
-                      {nextStepDoc ? nextStepDoc.title : t.common.approved}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {nextStepDoc ? nextStepDoc.whyNeeded : t.dashboard.nextStepDesc}
-                    </p>
+                    <p className="font-semibold text-green-700">{t.dashboard.nextStepFinished}</p>
+                    <p className="text-sm text-green-600">{t.dashboard.journeyProgress.replace('{progress}', '100')}</p>
                   </div>
                 </div>
-                <Button variant="ghost" size="icon"><ArrowRight className="w-4 h-4" /></Button>
               </div>
-            </Link>
+            )}
           </CardContent>
         </Card>
 
@@ -134,9 +157,9 @@ export default function Dashboard() {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-sm">{t.dashboard.accuracy}</span>
-                <span className="text-sm font-bold">80% {t.dashboard.targetLabel}</span>
+                <span className="text-sm font-bold">{displayProgress}% {t.dashboard.targetLabel}</span>
               </div>
-              <Progress value={60} className="h-2 bg-white/20" />
+              <Progress value={displayProgress} className="h-2 bg-white/20" />
             </div>
           </CardContent>
         </Card>

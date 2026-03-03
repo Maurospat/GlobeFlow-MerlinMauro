@@ -72,6 +72,8 @@ export const translations = {
       },
       nextStepAction: 'Upload Tax Residency Certificate',
       nextStepDesc: 'Needed for initial visa pre-approval.',
+      nextStepTransfer: 'Initiate or complete your asset transfer.',
+      nextStepFinished: 'All relocation steps are completed!',
       targets: 'Success Targets',
       accuracy: 'Document Accuracy',
       targetLabel: 'Target'
@@ -143,7 +145,7 @@ export const translations = {
       title: 'Case Manager',
       subtitle: 'Your dedicated relocation expert.',
       specialist: 'Senior Relocation Manager',
-      certified: 'Certified Immigration Specialist',
+      certified: 'Zertifizierter Einwanderungsspezialist',
       responseSLA: 'Response SLA',
       book: 'Book Consultation',
       messages: 'Secure Messages',
@@ -155,7 +157,7 @@ export const translations = {
       },
       chat: {
         m1: "Hello Alexander! I've reviewed your Passport copy. Everything looks perfect.",
-        u1: "Thanks, Sarah. When should I expect the tax certificate review to finish?",
+        u1: "Thanks, Sarah. When should I expect the tax review to finish?",
         m2: "Our tax team is finalizing it now. Expect an update by tomorrow morning."
       },
       faqs: [
@@ -251,6 +253,8 @@ export const translations = {
       },
       nextStepAction: 'Steuersitzbescheinigung hochladen',
       nextStepDesc: 'Wichtig für die erste Visum-Vorabgenehmigung.',
+      nextStepTransfer: 'Kapitaltransfer einleiten oder abschließen.',
+      nextStepFinished: 'Alle Schritte für Ihren Umzug sind abgeschlossen!',
       targets: 'Erfolgsziele',
       accuracy: 'Dokumentengenauigkeit',
       targetLabel: 'Ziel'
