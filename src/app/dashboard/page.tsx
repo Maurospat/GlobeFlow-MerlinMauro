@@ -16,32 +16,37 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react';
-import { initialDocuments, initialTransfer } from '@/app/data/mockData';
+import { initialDocuments } from '@/app/data/mockData';
 import Link from 'next/link';
 
 export default function Dashboard() {
   const { t } = useLanguage();
   const [progress, setProgress] = useState(0);
 
+  // Calculate actual progress based on approved documents
+  const completedDocs = initialDocuments.filter(d => d.status === 'approved').length;
+  const totalDocs = initialDocuments.length;
+  const actualProgress = Math.round((completedDocs / totalDocs) * 100);
+
   useEffect(() => {
-    // Simulate initial calculation
-    const timer = setTimeout(() => setProgress(35), 500);
+    // Faster animation for progress bar
+    const timer = setTimeout(() => setProgress(actualProgress), 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [actualProgress]);
 
   const stats = [
-    { title: t.nav.documents, value: '2/6', status: 'In Progress', icon: FileText, href: '/documents' },
+    { title: t.nav.documents, value: `${completedDocs}/${totalDocs}`, status: 'In Progress', icon: FileText, href: '/documents' },
     { title: t.nav.transfer, value: '$250k', status: 'Initiated', icon: ArrowRightLeft, href: '/transfer' },
     { title: 'Total Estimated Costs', value: '$3,420', status: 'Estimated', icon: Wallet, href: '/costs' },
     { title: 'Case Manager', value: 'Ready', status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-8 animate-in fade-in duration-200">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary">{t.dashboard.welcome} Alexander</h1>
-          <p className="text-muted-foreground mt-1">Your Indonesia relocation journey is 35% complete.</p>
+          <p className="text-muted-foreground mt-1">Your Indonesia relocation journey is {progress}% complete.</p>
         </div>
         <Link href="/documents">
           <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">

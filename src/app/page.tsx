@@ -33,7 +33,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
-        <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-left duration-700">
+        <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-left duration-300">
           <h1 className="text-5xl md:text-7xl font-headline font-extrabold text-primary leading-tight">
             {t.landing.heroTitle}
           </h1>
@@ -56,7 +56,7 @@ export default function LandingPage() {
           </p>
         </div>
         
-        <div className="flex-1 relative animate-in fade-in zoom-in duration-1000">
+        <div className="flex-1 relative animate-in fade-in zoom-in duration-500">
           <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
             <Image 
               src={heroImage?.imageUrl || "https://picsum.photos/seed/bali/800/600"} 

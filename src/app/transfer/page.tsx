@@ -28,10 +28,11 @@ export default function AssetTransferPage() {
 
   const startTransfer = () => {
     setIsStarting(true);
+    // Accelerated simulation speed
     setTimeout(() => {
       setTransfer({ ...transfer, status: 'in_transit' });
       setIsStarting(false);
-    }, 2000);
+    }, 400);
   };
 
   const getStepStatus = (stepStatus: TransferStatus, currentStatus: TransferStatus) => {
@@ -60,7 +61,7 @@ export default function AssetTransferPage() {
   );
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 max-w-4xl mx-auto animate-in fade-in duration-200">
       <header>
         <h1 className="text-3xl font-headline font-bold text-primary">{t.nav.transfer}</h1>
         <p className="text-muted-foreground">Manage your secure capital transfer to Indonesian banking partners.</p>
