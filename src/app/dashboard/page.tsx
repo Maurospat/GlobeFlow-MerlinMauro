@@ -23,40 +23,39 @@ export default function Dashboard() {
   const { t } = useLanguage();
   const [progress, setProgress] = useState(0);
 
-  // Calculate actual progress based on approved documents
   const completedDocs = initialDocuments.filter(d => d.status === 'approved').length;
   const totalDocs = initialDocuments.length;
   const actualProgress = Math.round((completedDocs / totalDocs) * 100);
 
   useEffect(() => {
-    // Faster animation for progress bar
-    const timer = setTimeout(() => setProgress(actualProgress), 100);
+    const timer = setTimeout(() => setProgress(actualProgress), 50);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
   const stats = [
-    { title: t.nav.documents, value: `${completedDocs}/${totalDocs}`, status: 'In Progress', icon: FileText, href: '/documents' },
-    { title: t.nav.transfer, value: '$250k', status: 'Initiated', icon: ArrowRightLeft, href: '/transfer' },
-    { title: 'Total Estimated Costs', value: '$3,420', status: 'Estimated', icon: Wallet, href: '/costs' },
-    { title: 'Case Manager', value: 'Ready', status: 'SLA Active', icon: UserCircle, href: '/manager' },
+    { title: t.dashboard.stats.docs, value: `${completedDocs}/${totalDocs}`, status: t.common.under_review, icon: FileText, href: '/documents' },
+    { title: t.dashboard.stats.transfer, value: '$250k', status: 'Initiated', icon: ArrowRightLeft, href: '/transfer' },
+    { title: t.dashboard.stats.costs, value: '$3,420', status: 'Estimated', icon: Wallet, href: '/costs' },
+    { title: t.dashboard.stats.manager, value: 'Ready', status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
+    <div className="space-y-8 animate-in fade-in duration-150">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary">{t.dashboard.welcome} Alexander</h1>
-          <p className="text-muted-foreground mt-1">Your Indonesia relocation journey is {progress}% complete.</p>
+          <p className="text-muted-foreground mt-1">
+            {t.dashboard.journeyProgress.replace('{progress}', progress.toString())}
+          </p>
         </div>
         <Link href="/documents">
           <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
-            Continue Journey
+            {t.landing.cta}
             <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </Link>
       </header>
 
-      {/* Main Progress Card */}
       <Card className="glass-card overflow-hidden">
         <CardContent className="p-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -67,16 +66,15 @@ export default function Dashboard() {
               </div>
               <Progress value={progress} className="h-3" />
               <div className="flex gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-500" /> Identity</span>
-                <span className="flex items-center gap-1"><Clock className="w-4 h-4 text-accent" /> Financials</span>
-                <span className="flex items-center gap-1"><AlertCircle className="w-4 h-4 text-slate-300" /> Visa Issuance</span>
+                <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-500" /> {t.dashboard.milestones.identity}</span>
+                <span className="flex items-center gap-1"><Clock className="w-4 h-4 text-accent" /> {t.dashboard.milestones.financials}</span>
+                <span className="flex items-center gap-1"><AlertCircle className="w-4 h-4 text-slate-300" /> {t.dashboard.milestones.visa}</span>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Status Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
@@ -99,7 +97,6 @@ export default function Dashboard() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        {/* Next Steps */}
         <Card className="md:col-span-2 border-slate-100">
           <CardHeader>
             <CardTitle>{t.common.nextSteps}</CardTitle>
@@ -116,20 +113,9 @@ export default function Dashboard() {
               </div>
               <Button variant="ghost" size="icon"><ArrowRight className="w-4 h-4" /></Button>
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-colors opacity-70">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-muted-foreground font-bold shadow-sm">2</div>
-                <div>
-                  <p className="font-semibold">Confirm Asset Transfer Setup</p>
-                  <p className="text-sm text-muted-foreground">Verify home bank details with your manager.</p>
-                </div>
-              </div>
-              <Button variant="ghost" size="icon"><ArrowRight className="w-4 h-4" /></Button>
-            </div>
           </CardContent>
         </Card>
 
-        {/* Success Targets */}
         <Card className="border-slate-100 bg-primary text-white">
           <CardHeader>
             <CardTitle className="text-white">Success Targets</CardTitle>
@@ -141,16 +127,6 @@ export default function Dashboard() {
                 <span className="text-sm font-bold">80% Target</span>
               </div>
               <Progress value={60} className="h-2 bg-white/20" />
-            </div>
-            <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm">Response Time</span>
-                <span className="text-sm font-bold">&lt; 12h Avg</span>
-              </div>
-              <Progress value={95} className="h-2 bg-white/20" />
-            </div>
-            <div className="p-4 bg-white/10 rounded-lg text-sm border border-white/10">
-              "We aim for 100% transparency in your financial immigration process."
             </div>
           </CardContent>
         </Card>
