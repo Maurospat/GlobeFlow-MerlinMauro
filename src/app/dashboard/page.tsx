@@ -28,19 +28,19 @@ export default function Dashboard() {
   const actualProgress = Math.round((completedDocs / totalDocs) * 100);
 
   useEffect(() => {
-    const timer = setTimeout(() => setProgress(actualProgress), 50);
+    const timer = setTimeout(() => setProgress(actualProgress), 100);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
   const stats = [
     { title: t.dashboard.stats.docs, value: `${completedDocs}/${totalDocs}`, status: t.common.under_review, icon: FileText, href: '/documents' },
-    { title: t.dashboard.stats.transfer, value: '$250k', status: 'Initiated', icon: ArrowRightLeft, href: '/transfer' },
-    { title: t.dashboard.stats.costs, value: '$3,420', status: 'Estimated', icon: Wallet, href: '/costs' },
-    { title: t.dashboard.stats.manager, value: 'Ready', status: 'SLA Active', icon: UserCircle, href: '/manager' },
+    { title: t.dashboard.stats.transfer, value: '$250k', status: t.common.active, icon: ArrowRightLeft, href: '/transfer' },
+    { title: t.dashboard.stats.costs, value: '$3,420', status: t.common.pending, icon: Wallet, href: '/costs' },
+    { title: t.dashboard.stats.manager, value: t.common.active, status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-150">
+    <div className="space-y-8 animate-in fade-in duration-100">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary">{t.dashboard.welcome} Alexander</h1>
@@ -49,7 +49,7 @@ export default function Dashboard() {
           </p>
         </div>
         <Link href="/documents">
-          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold transition-all duration-75">
             {t.landing.cta}
             <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
@@ -78,10 +78,10 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
-            <Card className="hover:shadow-md transition-shadow cursor-pointer border-slate-100">
+            <Card className="hover:shadow-md transition-all duration-75 cursor-pointer border-slate-100 group">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-primary/5 rounded-lg">
+                  <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10">
                     <stat.icon className="w-6 h-6 text-primary" />
                   </div>
                   <span className="text-xs font-semibold px-2 py-1 rounded-full bg-accent/10 text-accent-foreground">
@@ -100,15 +100,15 @@ export default function Dashboard() {
         <Card className="md:col-span-2 border-slate-100">
           <CardHeader>
             <CardTitle>{t.common.nextSteps}</CardTitle>
-            <CardDescription>Prioritized actions for your current stage.</CardDescription>
+            <CardDescription>{t.dashboard.nextStepDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-colors">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-colors duration-75">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
                 <div>
-                  <p className="font-semibold">Upload Tax Residency Certificate</p>
-                  <p className="text-sm text-muted-foreground">Needed for initial visa pre-approval.</p>
+                  <p className="font-semibold">{t.dashboard.nextStepAction}</p>
+                  <p className="text-sm text-muted-foreground">{t.dashboard.nextStepDesc}</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon"><ArrowRight className="w-4 h-4" /></Button>
@@ -118,13 +118,13 @@ export default function Dashboard() {
 
         <Card className="border-slate-100 bg-primary text-white">
           <CardHeader>
-            <CardTitle className="text-white">Success Targets</CardTitle>
+            <CardTitle className="text-white">{t.dashboard.targets}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-sm">Document Accuracy</span>
-                <span className="text-sm font-bold">80% Target</span>
+                <span className="text-sm">{t.dashboard.accuracy}</span>
+                <span className="text-sm font-bold">80% {t.dashboard.targetLabel}</span>
               </div>
               <Progress value={60} className="h-2 bg-white/20" />
             </div>

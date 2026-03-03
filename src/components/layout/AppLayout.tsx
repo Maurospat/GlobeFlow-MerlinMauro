@@ -89,8 +89,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Menu Overlay */}
       {mounted && isSidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)}>
-          <div className="absolute left-0 top-0 bottom-0 w-3/4 bg-white p-6 flex flex-col gap-4 animate-in slide-in-from-left duration-150" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[60] bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)}>
+          <div className="absolute left-0 top-0 bottom-0 w-3/4 bg-white p-6 flex flex-col gap-4 animate-in slide-in-from-left duration-100" onClick={e => e.stopPropagation()}>
              <div className="flex items-center gap-2 mb-6">
               <Globe className="text-primary" />
               <span className="font-headline font-bold text-xl text-primary">GlobeFlow</span>
@@ -122,7 +122,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/">
             <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive transition-colors duration-100">
               <LogOut className="mr-3 w-5 h-5" />
-              Logout
+              {t.common.logout}
             </Button>
           </Link>
         </div>
@@ -160,12 +160,12 @@ function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 transition-all duration-100">
+        <Button variant="outline" size="sm" className="gap-2 transition-all duration-75">
           <Globe className="w-4 h-4" />
           {language.toUpperCase()}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="animate-in fade-in zoom-in duration-100">
+      <DropdownMenuContent align="end" className="animate-in fade-in zoom-in duration-75">
         <DropdownMenuItem onClick={() => setLanguage('en')}>English</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('de')}>Deutsch</DropdownMenuItem>
       </DropdownMenuContent>

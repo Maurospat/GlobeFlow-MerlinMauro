@@ -27,7 +27,6 @@ import {
 
 export default function DocumentsPage() {
   const { t } = useLanguage();
-  const [documents] = useState(initialDocuments);
   const [loadingAi, setLoadingAi] = useState<string | null>(null);
   const [aiGuidance, setAiGuidance] = useState<string | null>(null);
 
@@ -41,6 +40,15 @@ export default function DocumentsPage() {
     }
   };
 
+  const docTranslations = [
+    { ...initialDocuments[0], title: t.documents.items.passport.title, whyNeeded: t.documents.items.passport.why, howToGet: t.documents.items.passport.how },
+    { ...initialDocuments[1], title: t.documents.items.address.title, whyNeeded: t.documents.items.address.why, howToGet: t.documents.items.address.how },
+    { ...initialDocuments[2], title: t.documents.items.tax.title, whyNeeded: t.documents.items.tax.why, howToGet: t.documents.items.tax.how },
+    { ...initialDocuments[3], title: t.documents.items.bank.title, whyNeeded: t.documents.items.bank.why, howToGet: t.documents.items.bank.how },
+    { ...initialDocuments[4], title: t.documents.items.funds.title, whyNeeded: t.documents.items.funds.why, howToGet: t.documents.items.funds.how },
+    { ...initialDocuments[5], title: t.documents.items.visa.title, whyNeeded: t.documents.items.visa.why, howToGet: t.documents.items.visa.how },
+  ];
+
   const handleAiGuidance = async (docTitle: string) => {
     setLoadingAi(docTitle);
     try {
@@ -53,10 +61,10 @@ export default function DocumentsPage() {
     }
   };
 
-  const completedCount = documents.filter(d => d.status === 'approved').length;
+  const completedCount = initialDocuments.filter(d => d.status === 'approved').length;
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-150">
+    <div className="space-y-6 animate-in fade-in duration-100">
       <header>
         <h1 className="text-3xl font-headline font-bold text-primary">{t.documents.title}</h1>
         <p className="text-muted-foreground">{t.documents.subtitle}</p>
@@ -67,13 +75,13 @@ export default function DocumentsPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">{t.documents.priority}</h2>
             <span className="text-sm font-medium text-muted-foreground">
-              {t.documents.completed.replace('{count}', completedCount.toString()).replace('{total}', documents.length.toString())}
+              {t.documents.completed.replace('{count}', completedCount.toString()).replace('{total}', initialDocuments.length.toString())}
             </span>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            {documents.map((doc) => (
-              <Card key={doc.id} className="border-slate-100 hover:border-primary/20 transition-all flex flex-col h-full">
+            {docTranslations.map((doc) => (
+              <Card key={doc.id} className="border-slate-100 hover:border-primary/20 transition-all duration-75 flex flex-col h-full">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
@@ -94,7 +102,7 @@ export default function DocumentsPage() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0 flex gap-2">
-                  <Button variant="outline" className="flex-1 gap-2 border-slate-200">
+                  <Button variant="outline" className="flex-1 gap-2 border-slate-200 transition-all duration-75">
                     <Upload className="w-4 h-4" />
                     {t.common.upload}
                   </Button>
@@ -104,7 +112,7 @@ export default function DocumentsPage() {
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="text-primary"
+                        className="text-primary transition-all duration-75"
                         onClick={() => handleAiGuidance(doc.title)}
                       >
                         {loadingAi === doc.title ? <Loader2 className="w-4 h-4 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
@@ -133,7 +141,7 @@ export default function DocumentsPage() {
                         )}
                       </div>
                       <div className="mt-4 flex justify-end">
-                        <Button onClick={() => setAiGuidance(null)} className="bg-primary">{t.common.close}</Button>
+                        <Button onClick={() => setAiGuidance(null)} className="bg-primary transition-all duration-75">{t.common.close}</Button>
                       </div>
                     </DialogContent>
                   </Dialog>
@@ -143,7 +151,7 @@ export default function DocumentsPage() {
           </div>
         </section>
 
-        <Card className="bg-primary/5 border-primary/10 mb-20 md:mb-0">
+        <Card className="bg-primary/5 border-primary/10 mb-8">
           <CardContent className="p-6 flex items-center gap-6">
             <div className="hidden md:flex w-16 h-16 bg-white rounded-full items-center justify-center border shadow-sm shrink-0">
               <CheckCircle className="w-8 h-8 text-green-500" />
@@ -152,7 +160,7 @@ export default function DocumentsPage() {
               <h3 className="text-lg font-bold text-primary">{t.documents.milestoneTitle}</h3>
               <p className="text-sm text-slate-600">{t.documents.milestoneDesc}</p>
             </div>
-            <Button className="ml-auto bg-primary text-white shrink-0">{t.common.view}</Button>
+            <Button className="ml-auto bg-primary text-white shrink-0 transition-all duration-75">{t.common.view}</Button>
           </CardContent>
         </Card>
       </div>

@@ -11,17 +11,17 @@ export default function CostsDashboard() {
   const { t } = useLanguage();
 
   const costItems = [
-    { name: 'Transfer Fee', description: t.language === 'de' ? 'Bank-zu-Bank Überweisungsgebühren' : 'Bank to Bank wiring costs', amount: 0, status: t.common.approved },
-    { name: 'FX Conversion', description: t.language === 'de' ? 'Basierend auf 0,15% Marge' : 'Based on 0.15% margin on mid-market', amount: 375, status: t.common.under_review },
-    { name: 'Visa Processing', description: t.language === 'de' ? 'Behördengebühren & Verwaltung' : 'Government fees & administration', amount: 1500, status: 'Fixed' },
-    { name: 'Consultancy', description: t.language === 'de' ? 'Beratergebühr (6 Monate)' : 'Personal case manager fee (6 months)', amount: 1200, status: 'Fixed' },
-    { name: 'Secure Vaulting', description: t.language === 'de' ? 'Digitaler Speicher & Sicherheit' : 'Digital document storage & security', amount: 345, status: 'Annual' },
+    { name: t.costs.items.transfer, description: t.costs.items.transferDesc, amount: 0, status: t.common.approved },
+    { name: t.costs.items.fx, description: t.costs.items.fxDesc, amount: 375, status: t.common.under_review },
+    { name: t.costs.items.visa, description: t.costs.items.visaDesc, amount: 1500, status: 'Fixed' },
+    { name: t.costs.items.consult, description: t.costs.items.consultDesc, amount: 1200, status: 'Fixed' },
+    { name: t.costs.items.vault, description: t.costs.items.vaultDesc, amount: 345, status: 'Annual' },
   ];
 
   const total = costItems.reduce((acc, item) => acc + item.amount, 0);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-150">
+    <div className="space-y-8 animate-in fade-in duration-100 pb-12">
       <header>
         <h1 className="text-3xl font-headline font-bold text-primary">{t.costs.title}</h1>
         <p className="text-muted-foreground">{t.costs.subtitle}</p>
@@ -71,7 +71,6 @@ export default function CostsDashboard() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t.nav.manager}</TableHead>
                 <TableHead>{t.costs.description}</TableHead>
                 <TableHead>{t.common.status}</TableHead>
                 <TableHead className="text-right">{t.costs.amount}</TableHead>
@@ -80,8 +79,10 @@ export default function CostsDashboard() {
             <TableBody>
               {costItems.map((item) => (
                 <TableRow key={item.name}>
-                  <TableCell className="font-semibold">{item.name}</TableCell>
-                  <TableCell className="text-muted-foreground text-sm">{item.description}</TableCell>
+                  <TableCell>
+                    <div className="font-semibold">{item.name}</div>
+                    <div className="text-muted-foreground text-xs">{item.description}</div>
+                  </TableCell>
                   <TableCell>
                     <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase
                       ${item.status === t.common.approved ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
@@ -92,7 +93,7 @@ export default function CostsDashboard() {
                 </TableRow>
               ))}
               <TableRow className="bg-slate-50/50">
-                <TableCell colSpan={3} className="font-bold text-lg">{t.language === 'de' ? 'Gesamtverpflichtung' : 'Total Commitment'}</TableCell>
+                <TableCell colSpan={2} className="font-bold text-lg">{t.costs.totalCommit}</TableCell>
                 <TableCell className="text-right font-bold text-lg text-primary">${total.toLocaleString()}</TableCell>
               </TableRow>
             </TableBody>
@@ -106,15 +107,14 @@ export default function CostsDashboard() {
             <Info className="w-5 h-5 text-accent" />
             {t.costs.drivers}
           </h3>
-          <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-            <p>{t.language === 'de' ? 'Unsere Gebühren sind auf maximale Klarheit ausgelegt.' : 'Our fees are structured for maximum clarity.'}</p>
-            <p>{t.language === 'de' ? 'GlobeFlow nutzt institutionelle Bankkurse, um Ihnen Geld zu sparen.' : 'GlobeFlow leverages institutional bank rates to save you money.'}</p>
-          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {t.costs.driversText}
+          </p>
         </div>
         <div className="p-6 bg-slate-50 rounded-2xl border flex items-center justify-between">
           <div className="space-y-2">
             <h4 className="font-bold">{t.costs.quote}</h4>
-            <p className="text-xs text-muted-foreground">{t.language === 'de' ? 'Für Transfers über 1 Mio. $ kontaktieren Sie uns.' : 'For transfers above $1M, contact us.'}</p>
+            <p className="text-xs text-muted-foreground">{t.costs.quoteSub}</p>
           </div>
           <PieChart className="w-12 h-12 text-primary opacity-20" />
         </div>

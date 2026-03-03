@@ -23,17 +23,17 @@ export default function LandingPage() {
         </div>
         <div className="flex gap-4">
           <Link href="/dashboard">
-            <Button variant="ghost">Login</Button>
+            <Button variant="ghost" className="transition-all duration-75">{t.common.login}</Button>
           </Link>
           <Link href="/dashboard">
-            <Button className="bg-primary hover:bg-primary/90">Sign Up</Button>
+            <Button className="bg-primary hover:bg-primary/90 transition-all duration-75">{t.common.signup}</Button>
           </Link>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
-        <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-left duration-300">
+        <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-left duration-100">
           <h1 className="text-5xl md:text-7xl font-headline font-extrabold text-primary leading-tight">
             {t.landing.heroTitle}
           </h1>
@@ -42,13 +42,13 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Link href="/dashboard">
-              <Button size="lg" className="bg-primary text-white h-14 px-8 text-lg rounded-full group">
+              <Button size="lg" className="bg-primary text-white h-14 px-8 text-lg rounded-full group transition-all duration-75">
                 {t.landing.cta}
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full">
-              Book Consultation
+            <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full transition-all duration-75">
+              {t.common.book}
             </Button>
           </div>
           <p className="text-sm font-medium text-muted-foreground italic">
@@ -56,7 +56,7 @@ export default function LandingPage() {
           </p>
         </div>
         
-        <div className="flex-1 relative animate-in fade-in zoom-in duration-500">
+        <div className="flex-1 relative animate-in fade-in zoom-in duration-150">
           <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
             <Image 
               src={heroImage?.imageUrl || "https://picsum.photos/seed/bali/800/600"} 
@@ -72,8 +72,8 @@ export default function LandingPage() {
                   <ShieldCheck className="text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-bold">100% Success Rate</p>
-                  <p className="text-white/80 text-sm">For Golden Visa applicants in 2024</p>
+                  <p className="text-white font-bold">{t.landing.successRate}</p>
+                  <p className="text-white/80 text-sm">{t.landing.goldenVisa}</p>
                 </div>
               </div>
             </div>
@@ -84,22 +84,22 @@ export default function LandingPage() {
       {/* Features Grid */}
       <section className="bg-slate-50 py-24">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-headline font-bold text-center mb-16">The GlobeFlow Experience</h2>
+          <h2 className="text-3xl font-headline font-bold text-center mb-16">{t.landing.experience}</h2>
           <div className="grid md:grid-cols-3 gap-12">
             <FeatureCard 
               icon={<ShieldCheck className="w-8 h-8" />} 
-              title="Command Center" 
-              description="A centralized dashboard to monitor your entire immigration status in real-time."
+              title={t.landing.features.command.title} 
+              description={t.landing.features.command.desc}
             />
             <FeatureCard 
               icon={<UserCheck className="w-8 h-8" />} 
-              title="Dedicated Manager" 
-              description="Direct access to your personal relocation expert with guaranteed response times."
+              title={t.landing.features.manager.title} 
+              description={t.landing.features.manager.desc}
             />
             <FeatureCard 
               icon={<CreditCard className="w-8 h-8" />} 
-              title="Transparent Transfers" 
-              description="Secure asset movement with real-time tracking and competitive FX rates."
+              title={t.landing.features.transfers.title} 
+              description={t.landing.features.transfers.desc}
             />
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function LandingPage() {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100">
+    <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-100 border border-slate-100">
       <div className="text-accent mb-6 bg-accent/10 w-16 h-16 rounded-xl flex items-center justify-center">
         {icon}
       </div>

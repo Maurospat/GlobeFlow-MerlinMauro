@@ -34,7 +34,7 @@ export default function AdminPanel() {
   ]);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-100">
+    <div className="space-y-8 animate-in fade-in duration-100 pb-12">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary flex items-center gap-3">
@@ -99,12 +99,12 @@ export default function AdminPanel() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Case ID</TableHead>
-                <TableHead>{t.language === 'de' ? 'Antragsteller' : 'Applicant'}</TableHead>
-                <TableHead>{t.language === 'de' ? 'Fortschritt' : 'Progress'}</TableHead>
+                <TableHead>{t.admin.caseId}</TableHead>
+                <TableHead>{t.admin.applicant}</TableHead>
+                <TableHead>{t.admin.progress}</TableHead>
                 <TableHead>{t.common.status}</TableHead>
-                <TableHead>{t.language === 'de' ? 'Zuständig' : 'Manager'}</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t.admin.manager}</TableHead>
+                <TableHead className="text-right">{t.common.actions}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -136,9 +136,7 @@ export default function AdminPanel() {
         <div>
           <h4 className="font-bold text-amber-800">{t.admin.compliance}</h4>
           <p className="text-sm text-amber-700 leading-relaxed">
-            {t.language === 'de' 
-              ? 'Neue indonesische FATCA-Berichtspflichten treten nächsten Monat in Kraft. Bitte stellen Sie sicher, dass alle "Proof of Funds"-Dokumente die zusätzliche Erklärung enthalten.'
-              : 'New Indonesian FATCA reporting requirements are effective next month. Please ensure all "Proof of Funds" documents include the additional declaration.'}
+            {t.admin.complianceText}
           </p>
         </div>
       </div>

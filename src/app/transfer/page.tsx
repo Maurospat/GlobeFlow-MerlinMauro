@@ -6,12 +6,9 @@ import { useLanguage } from '@/components/LanguageContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   ArrowRightLeft, 
   Building2, 
-  User, 
-  ShieldCheck, 
   CheckCircle2, 
   Info,
   Loader2
@@ -57,7 +54,7 @@ export default function AssetTransferPage() {
   );
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto animate-in fade-in duration-150">
+    <div className="space-y-8 max-w-4xl mx-auto animate-in fade-in duration-100 pb-16">
       <header>
         <h1 className="text-3xl font-headline font-bold text-primary">{t.transfer.title}</h1>
         <p className="text-muted-foreground">{t.transfer.subtitle}</p>
@@ -72,7 +69,7 @@ export default function AssetTransferPage() {
             </div>
             <div className="text-right">
               <p className="text-sm font-bold text-primary">{t.transfer.eta.replace('{days}', transfer.etaDays.toString())}</p>
-              <p className="text-xs text-muted-foreground">{t.transfer.arrival.replace('{date}', 'Oct 12, 2024')}</p>
+              <p className="text-xs text-muted-foreground">{t.transfer.arrival.replace('{date}', '12. Okt 2024')}</p>
             </div>
           </div>
         </CardHeader>
@@ -82,7 +79,7 @@ export default function AssetTransferPage() {
             
             <TimelineStep label={t.common.not_started} status={getStepStatus('initiated', transfer.status)} />
             <TimelineStep label={t.common.under_review} status={getStepStatus('in_review', transfer.status)} />
-            <TimelineStep label="In Transit" status={getStepStatus('in_transit', transfer.status)} />
+            <TimelineStep label={t.transfer.inTransit} status={getStepStatus('in_transit', transfer.status)} />
             <TimelineStep label={t.common.approved} status={getStepStatus('completed', transfer.status)} />
           </div>
         </CardContent>
@@ -98,7 +95,7 @@ export default function AssetTransferPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase">Institution</label>
+              <label className="text-xs font-bold text-muted-foreground uppercase">{t.transfer.institution}</label>
               <Input value={transfer.homeBank} readOnly />
             </div>
           </CardContent>
@@ -112,14 +109,12 @@ export default function AssetTransferPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Amount</label>
-                <Input value={transfer.amount.toLocaleString()} readOnly />
-              </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-muted-foreground uppercase">{t.transfer.amount}</label>
+              <Input value={transfer.amount.toLocaleString() + " USD"} readOnly />
             </div>
             <Button 
-              className="w-full bg-primary" 
+              className="w-full bg-primary transition-all duration-75" 
               onClick={startTransfer}
               disabled={isStarting || transfer.status !== 'initiated'}
             >
@@ -130,7 +125,7 @@ export default function AssetTransferPage() {
         </Card>
       </div>
 
-      <Card className="border-slate-100 mb-20 md:mb-0">
+      <Card className="border-slate-100 mb-8">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center gap-2">
             <Info className="w-5 h-5 text-muted-foreground" />
@@ -140,8 +135,8 @@ export default function AssetTransferPage() {
         <CardContent>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Mid-Market Rate</p>
-              <p className="text-xl font-bold font-mono">1 USD = 15,650.45 IDR</p>
+              <p className="text-sm text-muted-foreground">{t.transfer.midMarket}</p>
+              <p className="text-xl font-bold font-mono">1 USD = 15.650,45 IDR</p>
             </div>
           </div>
           <div className="mt-6 p-4 bg-slate-50 rounded-lg text-xs text-muted-foreground border italic">
