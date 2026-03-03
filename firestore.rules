@@ -1,0 +1,145 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * GlobeFlow Security Rules
+     * ------------------------
+     * Core Philosophy: This ruleset implements a strict owner-and-administrator access model. 
+     * Authorization is decoupled from data hierarchy through strategic denormalization.
+     * 
+     * Data Structure:
+     * - /users/{userId}: Private user profiles.
+     * - /admin_roles/{userId}: Registry for administrative access.
+     * - /cases/{caseId}: Top-level immigration cases.
+     * - /cases/{caseId}/[subcollections]: Documents, Transfers, Messages, and Appointments.
+     * 
+     * Key Security Decisions:
+     * 1. Denormalization for Authorization: Every document related to a case (including subcollections) 
+     *    MUST contain a 'userId' field. This allows rules to verify ownership instantly without 
+     *    performing expensive get() calls to parent documents.
+     * 2. Admin Oversight: A dedicated '/admin_roles' collection allows global read/write access 
+     *    for staff members, verified via document existence checks.
+     * 3. Relational Integrity: On creation, documents must link themselves to the correctly 
+     *    authenticated user via the 'userId' field. This field is immutable once set.
+     * 4. Prototyping Flexibility: While access control is strict, the internal schema (other than 
+     *    relational IDs) is not enforced to allow for rapid UI iteration.
+     */
+
+    // --- Helper Functions ---
+
+    /** @description Checks if the request is from a signed-in user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the authenticated user has an entry in the admin_roles collection. */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admin_roles/$(request.auth.uid));
+    }
+
+    /** @description Checks if the provided UID matches the authenticated user. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Checks if the 'userId' field in the document data matches the authenticated user. */
+    function isDataOwner(data) {
+      return isSignedIn() && data.userId == request.auth.uid;
+    }
+
+    /** @description Combines existence check and ownership/admin check for updates and deletes. */
+    function isExistingOwnerOrAdmin(resourceData) {
+      return resourceData != null && (isDataOwner(resourceData) || isAdmin());
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Rules for User profiles. Users can manage their own profile; admins can view all.
+     * @path /users/{userId}
+     * @allow (get) If the user is the owner or an admin.
+     * @deny (create) If the userId in the path doesn't match the auth UID.
+     * @principle Restricts access to a user's own data tree.
+     */
+    match /users/{userId} {
+      allow get, list: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    /**
+     * @description Admin registry. Minimal access to prevent unauthorized privilege escalation.
+     * @path /admin_roles/{userId}
+     * @allow (get) Only by existing admins.
+     * @deny (write) All writes from the client; managed via Admin SDK/Console.
+     * @principle Database Access Control (DBAC) via existence checks.
+     */
+    match /admin_roles/{userId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    /**
+     * @description Rules for Immigration Cases. Access relies on denormalized 'userId'.
+     * @path /cases/{caseId}
+     * @allow (list) Users can list cases where userId == their UID.
+     * @deny (update) If the userId field is being changed to another user's ID.
+     * @principle Enforces document ownership for writes and filtered listing.
+     */
+    match /cases/{caseId} {
+      allow get, list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isExistingOwnerOrAdmin(resource.data) && (request.resource.data.userId == resource.data.userId);
+      allow delete: if isAdmin();
+
+      /**
+       * @description Rules for Documents required for a case.
+       * @path /cases/{caseId}/documents/{documentId}
+       * @principle Denormalized ownership check for subcollections.
+       */
+      match /documents/{documentId} {
+        allow get, list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+        allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
+        allow update: if isExistingOwnerOrAdmin(resource.data) && (request.resource.data.userId == resource.data.userId);
+        allow delete: if isAdmin();
+      }
+
+      /**
+       * @description Rules for Asset Transfers.
+       * @path /cases/{caseId}/transfers/{transferId}
+       * @principle Prevents cross-user data access via UID validation.
+       */
+      match /transfers/{transferId} {
+        allow get, list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+        allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
+        allow update: if isExistingOwnerOrAdmin(resource.data) && (request.resource.data.userId == resource.data.userId);
+        allow delete: if isAdmin();
+      }
+
+      /**
+       * @description Rules for Chat Messages.
+       * @path /cases/{caseId}/messages/{messageId}
+       * @principle Relational integrity: creatorId must match sender.
+       */
+      match /messages/{messageId} {
+        allow get, list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+        allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin()) && (request.resource.data.fromUserId == request.auth.uid);
+        allow update: if isAdmin(); // Messages usually immutable for users
+        allow delete: if isAdmin();
+      }
+
+      /**
+       * @description Rules for Scheduled Appointments.
+       * @path /cases/{caseId}/appointments/{appointmentId}
+       */
+      match /appointments/{appointmentId} {
+        allow get, list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+        allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
+        allow update: if isExistingOwnerOrAdmin(resource.data) && (request.resource.data.userId == resource.data.userId);
+        allow delete: if isAdmin();
+      }
+    }
+  }
+}
