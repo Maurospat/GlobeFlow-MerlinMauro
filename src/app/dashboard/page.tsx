@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/components/LanguageContext';
+import { useCase } from '@/components/CaseContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
@@ -16,36 +17,38 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react';
-import { initialDocuments } from '@/app/data/mockData';
 import Link from 'next/link';
 
 export default function Dashboard() {
   const { t } = useLanguage();
-  const [progress, setProgress] = useState(0);
-
-  const completedDocs = initialDocuments.filter(d => d.status === 'approved').length;
-  const totalDocs = initialDocuments.length;
-  const actualProgress = Math.round((completedDocs / totalDocs) * 100);
+  const { documents, progress: actualProgress } = useCase();
+  const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setProgress(actualProgress), 100);
+    const timer = setTimeout(() => setDisplayProgress(actualProgress), 100);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
+  // Finde den ersten Schritt, der noch nicht hochgeladen wurde
+  const nextStepDoc = documents.find(d => d.status === 'not_uploaded');
+  
+  const completedDocs = documents.filter(d => d.status === 'approved').length;
+  const totalDocs = documents.length;
+
   const stats = [
-    { title: t.dashboard.stats.docs, value: `${completedDocs}/${totalDocs}`, status: t.common.under_review, icon: FileText, href: '/documents' },
+    { title: t.dashboard.stats.docs, value: `${completedDocs}/${totalDocs}`, status: t.common.active, icon: FileText, href: '/documents' },
     { title: t.dashboard.stats.transfer, value: '$250k', status: t.common.active, icon: ArrowRightLeft, href: '/transfer' },
     { title: t.dashboard.stats.costs, value: '$3,420', status: t.common.pending, icon: Wallet, href: '/costs' },
     { title: t.dashboard.stats.manager, value: t.common.active, status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-100">
+    <div className="space-y-8 animate-in fade-in duration-75">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-headline font-bold text-primary">{t.dashboard.welcome} Alexander</h1>
           <p className="text-muted-foreground mt-1">
-            {t.dashboard.journeyProgress.replace('{progress}', progress.toString())}
+            {t.dashboard.journeyProgress.replace('{progress}', displayProgress.toString())}
           </p>
         </div>
         <Link href="/documents">
@@ -62,9 +65,9 @@ export default function Dashboard() {
             <div className="flex-1 space-y-4">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-lg">{t.common.progress}</span>
-                <span className="font-bold text-primary text-2xl">{progress}%</span>
+                <span className="font-bold text-primary text-2xl">{displayProgress}%</span>
               </div>
-              <Progress value={progress} className="h-3" />
+              <Progress value={displayProgress} className="h-3" />
               <div className="flex gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-500" /> {t.dashboard.milestones.identity}</span>
                 <span className="flex items-center gap-1"><Clock className="w-4 h-4 text-accent" /> {t.dashboard.milestones.financials}</span>
@@ -103,16 +106,22 @@ export default function Dashboard() {
             <CardDescription>{t.dashboard.nextStepDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-colors duration-75">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
-                <div>
-                  <p className="font-semibold">{t.dashboard.nextStepAction}</p>
-                  <p className="text-sm text-muted-foreground">{t.dashboard.nextStepDesc}</p>
+            <Link href="/documents">
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
+                  <div>
+                    <p className="font-semibold">
+                      {nextStepDoc ? nextStepDoc.title : t.common.approved}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {nextStepDoc ? nextStepDoc.whyNeeded : t.dashboard.nextStepDesc}
+                    </p>
+                  </div>
                 </div>
+                <Button variant="ghost" size="icon"><ArrowRight className="w-4 h-4" /></Button>
               </div>
-              <Button variant="ghost" size="icon"><ArrowRight className="w-4 h-4" /></Button>
-            </div>
+            </Link>
           </CardContent>
         </Card>
 

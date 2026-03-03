@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@/components/LanguageContext';
+import { useCase } from '@/components/CaseContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +15,7 @@ import {
   Loader2,
   Globe
 } from 'lucide-react';
-import { initialDocuments, DocStatus } from '@/app/data/mockData';
+import { DocStatus } from '@/app/data/mockData';
 import { aiDocumentGuidance } from '@/ai/flows/ai-document-guidance-flow';
 import {
   Dialog,
@@ -24,11 +25,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from '@/hooks/use-toast';
 
 export default function DocumentsPage() {
   const { t } = useLanguage();
+  const { documents, updateDocumentStatus } = useCase();
   const [loadingAi, setLoadingAi] = useState<string | null>(null);
   const [aiGuidance, setAiGuidance] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState<string | null>(null);
 
   const getStatusBadge = (status: DocStatus) => {
     switch (status) {
@@ -39,15 +43,6 @@ export default function DocumentsPage() {
       default: return <Badge variant="outline" className="text-muted-foreground">{t.common.not_started}</Badge>;
     }
   };
-
-  const docTranslations = [
-    { ...initialDocuments[0], title: t.documents.items.passport.title, whyNeeded: t.documents.items.passport.why, howToGet: t.documents.items.passport.how },
-    { ...initialDocuments[1], title: t.documents.items.address.title, whyNeeded: t.documents.items.address.why, howToGet: t.documents.items.address.how },
-    { ...initialDocuments[2], title: t.documents.items.tax.title, whyNeeded: t.documents.items.tax.why, howToGet: t.documents.items.tax.how },
-    { ...initialDocuments[3], title: t.documents.items.bank.title, whyNeeded: t.documents.items.bank.why, howToGet: t.documents.items.bank.how },
-    { ...initialDocuments[4], title: t.documents.items.funds.title, whyNeeded: t.documents.items.funds.why, howToGet: t.documents.items.funds.how },
-    { ...initialDocuments[5], title: t.documents.items.visa.title, whyNeeded: t.documents.items.visa.why, howToGet: t.documents.items.visa.how },
-  ];
 
   const handleAiGuidance = async (docTitle: string) => {
     setLoadingAi(docTitle);
@@ -61,10 +56,23 @@ export default function DocumentsPage() {
     }
   };
 
-  const completedCount = initialDocuments.filter(d => d.status === 'approved').length;
+  const handleUpload = (docId: string, docTitle: string) => {
+    setIsUploading(docId);
+    // Simuliere Upload-Verzögerung für besseres Feedback
+    setTimeout(() => {
+      updateDocumentStatus(docId, 'under_review');
+      setIsUploading(null);
+      toast({
+        title: t.language === 'de' ? 'Erfolgreich hochgeladen' : 'Upload successful',
+        description: `${docTitle} ${t.language === 'de' ? 'wird nun geprüft.' : 'is now under review.'}`,
+      });
+    }, 400);
+  };
+
+  const completedCount = documents.filter(d => d.status === 'approved').length;
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-100">
+    <div className="space-y-6 animate-in fade-in duration-75">
       <header>
         <h1 className="text-3xl font-headline font-bold text-primary">{t.documents.title}</h1>
         <p className="text-muted-foreground">{t.documents.subtitle}</p>
@@ -75,12 +83,12 @@ export default function DocumentsPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">{t.documents.priority}</h2>
             <span className="text-sm font-medium text-muted-foreground">
-              {t.documents.completed.replace('{count}', completedCount.toString()).replace('{total}', initialDocuments.length.toString())}
+              {t.documents.completed.replace('{count}', completedCount.toString()).replace('{total}', documents.length.toString())}
             </span>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            {docTranslations.map((doc) => (
+            {documents.map((doc) => (
               <Card key={doc.id} className="border-slate-100 hover:border-primary/20 transition-all duration-75 flex flex-col h-full">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-2">
@@ -102,9 +110,14 @@ export default function DocumentsPage() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0 flex gap-2">
-                  <Button variant="outline" className="flex-1 gap-2 border-slate-200 transition-all duration-75">
-                    <Upload className="w-4 h-4" />
-                    {t.common.upload}
+                  <Button 
+                    variant={doc.status === 'not_uploaded' ? 'default' : 'outline'} 
+                    className="flex-1 gap-2 border-slate-200 transition-all duration-75"
+                    disabled={doc.status !== 'not_uploaded' || isUploading === doc.id}
+                    onClick={() => handleUpload(doc.id, doc.title)}
+                  >
+                    {isUploading === doc.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    {doc.status === 'not_uploaded' ? t.common.upload : t.common.uploaded}
                   </Button>
                   
                   <Dialog onOpenChange={(open) => !open && setAiGuidance(null)}>

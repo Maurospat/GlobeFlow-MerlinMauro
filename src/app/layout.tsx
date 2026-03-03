@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { LanguageProvider } from '@/components/LanguageContext';
+import { CaseProvider } from '@/components/CaseContext';
 import AppLayout from '@/components/layout/AppLayout';
 
 export const metadata: Metadata = {
@@ -23,9 +24,11 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <LanguageProvider>
-          <AppLayout>
-            {children}
-          </AppLayout>
+          <CaseProvider>
+            <AppLayout>
+              {children}
+            </AppLayout>
+          </CaseProvider>
         </LanguageProvider>
       </body>
     </html>
