@@ -27,7 +27,11 @@ export const translations = {
       not_started: 'Not Started',
       uploaded: 'Uploaded',
       close: 'Close',
-      details: 'Details'
+      details: 'Details',
+      search: 'Search',
+      active: 'Active',
+      delayed: 'Delayed',
+      review: 'In Review'
     },
     landing: {
       heroTitle: 'Your secure path to Indonesia.',
@@ -74,6 +78,18 @@ export const translations = {
       transparency: 'Cost Transparency',
       guarantee: 'GlobeFlow guarantees no hidden surprise fees.'
     },
+    costs: {
+      title: 'Total Costs',
+      subtitle: 'Total transparency on your immigration financial commitment.',
+      estTotal: 'Estimated Total Cost',
+      liveRate: 'Live Exchange Rate',
+      payStatus: 'Payment Status',
+      breakdown: 'Detailed Breakdown',
+      description: 'Description',
+      amount: 'Amount (USD)',
+      drivers: 'What drives cost?',
+      quote: 'Need a custom quote?'
+    },
     manager: {
       title: 'Case Manager',
       subtitle: 'Your dedicated relocation expert.',
@@ -83,6 +99,17 @@ export const translations = {
       book: 'Book Consultation',
       messages: 'Secure Messages',
       faq: 'Frequently Asked Questions'
+    },
+    admin: {
+      title: 'Admin Console',
+      subtitle: 'Management oversight for all immigration cases.',
+      sync: 'Sync CRM',
+      logs: 'System Logs',
+      activeCases: 'Active Cases',
+      pending: 'Pending Reviews',
+      aum: 'Total AUM Transfers',
+      management: 'Case Management',
+      compliance: 'Compliance Alert'
     }
   },
   de: {
@@ -110,7 +137,11 @@ export const translations = {
       not_started: 'Nicht gestartet',
       uploaded: 'Hochgeladen',
       close: 'Schließen',
-      details: 'Details'
+      details: 'Details',
+      search: 'Suchen',
+      active: 'Aktiv',
+      delayed: 'Verzögert',
+      review: 'In Prüfung'
     },
     landing: {
       heroTitle: 'Ihr sicherer Weg nach Indonesien.',
@@ -157,6 +188,18 @@ export const translations = {
       transparency: 'Kostentransparenz',
       guarantee: 'GlobeFlow garantiert keine versteckten Gebühren.'
     },
+    costs: {
+      title: 'Gesamtkosten',
+      subtitle: 'Vollständige Transparenz über Ihre finanziellen Verpflichtungen.',
+      estTotal: 'Geschätzte Gesamtkosten',
+      liveRate: 'Live-Wechselkurs',
+      payStatus: 'Zahlungsstatus',
+      breakdown: 'Detaillierte Aufschlüsselung',
+      description: 'Beschreibung',
+      amount: 'Betrag (USD)',
+      drivers: 'Was beeinflusst die Kosten?',
+      quote: 'Individuelles Angebot benötigt?'
+    },
     manager: {
       title: 'Fallmanager',
       subtitle: 'Ihr persönlicher Relocation-Experte.',
@@ -166,6 +209,17 @@ export const translations = {
       book: 'Beratung buchen',
       messages: 'Sichere Nachrichten',
       faq: 'Häufig gestellte Fragen'
+    },
+    admin: {
+      title: 'Admin-Bereich',
+      subtitle: 'Management-Übersicht für alle Einwanderungsfälle.',
+      sync: 'CRM synchronisieren',
+      logs: 'Systemprotokolle',
+      activeCases: 'Aktive Fälle',
+      pending: 'Ausstehende Prüfungen',
+      aum: 'Gesamte AUM-Transfers',
+      management: 'Fallmanagement',
+      compliance: 'Compliance-Hinweis'
     }
   }
 };
