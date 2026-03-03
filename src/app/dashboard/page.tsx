@@ -25,18 +25,19 @@ export default function Dashboard() {
   const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDisplayProgress(actualProgress), 100);
+    const timer = setTimeout(() => setDisplayProgress(actualProgress), 75);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
   // Finde den ersten Schritt, der noch nicht hochgeladen wurde
   const nextStepDoc = documents.find(d => d.status === 'not_uploaded');
   
-  const completedDocs = documents.filter(d => d.status === 'approved').length;
+  // Zähle alle Dokumente, die bereits hochgeladen wurden (Status ungleich 'not_uploaded')
+  const uploadedDocs = documents.filter(d => d.status !== 'not_uploaded').length;
   const totalDocs = documents.length;
 
   const stats = [
-    { title: t.dashboard.stats.docs, value: `${completedDocs}/${totalDocs}`, status: t.common.active, icon: FileText, href: '/documents' },
+    { title: t.dashboard.stats.docs, value: `${uploadedDocs}/${totalDocs}`, status: t.common.active, icon: FileText, href: '/documents' },
     { title: t.dashboard.stats.transfer, value: '$250k', status: t.common.active, icon: ArrowRightLeft, href: '/transfer' },
     { title: t.dashboard.stats.costs, value: '$3,420', status: t.common.pending, icon: Wallet, href: '/costs' },
     { title: t.dashboard.stats.manager, value: t.common.active, status: 'SLA Active', icon: UserCircle, href: '/manager' },
@@ -81,7 +82,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
-            <Card className="hover:shadow-md transition-all duration-75 cursor-pointer border-slate-100 group">
+            <Card className="hover:shadow-md transition-all duration-100 cursor-pointer border-slate-100 group">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10">
