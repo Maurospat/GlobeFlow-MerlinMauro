@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/components/LanguageContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,20 +13,70 @@ import {
   ShieldCheck, 
   HelpCircle,
   Phone,
-  Video
+  Video,
+  Loader2
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { chatWithManager } from '@/ai/flows/chat-flow';
+
+interface Message {
+  role: 'user' | 'model';
+  text: string;
+  time: string;
+}
 
 export default function CaseManagerPage() {
-  const { t } = useLanguage();
-  const [message, setMessage] = useState('');
+  const { t, language } = useLanguage();
+  const [inputMessage, setInputMessage] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'model', text: t.manager.chat.m1, time: "10:15" },
+    { role: 'user', text: t.manager.chat.u1, time: "10:20" },
+    { role: 'model', text: t.manager.chat.m2, time: "10:25" },
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const managerImage = PlaceHolderImages.find(img => img.id === 'case-manager-portrait');
 
-  const chatMessages = [
-    { role: 'manager', text: t.manager.chat.m1, time: "10:15" },
-    { role: 'user', text: t.manager.chat.u1, time: "10:20" },
-    { role: 'manager', text: t.manager.chat.m2, time: "10:25" },
-  ];
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isLoading]);
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
+
+    const userMsg: Message = {
+      role: 'user',
+      text: inputMessage,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    setInputMessage('');
+    setIsLoading(true);
+
+    try {
+      const history = messages.map(m => ({ role: m.role, text: m.text }));
+      const response = await chatWithManager({
+        history,
+        message: inputMessage,
+        language: language as 'en' | 'de'
+      });
+
+      const aiMsg: Message = {
+        role: 'model',
+        text: response.text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages(prev => [...prev, aiMsg]);
+    } catch (error) {
+      console.error("Chat failed", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="grid md:grid-cols-3 gap-8 pb-12">
@@ -86,44 +135,69 @@ export default function CaseManagerPage() {
       </div>
 
       <div className="md:col-span-2 space-y-8">
-        <Card className="h-[600px] flex flex-col border-slate-100 overflow-hidden">
-          <CardHeader className="border-b bg-slate-50/50">
+        <Card className="h-[600px] flex flex-col border-slate-100 overflow-hidden shadow-sm">
+          <CardHeader className="border-b bg-slate-50/50 py-4 px-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-green-500" />
-                <CardTitle className="text-lg">{t.manager.messages}</CardTitle>
+                <div className="relative">
+                  <Avatar className="w-10 h-10">
+                    <AvatarImage src={managerImage?.imageUrl} />
+                    <AvatarFallback>SH</AvatarFallback>
+                  </Avatar>
+                  <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Sarah Hamilton</CardTitle>
+                  <p className="text-xs text-muted-foreground font-medium">{t.manager.specialist}</p>
+                </div>
               </div>
               <MessageSquare className="w-5 h-5 text-muted-foreground" />
             </div>
           </CardHeader>
-          <CardContent className="flex-1 overflow-y-auto p-6 space-y-4">
-            {chatMessages.map((msg, i) => (
+          <CardContent className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30" ref={scrollRef}>
+            {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] rounded-2xl p-4 text-sm ${
+                <div className={`max-w-[85%] rounded-2xl p-4 text-sm shadow-sm leading-relaxed ${
                   msg.role === 'user' 
                     ? 'bg-primary text-white rounded-br-none' 
-                    : 'bg-slate-100 text-slate-800 rounded-bl-none'
+                    : 'bg-white text-slate-800 rounded-bl-none border border-slate-100'
                 }`}>
                   {msg.text}
-                  <p className={`text-[10px] mt-1 opacity-60 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                  <p className={`text-[10px] mt-2 opacity-60 font-medium ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                     {msg.time}
                   </p>
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-white text-slate-800 rounded-2xl rounded-bl-none p-4 shadow-sm border border-slate-100">
+                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                </div>
+              </div>
+            )}
           </CardContent>
-          <CardFooter className="p-4 bg-slate-50 border-t">
-            <div className="flex w-full gap-2">
+          <CardFooter className="p-4 bg-white border-t">
+            <form 
+              className="flex w-full gap-2" 
+              onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
+            >
               <Input 
                 placeholder={t.common.typeMessage} 
-                className="bg-white" 
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                className="bg-slate-50 border-slate-200 focus:bg-white" 
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                disabled={isLoading}
               />
-              <Button size="icon" className="bg-primary shrink-0 transition-all duration-75">
+              <Button 
+                type="submit"
+                size="icon" 
+                className="bg-primary shrink-0 transition-all duration-75 hover:bg-primary/90"
+                disabled={!inputMessage.trim() || isLoading}
+              >
                 <Send className="w-4 h-4" />
               </Button>
-            </div>
+            </form>
           </CardFooter>
         </Card>
 
@@ -134,7 +208,7 @@ export default function CaseManagerPage() {
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {t.manager.faqs.map((faq: any, i: number) => (
-              <Card key={i} className="border-slate-100 bg-slate-50/30">
+              <Card key={i} className="border-slate-100 bg-slate-50/30 hover:bg-slate-50 transition-colors duration-75">
                 <CardContent className="p-4">
                   <h4 className="font-bold text-sm mb-2">{faq.q}</h4>
                   <p className="text-xs text-muted-foreground leading-relaxed">{faq.a}</p>
