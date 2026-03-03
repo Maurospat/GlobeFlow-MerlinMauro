@@ -2,11 +2,13 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { initialDocuments, Document, DocStatus } from '@/app/data/mockData';
+import { initialDocuments, Document, DocStatus, TransferStatus, initialTransfer } from '@/app/data/mockData';
 
 type CaseContextType = {
   documents: Document[];
   updateDocumentStatus: (id: string, status: DocStatus) => void;
+  transferStatus: TransferStatus;
+  updateTransferStatus: (status: TransferStatus) => void;
   progress: number;
 };
 
@@ -14,6 +16,7 @@ const CaseContext = createContext<CaseContextType | undefined>(undefined);
 
 export function CaseProvider({ children }: { children: ReactNode }) {
   const [documents, setDocuments] = useState<Document[]>(initialDocuments);
+  const [transferStatus, setTransferStatus] = useState<TransferStatus>(initialTransfer.status);
 
   const updateDocumentStatus = (id: string, status: DocStatus) => {
     setDocuments(prev => prev.map(doc => 
@@ -21,11 +24,32 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     ));
   };
 
-  const completedCount = documents.filter(d => d.status === 'approved' || d.status === 'under_review' || d.status === 'uploaded').length;
-  const progress = Math.round((completedCount / documents.length) * 100);
+  const updateTransferStatus = (status: TransferStatus) => {
+    setTransferStatus(status);
+  };
+
+  // Berechnung des Fortschritts:
+  // Dokumente zählen für 70% des Fortschritts
+  // Der Transfer zählt für 30% des Fortschritts
+  const uploadedDocs = documents.filter(d => d.status !== 'not_uploaded').length;
+  const docProgress = (uploadedDocs / documents.length) * 70;
+
+  let transferProgressVal = 0;
+  if (transferStatus === 'initiated') transferProgressVal = 5;
+  if (transferStatus === 'in_review') transferProgressVal = 10;
+  if (transferStatus === 'in_transit') transferProgressVal = 20;
+  if (transferStatus === 'completed') transferProgressVal = 30;
+
+  const progress = Math.round(docProgress + transferProgressVal);
 
   return (
-    <CaseContext.Provider value={{ documents, updateDocumentStatus, progress }}>
+    <CaseContext.Provider value={{ 
+      documents, 
+      updateDocumentStatus, 
+      transferStatus, 
+      updateTransferStatus, 
+      progress 
+    }}>
       {children}
     </CaseContext.Provider>
   );
