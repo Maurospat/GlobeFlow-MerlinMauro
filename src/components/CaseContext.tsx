@@ -1,8 +1,15 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { initialDocuments, Document, DocStatus, TransferStatus, initialTransfer } from '@/app/data/mockData';
+
+type BankDetails = {
+  bankName: string;
+  swift: string;
+  iban: string;
+  customerNo: string;
+};
 
 type CaseContextType = {
   documents: Document[];
@@ -11,6 +18,8 @@ type CaseContextType = {
   updateTransferStatus: (status: TransferStatus) => void;
   isPoASigned: boolean;
   setPoASigned: (val: boolean) => void;
+  bankDetails: BankDetails;
+  updateBankDetails: (details: Partial<BankDetails>) => void;
   progress: number;
 };
 
@@ -20,6 +29,38 @@ export function CaseProvider({ children }: { children: ReactNode }) {
   const [documents, setDocuments] = useState<Document[]>(initialDocuments);
   const [transferStatus, setTransferStatus] = useState<TransferStatus>(initialTransfer.status);
   const [isPoASigned, setIsPoASigned] = useState(false);
+  const [bankDetails, setBankDetails] = useState<BankDetails>({
+    bankName: initialTransfer.homeBank,
+    swift: '',
+    iban: '',
+    customerNo: ''
+  });
+
+  // Load from localStorage if available
+  useEffect(() => {
+    const saved = localStorage.getItem('globeflow-case-data');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.documents) setDocuments(parsed.documents);
+        if (parsed.transferStatus) setTransferStatus(parsed.transferStatus);
+        if (parsed.isPoASigned) setIsPoASigned(parsed.isPoASigned);
+        if (parsed.bankDetails) setBankDetails(parsed.bankDetails);
+      } catch (e) {
+        console.error("Failed to parse saved case data", e);
+      }
+    }
+  }, []);
+
+  // Save to localStorage on changes
+  useEffect(() => {
+    localStorage.setItem('globeflow-case-data', JSON.stringify({
+      documents,
+      transferStatus,
+      isPoASigned,
+      bankDetails
+    }));
+  }, [documents, transferStatus, isPoASigned, bankDetails]);
 
   const updateDocumentStatus = (id: string, status: DocStatus) => {
     setDocuments(prev => prev.map(doc => 
@@ -29,6 +70,10 @@ export function CaseProvider({ children }: { children: ReactNode }) {
 
   const updateTransferStatus = (status: TransferStatus) => {
     setTransferStatus(status);
+  };
+
+  const updateBankDetails = (details: Partial<BankDetails>) => {
+    setBankDetails(prev => ({ ...prev, ...details }));
   };
 
   // Fortschrittsberechnung:
@@ -53,6 +98,8 @@ export function CaseProvider({ children }: { children: ReactNode }) {
       updateTransferStatus,
       isPoASigned,
       setPoASigned: setIsPoASigned,
+      bankDetails,
+      updateBankDetails,
       progress 
     }}>
       {children}
