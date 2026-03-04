@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/components/LanguageContext';
 import { useCase } from '@/components/CaseContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
@@ -17,7 +17,8 @@ import {
   Loader2,
   FileSignature,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  Eraser
 } from 'lucide-react';
 import { initialTransfer, TransferStatus } from '@/app/data/mockData';
 import { toast } from '@/hooks/use-toast';
@@ -30,6 +31,11 @@ export default function AssetTransferPage() {
   const [isSigning, setIsSigning] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // Signature State
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [hasSigned, setHasSigned] = useState(false);
+
   // Form State
   const [bankName, setBankName] = useState(initialTransfer.homeBank);
   const [swift, setSwift] = useState('');
@@ -39,6 +45,66 @@ export default function AssetTransferPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Canvas Drawing Logic
+  useEffect(() => {
+    if (mounted && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.strokeStyle = '#476685'; // Primary color
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+      }
+    }
+  }, [mounted]);
+
+  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+    if (isPoASigned) return;
+    setIsDrawing(true);
+    setHasSigned(true);
+    draw(e);
+  };
+
+  const stopDrawing = () => {
+    setIsDrawing(false);
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      ctx?.beginPath();
+    }
+  };
+
+  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDrawing || !canvasRef.current || isPoASigned) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    let x, y;
+
+    if ('touches' in e) {
+      x = e.touches[0].clientX - rect.left;
+      y = e.touches[0].clientY - rect.top;
+    } else {
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+    }
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  const clearSignature = () => {
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    setHasSigned(false);
+  };
 
   if (!mounted) return null;
 
@@ -64,6 +130,15 @@ export default function AssetTransferPage() {
   };
 
   const handleSignPoA = () => {
+    if (!hasSigned) {
+      toast({
+        variant: "destructive",
+        title: language === 'de' ? 'Unterschrift fehlt' : 'Signature missing',
+        description: language === 'de' ? 'Bitte leisten Sie eine digitale Unterschrift im vorgesehenen Feld.' : 'Please provide a digital signature in the designated field.',
+      });
+      return;
+    }
+
     setIsSigning(true);
     setTimeout(() => {
       setPoASigned(true);
@@ -225,10 +300,18 @@ export default function AssetTransferPage() {
           {/* Digital Power of Attorney */}
           <Card className={cn(isPoASigned && "opacity-60 pointer-events-none")}>
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <FileSignature className="w-5 h-5 text-primary" />
-                {t.transfer.poa.title}
-              </CardTitle>
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <FileSignature className="w-5 h-5 text-primary" />
+                  {t.transfer.poa.title}
+                </CardTitle>
+                {!isPoASigned && hasSigned && (
+                  <Button variant="ghost" size="sm" onClick={clearSignature} className="text-xs h-8 gap-1">
+                    <Eraser className="w-3 h-3" />
+                    {language === 'de' ? 'Löschen' : 'Clear'}
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm leading-relaxed text-slate-700 italic">
@@ -237,18 +320,32 @@ export default function AssetTransferPage() {
               
               <div className="space-y-2">
                 <Label className="text-xs font-bold text-muted-foreground uppercase">{language === 'de' ? 'Digitale Unterschrift' : 'Digital Signature'}</Label>
-                <div className="h-32 w-full border-2 border-dashed border-slate-200 rounded-xl bg-white flex items-center justify-center text-slate-300 relative group overflow-hidden">
-                  <span className="group-hover:hidden">{language === 'de' ? 'Hier unterschreiben (Maus/Finger)' : 'Sign here (mouse/finger)'}</span>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-50/50">
-                    <FileSignature className="w-8 h-8 text-primary/20" />
-                  </div>
+                <div className="relative group rounded-xl overflow-hidden border-2 border-slate-200 bg-white cursor-crosshair">
+                  <canvas
+                    ref={canvasRef}
+                    width={400}
+                    height={128}
+                    className="w-full h-32 block touch-none"
+                    onMouseDown={startDrawing}
+                    onMouseMove={draw}
+                    onMouseUp={stopDrawing}
+                    onMouseOut={stopDrawing}
+                    onTouchStart={startDrawing}
+                    onTouchMove={draw}
+                    onTouchEnd={stopDrawing}
+                  />
+                  {!hasSigned && !isPoASigned && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-slate-300 text-sm">
+                      {language === 'de' ? 'Hier unterschreiben' : 'Sign here'}
+                    </div>
+                  )}
                 </div>
               </div>
 
               <Button 
                 className="w-full bg-primary h-12 text-lg transition-all duration-75" 
                 onClick={handleSignPoA}
-                disabled={isSigning || isPoASigned || transferStatus === 'not_started'}
+                disabled={isSigning || isPoASigned || transferStatus === 'not_started' || !hasSigned}
               >
                 {isSigning ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <FileSignature className="w-5 h-5 mr-2" />}
                 {t.transfer.poa.sign}
