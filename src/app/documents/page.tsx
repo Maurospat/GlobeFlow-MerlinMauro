@@ -28,7 +28,7 @@ import {
 import { toast } from '@/hooks/use-toast';
 
 export default function DocumentsPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { documents, updateDocumentStatus } = useCase();
   const [loadingAi, setLoadingAi] = useState<string | null>(null);
   const [aiGuidance, setAiGuidance] = useState<string | null>(null);
@@ -58,18 +58,30 @@ export default function DocumentsPage() {
 
   const handleUpload = (docId: string, docTitle: string) => {
     setIsUploading(docId);
-    // Simuliere Upload-Verzögerung für besseres Feedback
+    // Minimale Verzögerung für visuelles Feedback, dann sofortiges Update
     setTimeout(() => {
       updateDocumentStatus(docId, 'under_review');
       setIsUploading(null);
       toast({
-        title: t.language === 'de' ? 'Erfolgreich hochgeladen' : 'Upload successful',
-        description: `${docTitle} ${t.language === 'de' ? 'wird nun geprüft.' : 'is now under review.'}`,
+        title: language === 'de' ? 'Erfolgreich hochgeladen' : 'Upload successful',
+        description: `${docTitle} ${language === 'de' ? 'wird nun geprüft.' : 'is now under review.'}`,
       });
-    }, 400);
+    }, 100);
   };
 
-  const completedCount = documents.filter(d => d.status === 'approved').length;
+  const completedCount = documents.filter(d => d.status === 'approved' || d.status === 'uploaded' || d.status === 'under_review').length;
+
+  const getDocT = (docId: string) => {
+    const keys: Record<string, string> = {
+      '1': 'passport',
+      '2': 'address',
+      '3': 'tax',
+      '4': 'bank',
+      '5': 'funds',
+      '6': 'visa'
+    };
+    return t.documents.items[keys[docId]];
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-75">
@@ -88,79 +100,82 @@ export default function DocumentsPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            {documents.map((doc) => (
-              <Card key={doc.id} className="border-slate-100 hover:border-primary/20 transition-all duration-75 flex flex-col h-full">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/5 rounded-lg">
-                        <FileText className="w-5 h-5 text-primary" />
+            {documents.map((doc) => {
+              const trans = getDocT(doc.id);
+              return (
+                <Card key={doc.id} className="border-slate-100 hover:border-primary/20 transition-all duration-75 flex flex-col h-full">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary/5 rounded-lg">
+                          <FileText className="w-5 h-5 text-primary" />
+                        </div>
+                        <CardTitle className="text-lg">{trans.title}</CardTitle>
                       </div>
-                      <CardTitle className="text-lg">{doc.title}</CardTitle>
+                      {getStatusBadge(doc.status)}
                     </div>
-                    {getStatusBadge(doc.status)}
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{doc.whyNeeded}</p>
-                  
-                  <div className="bg-slate-50 p-3 rounded-lg text-xs border border-slate-100">
-                    <span className="font-bold block mb-1">{t.documents.howTo}</span>
-                    {doc.howToGet}
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0 flex gap-2">
-                  <Button 
-                    variant={doc.status === 'not_uploaded' ? 'default' : 'outline'} 
-                    className="flex-1 gap-2 border-slate-200 transition-all duration-75"
-                    disabled={doc.status !== 'not_uploaded' || isUploading === doc.id}
-                    onClick={() => handleUpload(doc.id, doc.title)}
-                  >
-                    {isUploading === doc.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                    {doc.status === 'not_uploaded' ? t.common.upload : t.common.uploaded}
-                  </Button>
-                  
-                  <Dialog onOpenChange={(open) => !open && setAiGuidance(null)}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="text-primary transition-all duration-75"
-                        onClick={() => handleAiGuidance(doc.title)}
-                      >
-                        {loadingAi === doc.title ? <Loader2 className="w-4 h-4 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                      <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                          <Globe className="w-5 h-5 text-accent" />
-                          {t.documents.aiGuide}: {doc.title}
-                        </DialogTitle>
-                        <DialogDescription>
-                          Personalized instructions based on international requirements.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="mt-4 p-4 bg-slate-50 rounded-xl border max-h-[60vh] overflow-y-auto">
-                        {loadingAi === doc.title ? (
-                          <div className="flex flex-col items-center justify-center py-10 gap-4">
-                            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                            <p className="text-sm text-muted-foreground">{t.documents.aiAnalyzing}</p>
-                          </div>
-                        ) : (
-                          <div className="prose prose-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-                            {aiGuidance || "Something went wrong. Please try again."}
-                          </div>
-                        )}
-                      </div>
-                      <div className="mt-4 flex justify-end">
-                        <Button onClick={() => setAiGuidance(null)} className="bg-primary transition-all duration-75">{t.common.close}</Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </CardFooter>
-              </Card>
-            ))}
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{trans.why}</p>
+                    
+                    <div className="bg-slate-50 p-3 rounded-lg text-xs border border-slate-100">
+                      <span className="font-bold block mb-1">{t.documents.howTo}</span>
+                      {trans.how}
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-0 flex gap-2">
+                    <Button 
+                      variant={doc.status === 'not_uploaded' ? 'default' : 'outline'} 
+                      className="flex-1 gap-2 border-slate-200 transition-all duration-75"
+                      disabled={doc.status !== 'not_uploaded' || isUploading === doc.id}
+                      onClick={() => handleUpload(doc.id, trans.title)}
+                    >
+                      {isUploading === doc.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                      {doc.status === 'not_uploaded' ? t.common.upload : t.common.uploaded}
+                    </Button>
+                    
+                    <Dialog onOpenChange={(open) => !open && setAiGuidance(null)}>
+                      <DialogTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="text-primary transition-all duration-75"
+                          onClick={() => handleAiGuidance(trans.title)}
+                        >
+                          {loadingAi === doc.title ? <Loader2 className="w-4 h-4 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle className="flex items-center gap-2">
+                            <Globe className="w-5 h-5 text-accent" />
+                            {t.documents.aiGuide}: {trans.title}
+                          </DialogTitle>
+                          <DialogDescription>
+                            {language === 'de' ? 'Personalisierte Anweisungen basierend auf internationalen Anforderungen.' : 'Personalized instructions based on international requirements.'}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="mt-4 p-4 bg-slate-50 rounded-xl border max-h-[60vh] overflow-y-auto">
+                          {loadingAi === doc.title ? (
+                            <div className="flex flex-col items-center justify-center py-10 gap-4">
+                              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                              <p className="text-sm text-muted-foreground">{t.documents.aiAnalyzing}</p>
+                            </div>
+                          ) : (
+                            <div className="prose prose-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                              {aiGuidance || (language === 'de' ? "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut." : "Something went wrong. Please try again.")}
+                            </div>
+                          )}
+                        </div>
+                        <div className="mt-4 flex justify-end">
+                          <Button onClick={() => setAiGuidance(null)} className="bg-primary transition-all duration-75">{t.common.close}</Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </CardFooter>
+                </Card>
+              );
+            })}
           </div>
         </section>
 

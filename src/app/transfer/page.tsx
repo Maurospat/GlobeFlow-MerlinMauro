@@ -18,28 +18,28 @@ import { initialTransfer, TransferStatus } from '@/app/data/mockData';
 import { toast } from '@/hooks/use-toast';
 
 export default function AssetTransferPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { transferStatus, updateTransferStatus } = useCase();
   const [isStarting, setIsStarting] = useState(false);
 
   const startTransfer = () => {
     setIsStarting(true);
-    // Simulation einer schnellen Server-Reaktion
+    // Sofortige Reaktion
     setTimeout(() => {
       updateTransferStatus('in_transit');
       setIsStarting(false);
       toast({
-        title: t.language === 'de' ? 'Transfer eingeleitet' : 'Transfer initiated',
-        description: t.language === 'de' ? 'Ihr Kapital ist nun unterwegs.' : 'Your capital is now in transit.',
+        title: language === 'de' ? 'Transfer eingeleitet' : 'Transfer initiated',
+        description: language === 'de' ? 'Ihr Kapital ist nun unterwegs.' : 'Your capital is now in transit.',
       });
-    }, 100);
+    }, 50);
   };
 
   const completeTransferManual = () => {
     updateTransferStatus('completed');
     toast({
-      title: t.language === 'de' ? 'Transfer abgeschlossen' : 'Transfer completed',
-      description: t.language === 'de' ? 'Das Kapital wurde erfolgreich verbucht.' : 'Capital has been successfully reconciled.',
+      title: language === 'de' ? 'Transfer abgeschlossen' : 'Transfer completed',
+      description: language === 'de' ? 'Das Kapital wurde erfolgreich verbucht.' : 'Capital has been successfully reconciled.',
     });
   };
 
@@ -55,7 +55,7 @@ export default function AssetTransferPage() {
 
   const TimelineStep = ({ label, status }: { label: string, status: 'completed' | 'active' | 'pending' }) => (
     <div className="flex flex-col items-center gap-2 flex-1 relative">
-      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center z-10 transition-all duration-100
+      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center z-10 transition-all duration-75
         ${status === 'completed' ? 'bg-green-500 border-green-500 text-white' : 
           status === 'active' ? 'bg-white border-accent text-accent animate-pulse' : 
           'bg-white border-slate-200 text-slate-300'}`}>
@@ -69,7 +69,7 @@ export default function AssetTransferPage() {
   );
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto animate-in fade-in duration-100 pb-16">
+    <div className="space-y-8 max-w-4xl mx-auto animate-in fade-in duration-75 pb-16">
       <header>
         <h1 className="text-3xl font-headline font-bold text-primary">{t.transfer.title}</h1>
         <p className="text-muted-foreground">{t.transfer.subtitle}</p>
@@ -84,7 +84,7 @@ export default function AssetTransferPage() {
             </div>
             <div className="text-right">
               <p className="text-sm font-bold text-primary">{t.transfer.eta.replace('{days}', initialTransfer.etaDays.toString())}</p>
-              <p className="text-xs text-muted-foreground">{t.transfer.arrival.replace('{date}', '12. Okt 2024')}</p>
+              <p className="text-xs text-muted-foreground">{t.transfer.arrival.replace('{date}', language === 'de' ? '12. Okt 2024' : 'Oct 12, 2024')}</p>
             </div>
           </div>
         </CardHeader>
@@ -132,14 +132,14 @@ export default function AssetTransferPage() {
               <Button 
                 className="w-full bg-primary transition-all duration-75" 
                 onClick={startTransfer}
-                disabled={isStarting || transferStatus !== 'initiated'}
+                disabled={isStarting || (transferStatus !== 'not_started' && transferStatus !== 'initiated')}
               >
                 {isStarting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                {transferStatus === 'initiated' ? t.transfer.begin : t.transfer.processing}
+                {transferStatus === 'not_started' || transferStatus === 'initiated' ? t.transfer.begin : t.transfer.processing}
               </Button>
               {transferStatus === 'in_transit' && (
-                <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent/5" onClick={completeTransferManual}>
-                  {t.language === 'de' ? 'Transfer manuell abschließen' : 'Complete Transfer Manually'}
+                <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent/5 transition-all duration-75" onClick={completeTransferManual}>
+                  {language === 'de' ? 'Transfer manuell abschließen' : 'Complete Transfer Manually'}
                 </Button>
               )}
             </div>

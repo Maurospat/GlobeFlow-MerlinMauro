@@ -28,14 +28,14 @@ export const initialDocuments: Document[] = [
     title: 'Passport Copy',
     whyNeeded: 'Required for identity verification and visa issuance.',
     howToGet: 'Scan the biographical page of your valid passport.',
-    status: 'approved'
+    status: 'not_uploaded'
   },
   {
     id: '2',
     title: 'Proof of Address',
     whyNeeded: 'To verify your current place of residence in your home country.',
     howToGet: 'A utility bill or bank statement from the last 3 months.',
-    status: 'under_review'
+    status: 'not_uploaded'
   },
   {
     id: '3',
@@ -73,7 +73,7 @@ export const initialTransfer: Transfer = {
   contactName: 'James Wilson',
   amount: 250000,
   currency: 'USD',
-  status: 'initiated',
+  status: 'not_started',
   etaDays: 4,
   fxRate: 15650.45
 };

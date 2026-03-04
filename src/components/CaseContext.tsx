@@ -28,12 +28,12 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     setTransferStatus(status);
   };
 
-  // Berechnung des Fortschritts:
-  // Dokumente zählen für 70% des Fortschritts
-  // Der Transfer zählt für 30% des Fortschritts
+  // Fortschrittsberechnung:
+  // Dokumente (Hochgeladen oder weiter) zählen für 70% (ca. 11.6% pro Dokument)
   const uploadedDocs = documents.filter(d => d.status !== 'not_uploaded').length;
   const docProgress = (uploadedDocs / documents.length) * 70;
 
+  // Transfer zählt für 30%
   let transferProgressVal = 0;
   if (transferStatus === 'initiated') transferProgressVal = 5;
   if (transferStatus === 'in_review') transferProgressVal = 10;

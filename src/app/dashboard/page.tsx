@@ -20,28 +20,56 @@ import {
 import Link from 'next/link';
 
 export default function Dashboard() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { documents, progress: actualProgress, transferStatus } = useCase();
   const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDisplayProgress(actualProgress), 100);
+    // Schnellere Animation für den Balken
+    const timer = setTimeout(() => setDisplayProgress(actualProgress), 50);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
-  // Finde den ersten Schritt, der noch nicht hochgeladen wurde
+  // Nächster Schritt Logik
   const nextStepDoc = documents.find(d => d.status === 'not_uploaded');
-  
-  // Zähle alle Dokumente, die bereits hochgeladen wurden
+  const allDocsUploaded = !nextStepDoc;
+  const transferCompleted = transferStatus === 'completed';
+
   const uploadedDocsCount = documents.filter(d => d.status !== 'not_uploaded').length;
   const totalDocs = documents.length;
 
   const stats = [
-    { title: t.dashboard.stats.docs, value: `${uploadedDocsCount}/${totalDocs}`, status: t.common.active, icon: FileText, href: '/documents' },
-    { title: t.dashboard.stats.transfer, value: '$250k', status: transferStatus === 'completed' ? t.common.approved : t.common.active, icon: ArrowRightLeft, href: '/transfer' },
+    { title: t.dashboard.stats.docs, value: `${uploadedDocsCount}/${totalDocs}`, status: uploadedDocsCount > 0 ? t.common.active : t.common.not_started, icon: FileText, href: '/documents' },
+    { title: t.dashboard.stats.transfer, value: '$250k', status: transferCompleted ? t.common.approved : (transferStatus === 'not_started' ? t.common.not_started : t.common.active), icon: ArrowRightLeft, href: '/transfer' },
     { title: t.dashboard.stats.costs, value: '$3,420', status: t.common.pending, icon: Wallet, href: '/costs' },
     { title: t.dashboard.stats.manager, value: t.common.active, status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
+
+  const getDocTitle = (doc: any) => {
+    if (!doc) return "";
+    const keys: Record<string, string> = {
+      '1': 'passport',
+      '2': 'address',
+      '3': 'tax',
+      '4': 'bank',
+      '5': 'funds',
+      '6': 'visa'
+    };
+    return t.documents.items[keys[doc.id]].title;
+  };
+
+  const getDocWhy = (doc: any) => {
+    if (!doc) return "";
+    const keys: Record<string, string> = {
+      '1': 'passport',
+      '2': 'address',
+      '3': 'tax',
+      '4': 'bank',
+      '5': 'funds',
+      '6': 'visa'
+    };
+    return t.documents.items[keys[doc.id]].why;
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-75">
@@ -82,13 +110,13 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
-            <Card className="hover:shadow-md transition-all duration-100 cursor-pointer border-slate-100 group">
+            <Card className="hover:shadow-md transition-all duration-75 cursor-pointer border-slate-100 group">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10">
                     <stat.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${stat.status === t.common.approved ? 'bg-green-100 text-green-700' : 'bg-accent/10 text-accent-foreground'}`}>
+                  <span className={`text-[10px] font-semibold px-2 py-1 rounded-full ${stat.status === t.common.approved ? 'bg-green-100 text-green-700' : 'bg-accent/10 text-accent-foreground'}`}>
                     {stat.status}
                   </span>
                 </div>
@@ -107,20 +135,20 @@ export default function Dashboard() {
             <CardDescription>{t.dashboard.nextStepDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {nextStepDoc ? (
+            {!allDocsUploaded ? (
               <Link href="/documents">
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
                     <div>
-                      <p className="font-semibold">{nextStepDoc.title}</p>
-                      <p className="text-sm text-muted-foreground">{nextStepDoc.whyNeeded}</p>
+                      <p className="font-semibold">{getDocTitle(nextStepDoc)}</p>
+                      <p className="text-sm text-muted-foreground">{getDocWhy(nextStepDoc)}</p>
                     </div>
                   </div>
                   <Button variant="ghost" size="icon" className="transition-all duration-75"><ArrowRight className="w-4 h-4" /></Button>
                 </div>
               </Link>
-            ) : transferStatus !== 'completed' ? (
+            ) : !transferCompleted ? (
               <Link href="/transfer">
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
                   <div className="flex items-center gap-4">
@@ -134,7 +162,7 @@ export default function Dashboard() {
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 animate-in fade-in duration-150">
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 animate-in fade-in duration-75">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-green-500 font-bold shadow-sm">
                     <CheckCircle2 className="w-6 h-6" />
