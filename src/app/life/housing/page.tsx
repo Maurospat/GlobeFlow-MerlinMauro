@@ -25,7 +25,8 @@ import {
   Building2,
   Home,
   Waves,
-  Star
+  Star,
+  ShieldCheck
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -214,7 +215,6 @@ export default function HousingSearch() {
                 alt={listing.title} 
                 fill 
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
-                data-ai-hint="luxury property"
               />
               <div className="absolute top-4 left-4">
                 <Badge className="bg-white/90 text-primary hover:bg-white/100 backdrop-blur-sm border-none shadow-sm">
