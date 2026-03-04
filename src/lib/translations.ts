@@ -41,7 +41,8 @@ export const translations = {
       select: 'Select',
       typeMessage: 'Type your message...',
       send: 'Send',
-      viewMore: 'View more slots'
+      viewMore: 'View more slots',
+      required: 'Required'
     },
     landing: {
       heroTitle: 'Your secure path to Indonesia.',
@@ -111,9 +112,25 @@ export const translations = {
       transparency: 'Cost Transparency',
       guarantee: 'GlobeFlow guarantees no hidden surprise fees.',
       midMarket: 'Mid-Market Rate',
-      institution: 'Institution',
+      institution: 'Bank Name',
+      swift: 'BIC/SWIFT Code',
+      iban: 'IBAN',
+      customerNo: 'Customer Number at Home Bank',
       amount: 'Amount',
-      inTransit: 'In Transit'
+      inTransit: 'In Transit',
+      scope: {
+        title: 'Transfer Scope',
+        cash: 'Cash Assets',
+        securities: 'Securities / Portfolio',
+        pension: 'Pension Assets (3rd Pillar)',
+        total: 'Total Assets'
+      },
+      poa: {
+        title: 'Digital Power of Attorney',
+        text: 'I hereby authorize GlobeFlow to contact my designated home bank on my behalf to coordinate the asset transfer process and obtain necessary statements for the residency application.',
+        sign: 'Sign Power of Attorney',
+        success: 'Power of Attorney signed successfully. GlobeFlow will contact your home bank within 3 business days.'
+      }
     },
     costs: {
       title: 'Total Costs',
@@ -326,7 +343,8 @@ export const translations = {
       select: 'Auswählen',
       typeMessage: 'Nachricht eingeben...',
       send: 'Senden',
-      viewMore: 'Weitere Termine'
+      viewMore: 'Weitere Termine',
+      required: 'Erforderlich'
     },
     landing: {
       heroTitle: 'Ihr sicherer Weg nach Indonesien.',
@@ -396,9 +414,25 @@ export const translations = {
       transparency: 'Kostentransparenz',
       guarantee: 'GlobeFlow garantiert keine versteckten Gebühren.',
       midMarket: 'Marktkurs',
-      institution: 'Institut',
+      institution: 'Name der Bank',
+      swift: 'BIC/SWIFT Code',
+      iban: 'IBAN',
+      customerNo: 'Kundennummer bei der Hausbank',
       amount: 'Betrag',
-      inTransit: 'Unterwegs'
+      inTransit: 'Unterwegs',
+      scope: {
+        title: 'Transferumfang',
+        cash: 'Barguthaben',
+        securities: 'Wertschriften / Depot',
+        pension: 'Vorsorgevermögen (Säule 3a)',
+        total: 'Gesamtes Vermögen'
+      },
+      poa: {
+        title: 'Digitale Vollmacht',
+        text: 'Hiermit bevollmächtige ich GlobeFlow, in meinem Namen Kontakt mit meiner angegebenen Hausbank aufzunehmen, um den Transferprozess zu koordinieren und notwendige Bestätigungen für den Aufenthaltsantrag einzuholen.',
+        sign: 'Vollmacht unterzeichnen',
+        success: 'Vollmacht erfolgreich unterzeichnet. GlobeFlow wird Ihre Hausbank innerhalb von 3 Werktagen kontaktieren.'
+      }
     },
     costs: {
       title: 'Gesamtkosten',
@@ -503,7 +537,7 @@ export const translations = {
         bali: { 
           title: 'Bali', 
           desc: 'Lifestyle-Destination, digitale Nomaden, Unternehmer, Strände.',
-          full: 'Bali steht für luxuriöses tropisches Leben. Jenseits der Strände bietet die Insel eine lebendige Gemeinschaft aus Unternehmern und Weltbürgern. Orte wie Canggu und Uluwatu sind Hotspots für Privatvillen und exklusive Beach Clubs.',
+          full: 'Bali steht für luxuriöses tropisches Leben. Jenseits der Strände bietet die Insel eine lebendige Gemeinschaft aus Unternehmern und Weltbürgern. Orte wie Canggu und Uluwatu are hotspots für Privatvillen und exklusive Beach Clubs.',
           costs: {
             rent: '1.500 € - 4.000 € (Privatvilla)',
             meal: '15 € - 60 € (Sunset Beach Club)',
@@ -537,7 +571,7 @@ export const translations = {
         text: 'Indonesien bietet sowohl öffentliche als auch private Gesundheitsversorgung. Die meisten Expatriates nutzen Privatkliniken.',
         hospitals: 'Internationale Krankenhäuser',
         insurance: 'Private Krankenversicherung',
-        services: 'Medizinische Dienste in Jakarta und Bali'
+        services: 'Medizinische Dienste in Jakarta and Bali'
       },
       community: {
         title: 'Expat-Gemeinschaft',

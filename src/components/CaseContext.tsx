@@ -9,6 +9,8 @@ type CaseContextType = {
   updateDocumentStatus: (id: string, status: DocStatus) => void;
   transferStatus: TransferStatus;
   updateTransferStatus: (status: TransferStatus) => void;
+  isPoASigned: boolean;
+  setPoASigned: (val: boolean) => void;
   progress: number;
 };
 
@@ -17,6 +19,7 @@ const CaseContext = createContext<CaseContextType | undefined>(undefined);
 export function CaseProvider({ children }: { children: ReactNode }) {
   const [documents, setDocuments] = useState<Document[]>(initialDocuments);
   const [transferStatus, setTransferStatus] = useState<TransferStatus>(initialTransfer.status);
+  const [isPoASigned, setIsPoASigned] = useState(false);
 
   const updateDocumentStatus = (id: string, status: DocStatus) => {
     setDocuments(prev => prev.map(doc => 
@@ -47,7 +50,9 @@ export function CaseProvider({ children }: { children: ReactNode }) {
       documents, 
       updateDocumentStatus, 
       transferStatus, 
-      updateTransferStatus, 
+      updateTransferStatus,
+      isPoASigned,
+      setPoASigned: setIsPoASigned,
       progress 
     }}>
       {children}
