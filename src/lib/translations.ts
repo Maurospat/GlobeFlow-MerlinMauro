@@ -42,7 +42,9 @@ export const translations = {
       typeMessage: 'Type your message...',
       send: 'Send',
       viewMore: 'View more slots',
-      required: 'Required'
+      required: 'Required',
+      all: 'All',
+      filter: 'Filter'
     },
     landing: {
       heroTitle: 'Your secure path to Indonesia.',
@@ -258,6 +260,13 @@ export const translations = {
         apartments: 'Luxury apartments',
         villas: 'Villas',
         shortTerm: 'Short-term rentals when first arriving',
+        searchTitle: 'Verified Premium Real Estate',
+        searchSubtitle: 'Exclusive listings in prime locations across Indonesia.',
+        type: 'Type',
+        city: 'City',
+        priceRange: 'Price Range',
+        bed: 'Bed',
+        bath: 'Bath',
         partners: {
           title: 'Verified Housing Partners',
           desc: 'GlobeFlow connects you with trusted real estate partners who specialize in expat housing.',
@@ -344,7 +353,9 @@ export const translations = {
       typeMessage: 'Nachricht eingeben...',
       send: 'Senden',
       viewMore: 'Weitere Termine',
-      required: 'Erforderlich'
+      required: 'Erforderlich',
+      all: 'Alle',
+      filter: 'Filtern'
     },
     landing: {
       heroTitle: 'Ihr sicherer Weg nach Indonesien.',
@@ -560,10 +571,17 @@ export const translations = {
         apartments: 'Luxusapartments',
         villas: 'Villen',
         shortTerm: 'Kurzzeitmieten bei Ankunft',
+        searchTitle: 'Verifizierte Premium-Immobilien',
+        searchSubtitle: 'Exklusive Angebote in den besten Lagen Indonesiens.',
+        type: 'Typ',
+        city: 'Stadt',
+        priceRange: 'Preisklasse',
+        bed: 'Betten',
+        bath: 'Bäder',
         partners: {
           title: 'Verifizierte Wohnpartner',
           desc: 'GlobeFlow verbindet Sie mit vertrauenswürdigen Immobilienpartnern, die auf Expat-Wohnungen spezialisiert sind.',
-          button: 'Wohnmöglichkeiten durchsuchen'
+          button: 'Wohnungsmöglichkeiten durchsuchen'
         }
       },
       healthcare: {

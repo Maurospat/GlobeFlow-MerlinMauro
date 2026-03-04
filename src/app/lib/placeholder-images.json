@@ -36,6 +36,24 @@
       "description": "Surabaya cityscape",
       "imageUrl": "https://picsum.photos/seed/surabaya/600/400",
       "imageHint": "surabaya city"
+    },
+    {
+      "id": "house-1",
+      "description": "Luxury Villa in Bali",
+      "imageUrl": "https://picsum.photos/seed/villa1/800/600",
+      "imageHint": "luxury villa"
+    },
+    {
+      "id": "house-2",
+      "description": "Modern Penthouse in Jakarta",
+      "imageUrl": "https://picsum.photos/seed/penthouse/800/600",
+      "imageHint": "modern penthouse"
+    },
+    {
+      "id": "house-3",
+      "description": "Family House in Surabaya",
+      "imageUrl": "https://picsum.photos/seed/house/800/600",
+      "imageHint": "family house"
     }
   ]
 }

@@ -39,7 +39,6 @@ import {
 export default function LifeInIndonesia() {
   const { t, language } = useLanguage();
   const [mounted, setMounted] = useState(false);
-  const [selectedCity, setSelectedCity] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -278,9 +277,11 @@ export default function LifeInIndonesia() {
             <p className="text-white/80 leading-relaxed mb-6">
               {t.life.housing.partners.desc}
             </p>
-            <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-75">
-              {t.life.housing.partners.button}
-            </Button>
+            <Link href="/life/housing">
+              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-75">
+                {t.life.housing.partners.button}
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </section>
