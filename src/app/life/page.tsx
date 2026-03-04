@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -24,7 +23,8 @@ import {
   Info,
   ShieldCheck,
   Wallet,
-  Globe
+  Globe,
+  Waves
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
@@ -73,78 +73,88 @@ export default function LifeInIndonesia() {
   ];
 
   return (
-    <div className="space-y-16 pb-20 animate-in fade-in duration-100">
+    <div className="space-y-20 pb-24 animate-in fade-in duration-200">
       {/* Header */}
-      <header className="space-y-4">
-        <Badge variant="outline" className="text-accent border-accent px-4 py-1 uppercase tracking-widest font-bold">
+      <header className="space-y-6">
+        <Badge variant="outline" className="text-accent border-accent px-6 py-1.5 uppercase tracking-[0.2em] font-black text-[10px] batik-pattern">
           {t.nav.life}
         </Badge>
-        <h1 className="text-4xl md:text-5xl font-headline font-extrabold text-primary leading-tight">
+        <h1 className="text-5xl md:text-7xl font-headline font-black text-primary leading-[1.1] tracking-tighter">
           {t.life.title}
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl">
+        <p className="text-2xl text-muted-foreground max-w-2xl font-medium leading-relaxed">
           {t.life.subtitle}
         </p>
       </header>
 
       {/* Section 1: Overview */}
-      <section className="grid lg:grid-cols-2 gap-12 items-center">
-        <div className="space-y-6">
-          <h2 className="text-3xl font-bold">{t.life.overview.title}</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+      <section className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="space-y-8">
+          <h2 className="text-4xl font-black tracking-tight">{t.life.overview.title}</h2>
+          <p className="text-xl text-muted-foreground leading-relaxed font-medium">
             {t.life.overview.text}
           </p>
-          <div className="flex gap-4">
-            <CheckCircle2 className="text-accent w-6 h-6 shrink-0" />
-            <p className="text-sm font-medium">{language === 'de' ? 'Herausragende Lebensqualität' : 'Exceptional quality of life'}</p>
-          </div>
-          <div className="flex gap-4">
-            <CheckCircle2 className="text-accent w-6 h-6 shrink-0" />
-            <p className="text-sm font-medium">{language === 'de' ? 'Weltklasse-Gastfreundschaft' : 'World-class hospitality'}</p>
+          <div className="space-y-4">
+            <div className="flex gap-5 items-center p-5 rounded-2xl bg-white border border-secondary shadow-sm">
+              <div className="p-3 ocean-gradient rounded-xl shadow-lg">
+                <CheckCircle2 className="text-accent w-6 h-6 shrink-0" />
+              </div>
+              <p className="text-lg font-bold text-primary">{language === 'de' ? 'Herausragende Lebensqualität' : 'Exceptional quality of life'}</p>
+            </div>
+            <div className="flex gap-5 items-center p-5 rounded-2xl bg-white border border-secondary shadow-sm">
+              <div className="p-3 ocean-gradient rounded-xl shadow-lg">
+                <Waves className="text-accent w-6 h-6 shrink-0" />
+              </div>
+              <p className="text-lg font-bold text-primary">{language === 'de' ? 'Weltklasse-Gastfreundschaft' : 'World-class hospitality'}</p>
+            </div>
           </div>
         </div>
-        <div className="relative aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl border">
+        <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.1)] border-8 border-white group">
           <Image 
             src={heroImage?.imageUrl || "https://picsum.photos/seed/life/800/600"} 
             alt="Life in Indonesia" 
             fill 
-            className="object-cover"
+            className="object-cover group-hover:scale-110 transition-transform duration-1000"
             data-ai-hint="indonesia luxury"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none" />
         </div>
       </section>
 
       {/* Section 2: Cost of Living Comparison */}
-      <section className="space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold">{t.life.costOfLiving.title}</h2>
-          <p className="text-muted-foreground">{t.life.costOfLiving.subtitle}</p>
+      <section className="space-y-12">
+        <div className="text-center space-y-4">
+          <h2 className="text-4xl font-black tracking-tight">{t.life.costOfLiving.title}</h2>
+          <p className="text-xl text-muted-foreground font-medium">{t.life.costOfLiving.subtitle}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {costItems.map((item, i) => (
-            <Card key={i} className="border-slate-100 hover:shadow-md transition-all duration-75">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">{item.label}</CardTitle>
+            <Card key={i} className="glass-card group hover:-translate-y-2 transition-all border-none batik-pattern">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl font-black">{item.label}</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-3 bg-slate-50 rounded-xl">
-                  <p className="text-xs font-bold text-muted-foreground uppercase mb-1">{t.life.costOfLiving.switzerland}</p>
-                  <p className="text-sm font-medium">{item.chf}</p>
+              <CardContent className="space-y-6">
+                <div className="p-5 bg-secondary/40 rounded-2xl border border-secondary">
+                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">{t.life.costOfLiving.switzerland}</p>
+                  <p className="text-md font-bold text-primary/80">{item.chf}</p>
                 </div>
-                <div className="p-3 bg-primary/5 rounded-xl border border-primary/10">
-                  <p className="text-xs font-bold text-primary uppercase mb-1">{t.life.costOfLiving.indonesia}</p>
-                  <p className="text-sm font-bold text-primary">{item.idr}</p>
+                <div className="p-5 ocean-gradient rounded-2xl border border-primary/10 shadow-xl">
+                  <p className="text-[10px] font-black text-accent uppercase tracking-widest mb-2">{t.life.costOfLiving.indonesia}</p>
+                  <p className="text-lg font-black text-white">{item.idr}</p>
                 </div>
               </CardContent>
             </Card>
           ))}
-          <Card className="bg-primary text-white md:col-span-2 lg:col-span-1 flex flex-col justify-center p-6 space-y-4">
-            <div className="p-3 bg-white/10 rounded-full w-fit">
-              <TrendingDown className="w-6 h-6 text-accent" />
+          <Card className="ocean-gradient text-white md:col-span-2 lg:col-span-1 flex flex-col justify-center p-10 space-y-6 relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 w-40 h-40 opacity-10 pointer-events-none">
+              <Waves className="w-full h-full text-white" />
             </div>
-            <h3 className="text-xl font-bold">{language === 'de' ? 'Signifikante Einsparungen' : 'Significant Savings'}</h3>
-            <p className="text-white/80 text-sm leading-relaxed">
+            <div className="p-4 bg-white/20 backdrop-blur-md rounded-2xl w-fit">
+              <TrendingDown className="w-8 h-8 text-accent" />
+            </div>
+            <h3 className="text-3xl font-black tracking-tight">{language === 'de' ? 'Signifikante Einsparungen' : 'Significant Savings'}</h3>
+            <p className="text-white/80 text-lg leading-relaxed font-medium">
               {t.life.costOfLiving.note}
             </p>
           </Card>
@@ -152,81 +162,87 @@ export default function LifeInIndonesia() {
       </section>
 
       {/* Section 3: Best Cities for Expats */}
-      <section className="space-y-8">
-        <h2 className="text-3xl font-bold text-center">{t.life.cities.title}</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+      <section className="space-y-12">
+        <h2 className="text-4xl font-black tracking-tight text-center">{t.life.cities.title}</h2>
+        <div className="grid md:grid-cols-3 gap-10">
           {cityCards.map((city) => (
             <Dialog key={city.id}>
               <DialogTrigger asChild>
-                <Card className="overflow-hidden border-slate-100 group cursor-pointer hover:shadow-lg transition-all duration-100">
-                  <div className="relative h-48">
+                <Card className="overflow-hidden glass-card group cursor-pointer hover:shadow-2xl border-none">
+                  <div className="relative h-60">
                     <Image 
                       src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
                       alt={city.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
                       data-ai-hint="indonesia city"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-60" />
                   </div>
-                  <CardHeader>
-                    <CardTitle>{city.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">{city.desc}</CardDescription>
+                  <CardHeader className="p-8">
+                    <CardTitle className="text-3xl font-black">{city.title}</CardTitle>
+                    <CardDescription className="text-lg line-clamp-2 mt-2 font-medium">{city.desc}</CardDescription>
                   </CardHeader>
-                  <CardFooter>
-                    <Button variant="ghost" className="w-full text-primary gap-2 transition-all duration-75 group-hover:bg-primary group-hover:text-white">
+                  <CardFooter className="p-8 pt-0">
+                    <Button variant="ghost" className="w-full text-primary font-black gap-3 h-12 rounded-xl group-hover:bg-primary group-hover:text-white transition-all">
                       {t.life.cities.learnMore}
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-5 h-5" />
                     </Button>
                   </CardFooter>
                 </Card>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <div className="relative h-64 w-full rounded-xl overflow-hidden mb-4">
-                    <Image 
-                      src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
-                      alt={city.title}
-                      fill
-                      className="object-cover"
-                    />
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 rounded-[2rem] border-none batik-pattern">
+                <div className="relative h-80 w-full group">
+                  <Image 
+                    src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
+                    alt={city.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-10 left-10 right-10">
+                    <h3 className="text-5xl font-black text-white tracking-tighter">{city.title}</h3>
                   </div>
-                  <DialogTitle className="text-3xl font-bold text-primary">{city.title}</DialogTitle>
-                  <DialogDescription className="text-lg mt-2">
-                    {city.full}
-                  </DialogDescription>
-                </DialogHeader>
+                </div>
                 
-                <div className="mt-6 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-slate-50 rounded-xl border">
-                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
-                        <Building className="w-4 h-4" />
+                <div className="p-10 space-y-8">
+                  <p className="text-xl text-muted-foreground leading-relaxed font-medium">
+                    {city.full}
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-6 bg-secondary/50 rounded-2xl border border-secondary shadow-sm">
+                      <div className="flex items-center gap-3 text-primary font-black mb-3">
+                        <Building className="w-5 h-5 text-accent" />
                         {language === 'de' ? 'Wohnen' : 'Housing'}
                       </div>
-                      <p className="text-sm font-semibold">{city.costs.rent}</p>
+                      <p className="text-md font-bold text-primary/80">{city.costs.rent}</p>
                     </div>
-                    <div className="p-4 bg-slate-50 rounded-xl border">
-                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
-                        <Utensils className="w-4 h-4" />
+                    <div className="p-6 bg-secondary/50 rounded-2xl border border-secondary shadow-sm">
+                      <div className="flex items-center gap-3 text-primary font-black mb-3">
+                        <Utensils className="w-5 h-5 text-accent" />
                         {language === 'de' ? 'Essen' : 'Dining'}
                       </div>
-                      <p className="text-sm font-semibold">{city.costs.meal}</p>
+                      <p className="text-md font-bold text-primary/80">{city.costs.meal}</p>
                     </div>
-                    <div className="p-4 bg-slate-50 rounded-xl border">
-                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
-                        {city.id === 'bali' ? <HeartPulse className="w-4 h-4" /> : city.id === 'jakarta' ? <Users className="w-4 h-4" /> : <Wallet className="w-4 h-4" />}
+                    <div className="p-6 bg-secondary/50 rounded-2xl border border-secondary shadow-sm">
+                      <div className="flex items-center gap-3 text-primary font-black mb-3">
+                        {city.id === 'bali' ? <HeartPulse className="w-5 h-5 text-accent" /> : city.id === 'jakarta' ? <Users className="w-5 h-5 text-accent" /> : <Wallet className="w-5 h-5 text-accent" />}
                         {city.id === 'bali' ? (language === 'de' ? 'Wellness' : 'Wellness') : city.id === 'jakarta' ? (language === 'de' ? 'Personal' : 'Staff') : (language === 'de' ? 'Service' : 'Service')}
                       </div>
-                      <p className="text-sm font-semibold">{city.id === 'bali' ? city.costs.wellness : city.id === 'jakarta' ? city.costs.driver : city.costs.services}</p>
+                      <p className="text-md font-bold text-primary/80">{city.id === 'bali' ? city.costs.wellness : city.id === 'jakarta' ? city.costs.driver : city.costs.services}</p>
                     </div>
                   </div>
 
-                  <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
-                    <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
-                      <Info className="w-4 h-4" />
+                  <div className="p-8 ocean-gradient rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
+                    <div className="absolute -right-8 -bottom-8 w-32 h-32 opacity-10 pointer-events-none">
+                      <Lightbulb className="w-full h-full text-white" />
+                    </div>
+                    <h4 className="font-black text-accent mb-3 flex items-center gap-3 text-xl uppercase tracking-widest">
+                      <Info className="w-6 h-6" />
                       {language === 'de' ? 'Experten-Tipp' : 'Expert Tip'}
                     </h4>
-                    <p className="text-sm text-slate-700 italic">
+                    <p className="text-lg text-white font-medium italic leading-relaxed">
                       {city.id === 'jakarta' 
                         ? (language === 'de' ? 'Wählen Sie eine Wohnung in Gehweite zu Ihrem Büro, um den Verkehr zu vermeiden.' : 'Choose an apartment within walking distance to your office to bypass peak traffic.') 
                         : city.id === 'bali' 
@@ -236,9 +252,9 @@ export default function LifeInIndonesia() {
                   </div>
                 </div>
 
-                <div className="mt-8 flex justify-end">
+                <div className="p-8 pt-0 flex justify-end">
                   <DialogTrigger asChild>
-                    <Button className="bg-primary">{t.common.close}</Button>
+                    <Button className="bg-primary text-white font-black px-10 h-12 rounded-xl">{t.common.close}</Button>
                   </DialogTrigger>
                 </div>
               </DialogContent>
@@ -248,38 +264,48 @@ export default function LifeInIndonesia() {
       </section>
 
       {/* Section 4: Housing */}
-      <section className="bg-white rounded-3xl p-8 md:p-12 border border-slate-100 shadow-sm grid md:grid-cols-2 gap-12 items-center">
-        <div className="space-y-6">
-          <h2 className="text-3xl font-bold">{t.life.housing.title}</h2>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
-              <Building className="w-6 h-6 text-primary" />
-              <span className="font-medium">{t.life.housing.apartments}</span>
+      <section className="bg-white rounded-[3rem] p-10 md:p-20 border border-secondary shadow-xl batik-pattern grid lg:grid-cols-2 gap-20 items-center">
+        <div className="space-y-10">
+          <h2 className="text-5xl font-black tracking-tighter leading-tight">{t.life.housing.title}</h2>
+          <div className="grid gap-6">
+            <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
+              <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                <Building className="w-8 h-8 text-accent" />
+              </div>
+              <span className="text-xl font-black text-primary">{t.life.housing.apartments}</span>
             </div>
-            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
-              <MapPin className="w-6 h-6 text-primary" />
-              <span className="font-medium">{t.life.housing.villas}</span>
+            <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
+              <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                <Palmtree className="w-8 h-8 text-accent" />
+              </div>
+              <span className="text-xl font-black text-primary">{t.life.housing.villas}</span>
             </div>
-            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
-              <Users className="w-6 h-6 text-primary" />
-              <span className="font-medium">{t.life.housing.shortTerm}</span>
+            <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
+              <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                <Users className="w-8 h-8 text-accent" />
+              </div>
+              <span className="text-xl font-black text-primary">{t.life.housing.shortTerm}</span>
             </div>
           </div>
         </div>
-        <Card className="bg-primary text-white border-none shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <Badge variant="outline" className="bg-accent/20 text-accent border-accent/20">NEW</Badge>
+        <Card className="ocean-gradient text-white border-none shadow-[0_40px_100px_rgba(26,60,69,0.3)] rounded-[2.5rem] relative overflow-hidden p-4">
+           <div className="absolute -top-10 -right-10 w-48 h-48 opacity-10 rotate-45 pointer-events-none">
+            <Waves className="w-full h-full text-white" />
+          </div>
+          <CardHeader className="p-10">
+            <CardTitle className="text-white text-4xl font-black flex items-center gap-4">
+              <Badge variant="outline" className="bg-accent/20 text-accent border-accent/20 px-4 py-1 font-black">NEW</Badge>
               {t.life.housing.partners.title}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-white/80 leading-relaxed mb-6">
+          <CardContent className="px-10 pb-10">
+            <p className="text-white/80 text-xl leading-relaxed mb-10 font-medium">
               {t.life.housing.partners.desc}
             </p>
             <Link href="/life/housing">
-              <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-75">
+              <Button className="w-full bg-accent text-primary h-16 text-xl font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90 group transition-all">
                 {t.life.housing.partners.button}
+                <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
               </Button>
             </Link>
           </CardContent>
@@ -287,88 +313,65 @@ export default function LifeInIndonesia() {
       </section>
 
       {/* Section 5: Healthcare */}
-      <section className="space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-4">
-          <h2 className="text-3xl font-bold">{t.life.healthcare.title}</h2>
-          <p className="text-muted-foreground">{t.life.healthcare.text}</p>
+      <section className="space-y-12">
+        <div className="text-center max-w-2xl mx-auto space-y-6">
+          <h2 className="text-4xl font-black tracking-tight">{t.life.healthcare.title}</h2>
+          <p className="text-xl text-muted-foreground font-medium">{t.life.healthcare.text}</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="p-6 bg-slate-50 rounded-2xl border text-center space-y-3">
-            <div className="mx-auto w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center">
-              <HeartPulse className="w-6 h-6 text-primary" />
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="p-10 bg-white rounded-3xl border border-secondary text-center space-y-5 shadow-sm hover:shadow-xl transition-all batik-pattern group">
+            <div className="mx-auto w-16 h-16 ocean-gradient rounded-2xl shadow-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
+              <HeartPulse className="w-8 h-8 text-accent" />
             </div>
-            <h4 className="font-bold">{t.life.healthcare.hospitals}</h4>
+            <h4 className="font-black text-xl">{t.life.healthcare.hospitals}</h4>
           </div>
-          <div className="p-6 bg-slate-50 rounded-2xl border text-center space-y-3">
-            <div className="mx-auto w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center">
-              <ShieldCheck className="w-6 h-6 text-primary" />
+          <div className="p-10 bg-white rounded-3xl border border-secondary text-center space-y-5 shadow-sm hover:shadow-xl transition-all batik-pattern group">
+            <div className="mx-auto w-16 h-16 ocean-gradient rounded-2xl shadow-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
+              <ShieldCheck className="w-8 h-8 text-accent" />
             </div>
-            <h4 className="font-bold">{t.life.healthcare.insurance}</h4>
+            <h4 className="font-black text-xl">{t.life.healthcare.insurance}</h4>
           </div>
-          <div className="p-6 bg-slate-50 rounded-2xl border text-center space-y-3">
-            <div className="mx-auto w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-primary" />
+          <div className="p-10 bg-white rounded-3xl border border-secondary text-center space-y-5 shadow-sm hover:shadow-xl transition-all batik-pattern group">
+            <div className="mx-auto w-16 h-16 ocean-gradient rounded-2xl shadow-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
+              <MapPin className="w-8 h-8 text-accent" />
             </div>
-            <h4 className="font-bold">{t.life.healthcare.services}</h4>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 6: Expat Community */}
-      <section className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <h2 className="text-3xl font-bold">{t.life.community.title}</h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            {t.life.community.text}
-          </p>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {[t.life.community.events, t.life.community.business, t.life.community.schools, t.life.community.social].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
-                <div className="w-2 h-2 rounded-full bg-accent" />
-                <span className="font-medium">{item}</span>
-              </div>
-            ))}
+            <h4 className="font-black text-xl">{t.life.healthcare.services}</h4>
           </div>
         </div>
-        <Card className="border-accent/30 bg-accent/5 flex flex-col items-center text-center p-8 space-y-4">
-          <Users className="w-12 h-12 text-accent" />
-          <h3 className="text-xl font-bold text-primary">{t.life.community.network.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t.life.community.network.desc}
-          </p>
-          <Button variant="outline" className="w-full border-primary text-primary transition-all duration-75">
-            {t.common.view}
-          </Button>
-        </Card>
       </section>
 
       {/* Section 7: Lifestyle Highlights */}
-      <section className="space-y-8">
-        <h2 className="text-3xl font-bold text-center">{t.life.lifestyle.title}</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <section className="space-y-12">
+        <h2 className="text-4xl font-black tracking-tight text-center">{t.life.lifestyle.title}</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {lifestyleItems.map((item, i) => (
-            <Card key={i} className="text-center p-6 border-slate-100 hover:border-accent/50 transition-all duration-75">
-              <item.icon className="w-8 h-8 text-accent mx-auto mb-4" />
-              <h4 className="font-bold mb-1">{item.title}</h4>
-              <p className="text-xs text-muted-foreground">{item.desc}</p>
+            <Card key={i} className="text-center p-8 glass-card border-none hover:bg-white transition-all group">
+              <div className="p-4 bg-secondary rounded-2xl w-fit mx-auto mb-6 group-hover:bg-accent group-hover:text-white transition-colors">
+                <item.icon className="w-10 h-10 text-primary group-hover:text-white" />
+              </div>
+              <h4 className="font-black text-xl mb-2">{item.title}</h4>
+              <p className="text-sm text-muted-foreground font-medium">{item.desc}</p>
             </Card>
           ))}
         </div>
       </section>
 
       {/* Section 8: Relocation Tips */}
-      <section className="bg-primary/5 rounded-3xl p-8 md:p-12">
-        <div className="flex flex-col md:flex-row gap-8 items-center">
-          <div className="bg-white p-6 rounded-2xl shadow-xl w-full md:w-1/3">
-            <Lightbulb className="w-10 h-10 text-accent mb-4" />
-            <h3 className="text-xl font-bold mb-2">{t.life.tips.title}</h3>
-            <p className="text-sm text-muted-foreground">{language === 'de' ? 'Vorbereitung ist alles.' : 'Preparation is everything.'}</p>
+      <section className="ocean-gradient rounded-[3rem] p-12 md:p-20 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none">
+          <Waves className="w-full h-full text-white" />
+        </div>
+        <div className="flex flex-col lg:flex-row gap-20 items-center">
+          <div className="bg-white p-10 rounded-[2rem] shadow-[0_40px_100px_rgba(0,0,0,0.2)] w-full lg:w-1/3 batik-pattern relative z-10">
+            <Lightbulb className="w-16 h-16 text-accent mb-6" />
+            <h3 className="text-3xl font-black mb-3 tracking-tight">{t.life.tips.title}</h3>
+            <p className="text-lg text-muted-foreground font-medium">{language === 'de' ? 'Vorbereitung ist alles.' : 'Preparation is everything.'}</p>
           </div>
-          <div className="flex-1 grid sm:grid-cols-2 gap-6">
+          <div className="flex-1 grid sm:grid-cols-2 gap-10">
             {[t.life.tips.visa, t.life.tips.housing, t.life.tips.bank, t.life.tips.community].map((tip, i) => (
-              <div key={i} className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0 font-bold text-sm">{i+1}</div>
-                <p className="font-medium text-slate-700">{tip}</p>
+              <div key={i} className="flex items-start gap-6 group">
+                <div className="w-10 h-10 rounded-full bg-accent text-primary flex items-center justify-center shrink-0 font-black text-lg shadow-lg shadow-accent/20 group-hover:scale-110 transition-transform">{i+1}</div>
+                <p className="font-bold text-white text-xl leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -376,20 +379,20 @@ export default function LifeInIndonesia() {
       </section>
 
       {/* Section 9: Call to Action */}
-      <section className="text-center space-y-8 py-12">
-        <div className="space-y-4 max-w-2xl mx-auto">
-          <h2 className="text-4xl font-bold text-primary">{t.life.cta.title}</h2>
-          <p className="text-muted-foreground">{language === 'de' ? 'Ihr neues Kapitel wartet auf Sie.' : 'Your new chapter is waiting for you.'}</p>
+      <section className="text-center space-y-12 py-20 relative overflow-hidden batik-pattern">
+        <div className="space-y-6 max-w-3xl mx-auto px-4">
+          <h2 className="text-5xl md:text-7xl font-black text-primary tracking-tighter leading-tight">{t.life.cta.title}</h2>
+          <p className="text-2xl text-muted-foreground font-medium">{language === 'de' ? 'Ihr neues Kapitel wartet auf Sie.' : 'Your new chapter is waiting for you.'}</p>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-6">
           <Link href="/documents">
-            <Button size="lg" className="bg-accent text-accent-foreground h-14 px-8 text-lg rounded-xl group transition-all duration-75">
+            <Button size="lg" className="bg-primary text-white h-20 px-12 text-2xl font-black rounded-2xl group shadow-2xl shadow-primary/30 transition-all">
               {t.life.cta.continue}
-              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform w-8 h-8" />
             </Button>
           </Link>
           <Link href="/dashboard">
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-xl border-slate-200 transition-all duration-75">
+            <Button size="lg" variant="outline" className="h-20 px-12 text-2xl font-black rounded-2xl border-secondary border-4 text-primary bg-white hover:bg-secondary transition-all">
               {t.life.cta.dashboard}
             </Button>
           </Link>

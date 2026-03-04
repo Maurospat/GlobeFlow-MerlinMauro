@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -15,7 +14,8 @@ import {
   ArrowRight,
   CheckCircle2,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Waves
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -74,35 +74,41 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-75">
+    <div className="space-y-8 animate-in fade-in duration-100">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-headline font-bold text-primary">{t.dashboard.welcome} Alexander</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-4xl font-headline font-extrabold text-primary flex items-center gap-3">
+            <Waves className="w-8 h-8 text-accent" />
+            {t.dashboard.welcome} Alexander
+          </h1>
+          <p className="text-muted-foreground mt-1 text-lg">
             {t.dashboard.journeyProgress.replace('{progress}', displayProgress.toString())}
           </p>
         </div>
         <Link href="/documents">
-          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold transition-all duration-75">
+          <Button className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 rounded-full shadow-lg shadow-primary/20 transition-all">
             {t.landing.cta}
-            <ArrowRight className="ml-2 w-4 h-4" />
+            <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </Link>
       </header>
 
-      <Card className="glass-card overflow-hidden">
-        <CardContent className="p-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex-1 space-y-4">
+      <Card className="glass-card overflow-hidden relative border-none batik-pattern">
+        <div className="absolute top-0 right-0 w-32 h-32 opacity-5 pointer-events-none">
+          <Waves className="w-full h-full text-primary" />
+        </div>
+        <CardContent className="p-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="flex-1 space-y-6">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-lg">{t.common.progress}</span>
-                <span className="font-bold text-primary text-2xl">{displayProgress}%</span>
+                <span className="font-bold text-xl text-primary">{t.common.progress}</span>
+                <span className="font-black text-primary text-4xl">{displayProgress}%</span>
               </div>
-              <Progress value={displayProgress} className="h-3" />
-              <div className="flex gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1"><CheckCircle2 className={`w-4 h-4 ${displayProgress > 30 ? 'text-green-500' : 'text-slate-300'}`} /> {t.dashboard.milestones.identity}</span>
-                <span className="flex items-center gap-1"><Clock className={`w-4 h-4 ${displayProgress > 60 ? 'text-green-500' : 'text-accent'}`} /> {t.dashboard.milestones.financials}</span>
-                <span className="flex items-center gap-1"><AlertCircle className={`w-4 h-4 ${displayProgress === 100 ? 'text-green-500' : 'text-slate-300'}`} /> {t.dashboard.milestones.visa}</span>
+              <Progress value={displayProgress} className="h-4 bg-secondary" />
+              <div className="flex flex-wrap gap-6 text-sm font-semibold text-muted-foreground">
+                <span className="flex items-center gap-2"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 30 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
+                <span className="flex items-center gap-2"><Clock className={`w-5 h-5 ${displayProgress > 60 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
+                <span className="flex items-center gap-2"><AlertCircle className={`w-5 h-5 ${displayProgress === 100 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
               </div>
             </div>
           </div>
@@ -112,18 +118,18 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
-            <Card className="hover:shadow-md transition-all duration-75 cursor-pointer border-slate-100 group">
+            <Card className="glass-card group hover:-translate-y-1 hover:shadow-xl transition-all border-none">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10">
-                    <stat.icon className="w-6 h-6 text-primary" />
+                  <div className="p-3 bg-secondary rounded-2xl group-hover:bg-accent group-hover:text-white transition-colors">
+                    <stat.icon className="w-6 h-6 text-primary group-hover:text-white" />
                   </div>
-                  <span className={`text-[10px] font-semibold px-2 py-1 rounded-full ${stat.status === t.common.approved ? 'bg-green-100 text-green-700' : 'bg-accent/10 text-accent-foreground'}`}>
+                  <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter ${stat.status === t.common.approved ? 'bg-emerald-100 text-emerald-800' : 'bg-primary/5 text-primary'}`}>
                     {stat.status}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-sm font-medium">{stat.title}</p>
-                <p className="text-2xl font-bold text-primary">{stat.value}</p>
+                <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest">{stat.title}</p>
+                <p className="text-3xl font-black text-primary mt-1">{stat.value}</p>
               </CardContent>
             </Card>
           </Link>
@@ -131,51 +137,51 @@ export default function Dashboard() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        <Card className="md:col-span-2 border-slate-100">
+        <Card className="md:col-span-2 glass-card border-none">
           <CardHeader>
-            <CardTitle>{t.common.nextSteps}</CardTitle>
-            <CardDescription>{t.dashboard.nextStepDesc}</CardDescription>
+            <CardTitle className="text-2xl">{t.common.nextSteps}</CardTitle>
+            <CardDescription className="text-md">{t.dashboard.nextStepDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {!allDocsUploaded ? (
               <Link href="/documents" className="block">
-                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
+                <div className="flex items-center justify-between p-6 bg-secondary/30 rounded-2xl border border-secondary group hover:bg-white hover:shadow-md transition-all">
+                  <div className="flex items-center gap-6">
+                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border-2 border-primary/10 text-primary font-black shadow-sm group-hover:scale-110 transition-transform">1</div>
                     <div>
-                      <p className="font-semibold">{getDocTitle(nextStepDoc)}</p>
-                      <p className="text-sm text-muted-foreground">{getDocWhy(nextStepDoc)}</p>
+                      <p className="font-bold text-lg text-primary">{getDocTitle(nextStepDoc)}</p>
+                      <p className="text-sm text-muted-foreground font-medium">{getDocWhy(nextStepDoc)}</p>
                     </div>
                   </div>
-                  <div className="p-2 text-muted-foreground group-hover:text-primary transition-colors">
-                    <ArrowRight className="w-5 h-5" />
+                  <div className="p-3 text-muted-foreground group-hover:text-accent transition-colors">
+                    <ArrowRight className="w-6 h-6" />
                   </div>
                 </div>
               </Link>
             ) : !transferCompleted ? (
               <Link href="/transfer" className="block">
-                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
+                <div className="flex items-center justify-between p-6 bg-secondary/30 rounded-2xl border border-secondary group hover:bg-white hover:shadow-md transition-all">
+                  <div className="flex items-center gap-6">
+                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border-2 border-primary/10 text-primary font-black shadow-sm group-hover:scale-110 transition-transform">1</div>
                     <div>
-                      <p className="font-semibold">{t.nav.transfer}</p>
-                      <p className="text-sm text-muted-foreground">{t.dashboard.nextStepTransfer}</p>
+                      <p className="font-bold text-lg text-primary">{t.nav.transfer}</p>
+                      <p className="text-sm text-muted-foreground font-medium">{t.dashboard.nextStepTransfer}</p>
                     </div>
                   </div>
-                  <div className="p-2 text-muted-foreground group-hover:text-primary transition-colors">
-                    <ArrowRight className="w-5 h-5" />
+                  <div className="p-3 text-muted-foreground group-hover:text-accent transition-colors">
+                    <ArrowRight className="w-6 h-6" />
                   </div>
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 animate-in fade-in duration-75">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-green-500 font-bold shadow-sm">
-                    <CheckCircle2 className="w-6 h-6" />
+              <div className="flex items-center justify-between p-6 bg-emerald-50 rounded-2xl border border-emerald-100 animate-in fade-in">
+                <div className="flex items-center gap-6">
+                  <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border-2 border-emerald-500 text-emerald-500 font-black shadow-sm">
+                    <CheckCircle2 className="w-7 h-7" />
                   </div>
                   <div>
-                    <p className="font-semibold text-green-700">{t.dashboard.nextStepFinished}</p>
-                    <p className="text-sm text-green-600">{t.dashboard.journeyProgress.replace('{progress}', '100')}</p>
+                    <p className="font-bold text-lg text-emerald-800">{t.dashboard.nextStepFinished}</p>
+                    <p className="text-sm text-emerald-600 font-medium">{t.dashboard.journeyProgress.replace('{progress}', '100')}</p>
                   </div>
                 </div>
               </div>
@@ -183,18 +189,24 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-100 bg-primary text-white">
+        <Card className="border-none ocean-gradient text-white relative overflow-hidden shadow-2xl">
+          <div className="absolute -bottom-8 -left-8 w-40 h-40 opacity-10 rotate-12 pointer-events-none">
+            <Waves className="w-full h-full text-white" />
+          </div>
           <CardHeader>
-            <CardTitle className="text-white">{t.dashboard.targets}</CardTitle>
+            <CardTitle className="text-white text-2xl font-black">{t.dashboard.targets}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8 mt-4">
             <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm">{t.dashboard.accuracy}</span>
-                <span className="text-sm font-bold">{displayProgress}% {t.dashboard.targetLabel}</span>
+              <div className="flex justify-between mb-3">
+                <span className="text-sm font-bold text-white/80 uppercase tracking-widest">{t.dashboard.accuracy}</span>
+                <span className="text-sm font-black">{displayProgress}%</span>
               </div>
-              <Progress value={displayProgress} className="h-2 bg-white/20" />
+              <Progress value={displayProgress} className="h-3 bg-white/20" />
             </div>
+            <p className="text-sm text-white/70 leading-relaxed font-medium">
+              Maintain high document accuracy for faster processing at the Indonesian Ministry of Law.
+            </p>
           </CardContent>
         </Card>
       </div>

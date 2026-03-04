@@ -1,55 +1,80 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 240 10% 98%;
-    --foreground: 222 47% 11%;
+    /* Deep Ocean Blue & Bali Sand Palette */
+    --background: 40 20% 98%;
+    --foreground: 210 40% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 210 40% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 210 30% 40%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 180 50% 61%;
-    --accent-foreground: 222 47% 11%;
+    --popover-foreground: 210 40% 15%;
+    
+    /* Primary: Deep Teal/Ocean */
+    --primary: 190 45% 25%;
+    --primary-foreground: 180 20% 98%;
+    
+    /* Secondary: Warm Sand */
+    --secondary: 35 30% 92%;
+    --secondary-foreground: 190 45% 20%;
+    
+    --muted: 35 20% 95%;
+    --muted-foreground: 210 20% 45%;
+    
+    /* Accent: Seafoam/Clear Water */
+    --accent: 175 45% 60%;
+    --accent-foreground: 210 40% 15%;
+    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 210 30% 40%;
-    --radius: 0.75rem;
+    
+    --border: 35 20% 88%;
+    --input: 35 20% 88%;
+    --ring: 190 45% 25%;
+    --radius: 1rem;
   }
 }
 
 @layer base {
   * {
-    @apply border-border transition-all duration-75;
+    @apply border-border transition-all duration-100;
   }
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-body antialiased;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(190, 45%, 25%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(35, 45%, 60%, 0.03) 0px, transparent 50%);
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline font-semibold tracking-tight;
+    @apply font-headline font-bold tracking-tight text-primary;
   }
 }
 
 .glass-card {
-  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm transition-all duration-100;
+  @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all duration-300;
 }
 
-.status-badge-pending { @apply bg-yellow-100 text-yellow-800 border-yellow-200; }
-.status-badge-success { @apply bg-green-100 text-green-800 border-green-200; }
-.status-badge-error { @apply bg-red-100 text-red-800 border-red-200; }
+.batik-pattern {
+  background-color: transparent;
+  background-image: radial-gradient(var(--border) 0.5px, transparent 0.5px);
+  background-size: 10px 10px;
+}
+
+.ocean-gradient {
+  @apply bg-gradient-to-br from-[#1A3C45] via-[#2A5C69] to-[#4FB3B3];
+}
+
+.sand-gradient {
+  @apply bg-gradient-to-br from-[#FDFBF7] to-[#F2E9D8];
+}
+
+.status-badge-pending { @apply bg-amber-100 text-amber-800 border-amber-200; }
+.status-badge-success { @apply bg-emerald-100 text-emerald-800 border-emerald-200; }
+.status-badge-error { @apply bg-rose-100 text-rose-800 border-rose-200; }
 .status-badge-neutral { @apply bg-slate-100 text-slate-800 border-slate-200; }
 
-/* Faster animations for overall responsiveness */
 .animate-in {
-  animation-duration: 100ms !important;
+  animation-duration: 150ms !important;
 }
