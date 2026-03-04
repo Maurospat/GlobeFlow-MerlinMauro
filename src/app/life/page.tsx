@@ -264,57 +264,65 @@ export default function LifeInIndonesia() {
         </div>
       </section>
 
-      {/* Section 4: Housing */}
-      <section className="bg-white rounded-[3rem] p-8 md:p-16 lg:p-20 border border-secondary shadow-xl batik-pattern">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
-          <div className="space-y-10">
+      {/* Section 4: Housing - VERTICAL STACKED VERSION */}
+      <section className="space-y-12">
+        <div className="bg-white rounded-[3rem] p-10 md:p-16 lg:p-20 border border-secondary shadow-xl batik-pattern space-y-16">
+          {/* Top: Introduction */}
+          <div className="max-w-3xl space-y-6">
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight">{t.life.housing.title}</h2>
-            <div className="grid gap-4 md:gap-6">
-              <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
-                <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                  <Building className="w-8 h-8 text-accent" />
-                </div>
-                <span className="text-xl font-black text-primary">{t.life.housing.apartments}</span>
+            <p className="text-xl text-muted-foreground font-medium leading-relaxed">
+              {language === 'de' 
+                ? 'Finden Sie Ihr perfektes Zuhause in den exklusivsten Lagen Indonesiens.' 
+                : 'Find your perfect home in Indonesia\'s most exclusive locations.'}
+            </p>
+          </div>
+
+          {/* Middle: Feature List */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center text-center p-8 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all">
+              <div className="p-6 ocean-gradient rounded-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform">
+                <Building className="w-10 h-10 text-accent" />
               </div>
-              <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
-                <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                  <Palmtree className="w-8 h-8 text-accent" />
-                </div>
-                <span className="text-xl font-black text-primary">{t.life.housing.villas}</span>
+              <span className="text-xl font-black text-primary uppercase tracking-tight">{t.life.housing.apartments}</span>
+            </div>
+            <div className="flex flex-col items-center text-center p-8 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all">
+              <div className="p-6 ocean-gradient rounded-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform">
+                <Palmtree className="w-10 h-10 text-accent" />
               </div>
-              <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
-                <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                  <Users className="w-8 h-8 text-accent" />
-                </div>
-                <span className="text-xl font-black text-primary">{t.life.housing.shortTerm}</span>
+              <span className="text-xl font-black text-primary uppercase tracking-tight">{t.life.housing.villas}</span>
+            </div>
+            <div className="flex flex-col items-center text-center p-8 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all">
+              <div className="p-6 ocean-gradient rounded-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform">
+                <Users className="w-10 h-10 text-accent" />
               </div>
+              <span className="text-xl font-black text-primary uppercase tracking-tight">{t.life.housing.shortTerm}</span>
             </div>
           </div>
-          <Card className="ocean-gradient text-white border-none shadow-[0_40px_100px_rgba(26,60,69,0.3)] rounded-[2.5rem] relative overflow-hidden flex flex-col h-full">
-            <div className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none translate-x-1/4 -translate-y-1/4">
+
+          {/* Bottom: Partner CTA */}
+          <Card className="ocean-gradient text-white border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden p-10 md:p-16">
+            <div className="absolute top-0 right-0 w-80 h-80 opacity-10 pointer-events-none translate-x-1/4 -translate-y-1/4">
               <Waves className="w-full h-full text-white" />
             </div>
-            <CardHeader className="p-8 md:p-12 pb-6 z-10">
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <Badge variant="outline" className="bg-accent/20 text-accent border-accent/20 px-4 py-1 font-black shrink-0">NEW</Badge>
-                <CardTitle className="text-white text-3xl md:text-4xl font-black tracking-tight">
+            <div className="relative z-10 flex flex-col items-center text-center space-y-8">
+              <div className="flex flex-col items-center gap-4">
+                <Badge variant="outline" className="bg-accent/20 text-accent border-accent/20 px-6 py-1.5 font-black uppercase tracking-widest text-xs">
+                  Premium Access
+                </Badge>
+                <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter leading-tight max-w-2xl">
                   {t.life.housing.partners.title}
-                </CardTitle>
+                </h3>
               </div>
-            </CardHeader>
-            <CardContent className="px-8 md:px-12 pb-12 z-10 flex flex-col flex-1">
-              <p className="text-white/80 text-lg md:text-xl leading-relaxed mb-10 font-medium">
+              <p className="text-white/80 text-lg md:text-xl leading-relaxed font-medium max-w-3xl">
                 {t.life.housing.partners.desc}
               </p>
-              <div className="mt-auto">
-                <Link href="/life/housing">
-                  <Button className="w-full bg-accent text-primary h-16 text-xl font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90 group transition-all">
-                    {t.life.housing.partners.button}
-                    <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
+              <Link href="/life/housing" className="w-full max-w-md">
+                <Button className="w-full bg-accent text-primary h-16 md:h-20 text-xl font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90 group transition-all">
+                  {t.life.housing.partners.button}
+                  <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform w-8 h-8" />
+                </Button>
+              </Link>
+            </div>
           </Card>
         </div>
       </section>
