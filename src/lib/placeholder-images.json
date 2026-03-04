@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-bali",
+      "description": "Premium Indonesian landscape representing luxury relocation",
+      "imageUrl": "https://picsum.photos/seed/globeflow-hero/1200/800",
+      "imageHint": "indonesia luxury"
+    },
+    {
+      "id": "case-manager-portrait",
+      "description": "Professional case manager portrait",
+      "imageUrl": "https://images.unsplash.com/photo-1610631066894-62452ccb927c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwcm9mZXNzaW9uYWwlMjBwZXJzb258ZW58MHx8fHwxNzcyNTc2OTEwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional person"
+    },
+    {
+      "id": "life-hero",
+      "description": "Indonesian tropical skyline overview",
+      "imageUrl": "https://picsum.photos/seed/indo-life/1200/500",
+      "imageHint": "indonesia skyline"
+    },
+    {
+      "id": "city-jakarta",
+      "description": "Jakarta business district",
+      "imageUrl": "https://picsum.photos/seed/jakarta/600/400",
+      "imageHint": "jakarta city"
+    },
+    {
+      "id": "city-bali",
+      "description": "Bali beach lifestyle",
+      "imageUrl": "https://images.unsplash.com/photo-1691945686257-c22b00463104?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxiYWxpJTIwYmVhY2h8ZW58MHx8fHwxNzcyNTU4NTM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bali beach"
+    },
+    {
+      "id": "city-surabaya",
+      "description": "Surabaya cityscape",
+      "imageUrl": "https://picsum.photos/seed/surabaya/600/400",
+      "imageHint": "surabaya city"
+    },
+    {
+      "id": "house-1",
+      "description": "Luxury Villa in Bali",
+      "imageUrl": "https://picsum.photos/seed/villa1/800/600",
+      "imageHint": "luxury villa"
+    },
+    {
+      "id": "house-2",
+      "description": "Modern Penthouse in Jakarta",
+      "imageUrl": "https://picsum.photos/seed/penthouse/800/600",
+      "imageHint": "modern penthouse"
+    },
+    {
+      "id": "house-3",
+      "description": "Family House in Surabaya",
+      "imageUrl": "https://picsum.photos/seed/house/800/600",
+      "imageHint": "family house"
+    }
+  ]
 }

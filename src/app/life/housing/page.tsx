@@ -65,7 +65,7 @@ export default function HousingSearch() {
       beds: 4,
       baths: 4,
       sqm: 450,
-      image: PlaceHolderImages.find(img => img.id === 'house-1')?.imageUrl || '',
+      image: PlaceHolderImages.find(img => img.id === 'house-1')?.imageUrl || 'https://picsum.photos/seed/house1/800/600',
       rating: 4.9,
       tags: ['Private Pool', 'Beachfront']
     },
@@ -78,7 +78,7 @@ export default function HousingSearch() {
       beds: 3,
       baths: 3,
       sqm: 280,
-      image: PlaceHolderImages.find(img => img.id === 'house-2')?.imageUrl || '',
+      image: PlaceHolderImages.find(img => img.id === 'house-2')?.imageUrl || 'https://picsum.photos/seed/apt1/800/600',
       rating: 4.8,
       tags: ['CBD Location', 'Concierge']
     },
@@ -91,7 +91,7 @@ export default function HousingSearch() {
       beds: 5,
       baths: 3,
       sqm: 350,
-      image: PlaceHolderImages.find(img => img.id === 'house-3')?.imageUrl || '',
+      image: PlaceHolderImages.find(img => img.id === 'house-3')?.imageUrl || 'https://picsum.photos/seed/house1/800/600',
       rating: 4.7,
       tags: ['Garden', 'Security']
     },
@@ -104,7 +104,7 @@ export default function HousingSearch() {
       beds: 1,
       baths: 1,
       sqm: 85,
-      image: 'https://picsum.photos/seed/apt1/800/600',
+      image: 'https://picsum.photos/seed/apt2/800/600',
       rating: 4.9,
       tags: ['Sunset View', 'Eco-friendly']
     },
@@ -117,7 +117,7 @@ export default function HousingSearch() {
       beds: 2,
       baths: 2,
       sqm: 140,
-      image: 'https://picsum.photos/seed/apt2/800/600',
+      image: 'https://picsum.photos/seed/apt3/800/600',
       rating: 4.6,
       tags: ['Balcony', 'Gym Access']
     },
@@ -210,12 +210,16 @@ export default function HousingSearch() {
         {filteredListings.map((listing) => (
           <Card key={listing.id} className="overflow-hidden border-slate-100 group hover:shadow-xl transition-all duration-150 flex flex-col">
             <div className="relative h-64">
-              <Image 
-                src={listing.image} 
-                alt={listing.title} 
-                fill 
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+              {listing.image ? (
+                <Image 
+                  src={listing.image} 
+                  alt={listing.title} 
+                  fill 
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : (
+                <div className="w-full h-full bg-slate-200 animate-pulse" />
+              )}
               <div className="absolute top-4 left-4">
                 <Badge className="bg-white/90 text-primary hover:bg-white/100 backdrop-blur-sm border-none shadow-sm">
                   {listing.type === 'Apartment' ? <Building2 className="w-3 h-3 mr-1" /> : <Home className="w-3 h-3 mr-1" />}
