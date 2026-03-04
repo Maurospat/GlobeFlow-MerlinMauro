@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { initialDocuments, Document, DocStatus, TransferStatus, initialTransfer } from '@/app/data/mockData';
 
 type BankDetails = {
@@ -26,6 +26,8 @@ type CaseContextType = {
 const CaseContext = createContext<CaseContextType | undefined>(undefined);
 
 export function CaseProvider({ children }: { children: ReactNode }) {
+  // Der Zustand wird nur im Arbeitsspeicher (React State) gehalten.
+  // Ein Refresh der Seite setzt diesen Zustand automatisch auf die Initialwerte zurück.
   const [documents, setDocuments] = useState<Document[]>(initialDocuments);
   const [transferStatus, setTransferStatus] = useState<TransferStatus>(initialTransfer.status);
   const [isPoASigned, setIsPoASigned] = useState(false);
@@ -35,32 +37,6 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     iban: '',
     customerNo: ''
   });
-
-  // Load from localStorage if available
-  useEffect(() => {
-    const saved = localStorage.getItem('globeflow-case-data');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.documents) setDocuments(parsed.documents);
-        if (parsed.transferStatus) setTransferStatus(parsed.transferStatus);
-        if (parsed.isPoASigned) setIsPoASigned(parsed.isPoASigned);
-        if (parsed.bankDetails) setBankDetails(parsed.bankDetails);
-      } catch (e) {
-        console.error("Failed to parse saved case data", e);
-      }
-    }
-  }, []);
-
-  // Save to localStorage on changes
-  useEffect(() => {
-    localStorage.setItem('globeflow-case-data', JSON.stringify({
-      documents,
-      transferStatus,
-      isPoASigned,
-      bankDetails
-    }));
-  }, [documents, transferStatus, isPoASigned, bankDetails]);
 
   const updateDocumentStatus = (id: string, status: DocStatus) => {
     setDocuments(prev => prev.map(doc => 
