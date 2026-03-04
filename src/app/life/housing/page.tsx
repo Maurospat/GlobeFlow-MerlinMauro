@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -65,7 +64,7 @@ export default function HousingSearch() {
       beds: 4,
       baths: 4,
       sqm: 450,
-      image: PlaceHolderImages.find(img => img.id === 'house-1')?.imageUrl || 'https://picsum.photos/seed/house1/800/600',
+      image: PlaceHolderImages.find(img => img.id === 'house-1')?.imageUrl || "https://picsum.photos/seed/house1/800/600",
       rating: 4.9,
       tags: ['Private Pool', 'Beachfront']
     },
@@ -78,7 +77,7 @@ export default function HousingSearch() {
       beds: 3,
       baths: 3,
       sqm: 280,
-      image: PlaceHolderImages.find(img => img.id === 'house-2')?.imageUrl || 'https://picsum.photos/seed/apt1/800/600',
+      image: PlaceHolderImages.find(img => img.id === 'house-2')?.imageUrl || "https://picsum.photos/seed/apt1/800/600",
       rating: 4.8,
       tags: ['CBD Location', 'Concierge']
     },
@@ -91,7 +90,7 @@ export default function HousingSearch() {
       beds: 5,
       baths: 3,
       sqm: 350,
-      image: PlaceHolderImages.find(img => img.id === 'house-3')?.imageUrl || 'https://picsum.photos/seed/house1/800/600',
+      image: PlaceHolderImages.find(img => img.id === 'house-3')?.imageUrl || "https://picsum.photos/seed/house3/800/600",
       rating: 4.7,
       tags: ['Garden', 'Security']
     },
