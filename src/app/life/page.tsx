@@ -22,13 +22,24 @@ import {
   ArrowRight,
   TrendingDown,
   Info,
-  ShieldCheck
+  ShieldCheck,
+  Wallet,
+  Globe
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function LifeInIndonesia() {
   const { t, language } = useLanguage();
   const [mounted, setMounted] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -50,9 +61,9 @@ export default function LifeInIndonesia() {
   ];
 
   const cityCards = [
-    { title: t.life.cities.jakarta.title, desc: t.life.cities.jakarta.desc, img: jakartaImage },
-    { title: t.life.cities.bali.title, desc: t.life.cities.bali.desc, img: baliImage },
-    { title: t.life.cities.surabaya.title, desc: t.life.cities.surabaya.desc, img: surabayaImage },
+    { id: 'jakarta', ...t.life.cities.jakarta, img: jakartaImage },
+    { id: 'bali', ...t.life.cities.bali, img: baliImage },
+    { id: 'surabaya', ...t.life.cities.surabaya, img: surabayaImage },
   ];
 
   const lifestyleItems = [
@@ -63,7 +74,7 @@ export default function LifeInIndonesia() {
   ];
 
   return (
-    <div className="space-y-16 pb-20 animate-in fade-in duration-75">
+    <div className="space-y-16 pb-20 animate-in fade-in duration-100">
       {/* Header */}
       <header className="space-y-4">
         <Badge variant="outline" className="text-accent border-accent px-4 py-1 uppercase tracking-widest font-bold">
@@ -113,7 +124,7 @@ export default function LifeInIndonesia() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {costItems.map((item, i) => (
-            <Card key={i} className="border-slate-100 hover:shadow-md transition-all duration-100">
+            <Card key={i} className="border-slate-100 hover:shadow-md transition-all duration-75">
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">{item.label}</CardTitle>
               </CardHeader>
@@ -145,28 +156,94 @@ export default function LifeInIndonesia() {
       <section className="space-y-8">
         <h2 className="text-3xl font-bold text-center">{t.life.cities.title}</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {cityCards.map((city, i) => (
-            <Card key={i} className="overflow-hidden border-slate-100 group">
-              <div className="relative h-48">
-                <Image 
-                  src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
-                  alt={city.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  data-ai-hint="indonesia city"
-                />
-              </div>
-              <CardHeader>
-                <CardTitle>{city.title}</CardTitle>
-                <CardDescription>{city.desc}</CardDescription>
-              </CardHeader>
-              <CardFooter>
-                <Button variant="ghost" className="w-full text-primary gap-2 transition-all duration-75">
-                  {t.life.cities.learnMore}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </CardFooter>
-            </Card>
+          {cityCards.map((city) => (
+            <Dialog key={city.id}>
+              <DialogTrigger asChild>
+                <Card className="overflow-hidden border-slate-100 group cursor-pointer hover:shadow-lg transition-all duration-100">
+                  <div className="relative h-48">
+                    <Image 
+                      src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
+                      alt={city.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      data-ai-hint="indonesia city"
+                    />
+                  </div>
+                  <CardHeader>
+                    <CardTitle>{city.title}</CardTitle>
+                    <CardDescription className="line-clamp-2">{city.desc}</CardDescription>
+                  </CardHeader>
+                  <CardFooter>
+                    <Button variant="ghost" className="w-full text-primary gap-2 transition-all duration-75 group-hover:bg-primary group-hover:text-white">
+                      {t.life.cities.learnMore}
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <div className="relative h-64 w-full rounded-xl overflow-hidden mb-4">
+                    <Image 
+                      src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
+                      alt={city.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <DialogTitle className="text-3xl font-bold text-primary">{city.title}</DialogTitle>
+                  <DialogDescription className="text-lg mt-2">
+                    {city.full}
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="mt-6 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-slate-50 rounded-xl border">
+                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
+                        <Building className="w-4 h-4" />
+                        {language === 'de' ? 'Wohnen' : 'Housing'}
+                      </div>
+                      <p className="text-sm font-semibold">{city.costs.rent}</p>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-xl border">
+                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
+                        <Utensils className="w-4 h-4" />
+                        {language === 'de' ? 'Essen' : 'Dining'}
+                      </div>
+                      <p className="text-sm font-semibold">{city.costs.meal}</p>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-xl border">
+                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
+                        {city.id === 'bali' ? <HeartPulse className="w-4 h-4" /> : city.id === 'jakarta' ? <Users className="w-4 h-4" /> : <Wallet className="w-4 h-4" />}
+                        {city.id === 'bali' ? (language === 'de' ? 'Wellness' : 'Wellness') : city.id === 'jakarta' ? (language === 'de' ? 'Personal' : 'Staff') : (language === 'de' ? 'Service' : 'Service')}
+                      </div>
+                      <p className="text-sm font-semibold">{city.id === 'bali' ? city.costs.wellness : city.id === 'jakarta' ? city.costs.driver : city.costs.services}</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
+                    <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
+                      <Info className="w-4 h-4" />
+                      {language === 'de' ? 'Experten-Tipp' : 'Expert Tip'}
+                    </h4>
+                    <p className="text-sm text-slate-700 italic">
+                      {city.id === 'jakarta' 
+                        ? (language === 'de' ? 'Wählen Sie eine Wohnung in Gehweite zu Ihrem Büro, um den Verkehr zu vermeiden.' : 'Choose an apartment within walking distance to your office to bypass peak traffic.') 
+                        : city.id === 'bali' 
+                          ? (language === 'de' ? 'Mieten Sie erst kurzfristig, um verschiedene Gebiete wie Canggu oder Ubud zu testen.' : 'Rent short-term first to experience different areas like Canggu or Ubud before committing.')
+                          : (language === 'de' ? 'Nutzen Sie die exzellenten privaten Krankenhäuser der Stadt für internationale Standards.' : 'Leverage the city\'s excellent private hospitals for international healthcare standards.')}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex justify-end">
+                  <DialogTrigger asChild>
+                    <Button className="bg-primary">{t.common.close}</Button>
+                  </DialogTrigger>
+                </div>
+              </DialogContent>
+            </Dialog>
           ))}
         </div>
       </section>
@@ -269,7 +346,7 @@ export default function LifeInIndonesia() {
         <h2 className="text-3xl font-bold text-center">{t.life.lifestyle.title}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {lifestyleItems.map((item, i) => (
-            <Card key={i} className="text-center p-6 border-slate-100 hover:border-accent/50 transition-all duration-150">
+            <Card key={i} className="text-center p-6 border-slate-100 hover:border-accent/50 transition-all duration-75">
               <item.icon className="w-8 h-8 text-accent mx-auto mb-4" />
               <h4 className="font-bold mb-1">{item.title}</h4>
               <p className="text-xs text-muted-foreground">{item.desc}</p>

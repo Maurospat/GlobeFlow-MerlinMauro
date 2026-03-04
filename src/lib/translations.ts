@@ -204,10 +204,37 @@ export const translations = {
       },
       cities: {
         title: 'Best Cities for Expats',
-        jakarta: { title: 'Jakarta', desc: 'Business hub, international companies, luxury apartments.' },
-        bali: { title: 'Bali', desc: 'Lifestyle destination, digital nomads, entrepreneurs, beaches.' },
-        surabaya: { title: 'Surabaya', desc: 'Growing economic center with lower living costs.' },
-        learnMore: 'Learn more'
+        learnMore: 'Learn more',
+        jakarta: { 
+          title: 'Jakarta', 
+          desc: 'Business hub, international companies, luxury apartments.',
+          full: 'Jakarta is the pulsating heart of Indonesia. For high-net-worth individuals, it offers a sophisticated lifestyle with world-class shopping malls, exclusive rooftop bars, and high-end residential skyscrapers in areas like Mega Kuningan and SCBD.',
+          costs: {
+            rent: '$1,200 - $3,500 (Luxury Condo)',
+            meal: '$25 - $80 (Fine Dining)',
+            driver: '$450/mo (Private Full-time)'
+          }
+        },
+        bali: { 
+          title: 'Bali', 
+          desc: 'Lifestyle destination, digital nomads, entrepreneurs, beaches.',
+          full: 'Bali is synonymous with luxury tropical living. Beyond the beaches, the island offers a vibrant community of entrepreneurs and global citizens. Places like Canggu and Uluwatu are hotspots for private villas and high-end beach clubs.',
+          costs: {
+            rent: '$1,500 - $4,000 (Private Villa)',
+            meal: '$15 - $60 (Sunset Beach Club)',
+            wellness: '$200/mo (Gym & Spa)'
+          }
+        },
+        surabaya: { 
+          title: 'Surabaya', 
+          desc: 'Growing economic center with lower living costs.',
+          full: 'As Indonesia\'s second-largest city, Surabaya offers a more relaxed pace than Jakarta while maintaining high standards of living. It is a major industrial and maritime hub with excellent private healthcare and international schools.',
+          costs: {
+            rent: '$800 - $1,800 (Premium Apartment)',
+            meal: '$10 - $40 (Local Premium)',
+            services: '$300/mo (Domestic Staff)'
+          }
+        }
       },
       housing: {
         title: 'Housing Options',
@@ -462,10 +489,37 @@ export const translations = {
       },
       cities: {
         title: 'Beste Städte für Expats',
-        jakarta: { title: 'Jakarta', desc: 'Wirtschaftszentrum, internationale Unternehmen, Luxusapartments.' },
-        bali: { title: 'Bali', desc: 'Lifestyle-Destination, digitale Nomaden, Unternehmer, Strände.' },
-        surabaya: { title: 'Surabaya', desc: 'Wachsendes Wirtschaftszentrum mit niedrigeren Lebenshaltungskosten.' },
-        learnMore: 'Mehr erfahren'
+        learnMore: 'Mehr erfahren',
+        jakarta: { 
+          title: 'Jakarta', 
+          desc: 'Wirtschaftszentrum, internationale Unternehmen, Luxusapartments.',
+          full: 'Jakarta ist das pulsierende Herz Indonesiens. Für vermögende Privatpersonen bietet es einen anspruchsvollen Lebensstil mit Weltklasse-Einkaufszentren, exklusiven Rooftop-Bars und luxuriösen Wohnwolkenkratzern in Vierteln wie Mega Kuningan und SCBD.',
+          costs: {
+            rent: '1.200 € - 3.500 € (Luxus-Condo)',
+            meal: '25 € - 80 € (Fine Dining)',
+            driver: '450 €/Monat (Privatfahrer Vollzeit)'
+          }
+        },
+        bali: { 
+          title: 'Bali', 
+          desc: 'Lifestyle-Destination, digitale Nomaden, Unternehmer, Strände.',
+          full: 'Bali steht für luxuriöses tropisches Leben. Jenseits der Strände bietet die Insel eine lebendige Gemeinschaft aus Unternehmern und Weltbürgern. Orte wie Canggu und Uluwatu sind Hotspots für Privatvillen und exklusive Beach Clubs.',
+          costs: {
+            rent: '1.500 € - 4.000 € (Privatvilla)',
+            meal: '15 € - 60 € (Sunset Beach Club)',
+            wellness: '200 €/Monat (Gym & Spa)'
+          }
+        },
+        surabaya: { 
+          title: 'Surabaya', 
+          desc: 'Wachsendes Wirtschaftszentrum mit niedrigeren Lebenshaltungskosten.',
+          full: 'Als zweitgrößte Stadt Indonesiens bietet Surabaya ein entspannteres Tempo als Jakarta bei gleichzeitig hohem Lebensstandard. Es ist ein bedeutendes Industrie- und Maritimbündnis mit exzellenter Gesundheitsversorgung und internationalen Schulen.',
+          costs: {
+            rent: '800 € - 1.800 € (Premium Apartment)',
+            meal: '10 € - 40 € (Lokales Premium)',
+            services: '300 €/Monat (Haushaltspersonal)'
+          }
+        }
       },
       housing: {
         title: 'Wohnmöglichkeiten',
