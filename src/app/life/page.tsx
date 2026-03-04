@@ -21,7 +21,8 @@ import {
   CheckCircle2,
   ArrowRight,
   TrendingDown,
-  Info
+  Info,
+  ShieldCheck
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -98,7 +99,7 @@ export default function LifeInIndonesia() {
             alt="Life in Indonesia" 
             fill 
             className="object-cover"
-            data-ai-hint="indonesia skyline"
+            data-ai-hint="indonesia luxury"
           />
         </div>
       </section>

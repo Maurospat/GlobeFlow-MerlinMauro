@@ -51,5 +51,5 @@
 
 /* Faster animations for overall responsiveness */
 .animate-in {
-  animation-duration: 150ms !important;
+  animation-duration: 100ms !important;
 }
