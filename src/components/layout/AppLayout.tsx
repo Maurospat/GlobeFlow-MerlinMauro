@@ -15,7 +15,8 @@ import {
   Globe,
   LogOut,
   Menu,
-  X
+  X,
+  Palmtree
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -45,6 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     { name: t.nav.transfer, href: '/transfer', icon: ArrowRightLeft },
     { name: t.nav.costs, href: '/costs', icon: Wallet },
     { name: t.nav.manager, href: '/manager', icon: UserCircle },
+    { name: t.nav.life, href: '/life', icon: Palmtree },
     { name: t.nav.admin, href: '/admin', icon: ShieldCheck },
   ];
 
@@ -100,7 +102,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r p-6 sticky top-0 h-screen">
+      <aside className="hidden md:flex flex-col w-64 bg-white border-r p-6 sticky top-0 h-screen shrink-0">
         <div className="flex items-center gap-2 mb-10 px-2">
           <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
             <Globe className="text-white w-6 h-6" />
@@ -108,13 +110,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <span className="font-headline font-bold text-2xl text-primary tracking-tight">GlobeFlow</span>
         </div>
 
-        <nav className="flex-1 space-y-1">
+        <nav className="flex-1 space-y-1 overflow-y-auto">
           {navigation.map((item) => (
             <NavItem key={item.name} item={item} />
           ))}
         </nav>
 
-        <div className="mt-auto space-y-4">
+        <div className="mt-auto space-y-4 pt-4 border-t">
           <LanguageToggle />
           <Link href="/">
             <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive transition-colors duration-75">
@@ -131,17 +133,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-2 z-50">
-        {navigation.slice(0, 5).map((item) => {
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-2 z-50 overflow-x-auto no-scrollbar">
+        {navigation.slice(0, 6).map((item) => {
           const isActive = mounted && pathname === item.href;
           const Icon = item.icon;
           return (
             <Link key={item.name} href={item.href} className={cn(
-              "flex flex-col items-center p-2 rounded-md transition-colors duration-75",
+              "flex flex-col items-center p-2 rounded-md transition-colors duration-75 min-w-[64px]",
               isActive ? "text-primary" : "text-muted-foreground"
             )}>
               <Icon className="w-6 h-6" />
-              <span className="text-[10px] mt-1 font-medium">{mounted ? item.name : "..."}</span>
+              <span className="text-[10px] mt-1 font-medium text-center truncate w-full">{mounted ? item.name : "..."}</span>
             </Link>
           );
         })}
@@ -155,7 +157,7 @@ function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 transition-all duration-75">
+        <Button variant="outline" size="sm" className="gap-2 transition-all duration-75 w-full justify-start">
           <Globe className="w-4 h-4" />
           {language.toUpperCase()}
         </Button>

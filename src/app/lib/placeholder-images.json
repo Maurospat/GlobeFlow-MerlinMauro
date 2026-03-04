@@ -12,6 +12,30 @@
       "description": "Professional case manager portrait",
       "imageUrl": "https://picsum.photos/seed/manager/400/400",
       "imageHint": "professional person"
+    },
+    {
+      "id": "life-hero",
+      "description": "Indonesian tropical skyline overview",
+      "imageUrl": "https://picsum.photos/seed/indo-life/1200/500",
+      "imageHint": "indonesia skyline"
+    },
+    {
+      "id": "city-jakarta",
+      "description": "Jakarta business district",
+      "imageUrl": "https://picsum.photos/seed/jakarta/600/400",
+      "imageHint": "jakarta city"
+    },
+    {
+      "id": "city-bali",
+      "description": "Bali beach lifestyle",
+      "imageUrl": "https://picsum.photos/seed/bali-lifestyle/600/400",
+      "imageHint": "bali beach"
+    },
+    {
+      "id": "city-surabaya",
+      "description": "Surabaya cityscape",
+      "imageUrl": "https://picsum.photos/seed/surabaya/600/400",
+      "imageHint": "surabaya city"
     }
   ]
 }

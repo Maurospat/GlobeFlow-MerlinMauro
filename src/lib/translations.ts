@@ -1,3 +1,4 @@
+
 export type Language = 'en' | 'de';
 
 export const translations = {
@@ -8,7 +9,8 @@ export const translations = {
       transfer: 'Asset Transfer',
       costs: 'Total Costs',
       manager: 'Case Manager',
-      admin: 'Admin Console'
+      admin: 'Admin Console',
+      life: 'Life in Indonesia'
     },
     common: {
       nextSteps: 'Next Best Actions',
@@ -180,6 +182,82 @@ export const translations = {
       manager: 'Manager',
       caseId: 'Case ID',
       complianceText: 'New Indonesian FATCA reporting requirements are effective next month. Please ensure all "Proof of Funds" documents include the additional declaration.'
+    },
+    life: {
+      title: 'Life in Indonesia',
+      subtitle: 'Discover what everyday life looks like after your relocation.',
+      overview: {
+        title: 'Overview',
+        text: 'Indonesia offers a vibrant lifestyle combining tropical nature, modern cities, and a growing international community. Many expatriates choose Indonesia for its lower living costs, beautiful environment, and business opportunities.'
+      },
+      costOfLiving: {
+        title: 'Cost of Living Comparison',
+        subtitle: 'Estimated costs between Switzerland and Indonesia.',
+        switzerland: 'Switzerland',
+        indonesia: 'Indonesia',
+        rent: { title: 'Rent', chf: 'Apartment (city center): ~3000 CHF', idr: 'Apartment (Jakarta/Bali): ~800–1200 CHF' },
+        dining: { title: 'Dining', chf: 'Fine dining: ~150 CHF', idr: 'Premium dining: ~30–50 CHF' },
+        transport: { title: 'Transportation', chf: 'Public pass: ~80 CHF', idr: 'Private driver: ~400 CHF/mo' },
+        help: { title: 'Domestic Help', chf: 'N/A / High cost', idr: 'Full-time: ~250–400 CHF/mo' },
+        health: { title: 'Healthcare', chf: 'Premium: ~400 CHF/mo', idr: 'Private: ~50–100 CHF/mo' },
+        note: 'Costs vary depending on lifestyle and location.'
+      },
+      cities: {
+        title: 'Best Cities for Expats',
+        jakarta: { title: 'Jakarta', desc: 'Business hub, international companies, luxury apartments.' },
+        bali: { title: 'Bali', desc: 'Lifestyle destination, digital nomads, entrepreneurs, beaches.' },
+        surabaya: { title: 'Surabaya', desc: 'Growing economic center with lower living costs.' },
+        learnMore: 'Learn more'
+      },
+      housing: {
+        title: 'Housing Options',
+        apartments: 'Luxury apartments',
+        villas: 'Villas',
+        shortTerm: 'Short-term rentals when first arriving',
+        partners: {
+          title: 'Verified Housing Partners',
+          desc: 'GlobeFlow connects you with trusted real estate partners who specialize in expat housing.',
+          button: 'Browse Housing Options'
+        }
+      },
+      healthcare: {
+        title: 'Healthcare',
+        text: 'Indonesia offers both public and private healthcare. Most expatriates use private hospitals or international clinics.',
+        hospitals: 'International hospitals',
+        insurance: 'Private health insurance',
+        services: 'Medical services in Jakarta and Bali'
+      },
+      community: {
+        title: 'Expat Community',
+        text: 'Many international communities exist in Indonesia.',
+        events: 'Networking events',
+        business: 'Business communities',
+        schools: 'International schools',
+        social: 'Social groups',
+        network: {
+          title: 'GlobeFlow Expat Network',
+          desc: 'Connect with other expats who have already relocated.'
+        }
+      },
+      lifestyle: {
+        title: 'Lifestyle Highlights',
+        nature: { title: 'Nature', desc: 'Beaches, jungles, volcanoes' },
+        food: { title: 'Food', desc: 'World-famous Indonesian cuisine' },
+        culture: { title: 'Culture', desc: 'Festivals, temples, art' },
+        business: { title: 'Business', desc: 'Growing startup and investment ecosystem' }
+      },
+      tips: {
+        title: 'Tips for New Expats',
+        visa: 'Secure your visa before arrival',
+        housing: 'Arrange temporary housing for the first weeks',
+        bank: 'Open a local bank account early',
+        community: 'Join expat communities'
+      },
+      cta: {
+        title: 'Ready to start your move to Indonesia?',
+        continue: 'Continue your immigration journey',
+        dashboard: 'Return to Dashboard'
+      }
     }
   },
   de: {
@@ -189,7 +267,8 @@ export const translations = {
       transfer: 'Kapitaltransfer',
       costs: 'Gesamtkosten',
       manager: 'Fallmanager',
-      admin: 'Admin-Bereich'
+      admin: 'Admin-Bereich',
+      life: 'Leben in Indonesien'
     },
     common: {
       nextSteps: 'Nächste Schritte',
@@ -361,6 +440,82 @@ export const translations = {
       manager: 'Berater',
       caseId: 'Fall ID',
       complianceText: 'Neue FATCA-Berichtspflichten treten nächsten Monat in Kraft. Bitte stellen Sie sicher, dass alle Mittelherkunftsnachweise die Zusatzerklärung enthalten.'
+    },
+    life: {
+      title: 'Leben in Indonesien',
+      subtitle: 'Entdecken Sie, wie der Alltag nach Ihrem Umzug aussieht.',
+      overview: {
+        title: 'Überblick',
+        text: 'Indonesien bietet einen lebendigen Lebensstil, der tropische Natur, moderne Städte und eine wachsende internationale Gemeinschaft vereint. Viele Expatriates wählen Indonesien wegen der niedrigeren Lebenshaltungskosten, der wunderschönen Umgebung und der Geschäftsmöglichkeiten.'
+      },
+      costOfLiving: {
+        title: 'Vergleich der Lebenshaltungskosten',
+        subtitle: 'Geschätzte Kosten zwischen der Schweiz und Indonesien.',
+        switzerland: 'Schweiz',
+        indonesia: 'Indonesien',
+        rent: { title: 'Miete', chf: 'Wohnung (Stadtzentrum): ~3000 CHF', idr: 'Wohnung (Jakarta/Bali): ~800–1200 CHF' },
+        dining: { title: 'Essen gehen', chf: 'Gehobene Küche: ~150 CHF', idr: 'Premium-Essen: ~30–50 CHF' },
+        transport: { title: 'Transport', chf: 'Monatsticket: ~80 CHF', idr: 'Privatfahrer: ~400 CHF/Monat' },
+        help: { title: 'Haushaltshilfe', chf: 'N/A / Hohe Kosten', idr: 'Vollzeit: ~250–400 CHF/Monat' },
+        health: { title: 'Gesundheitswesen', chf: 'Premium: ~400 CHF/Monat', idr: 'Privat: ~50–100 CHF/Monat' },
+        note: 'Die Kosten variieren je nach Lebensstil und Standort.'
+      },
+      cities: {
+        title: 'Beste Städte für Expats',
+        jakarta: { title: 'Jakarta', desc: 'Wirtschaftszentrum, internationale Unternehmen, Luxusapartments.' },
+        bali: { title: 'Bali', desc: 'Lifestyle-Destination, digitale Nomaden, Unternehmer, Strände.' },
+        surabaya: { title: 'Surabaya', desc: 'Wachsendes Wirtschaftszentrum mit niedrigeren Lebenshaltungskosten.' },
+        learnMore: 'Mehr erfahren'
+      },
+      housing: {
+        title: 'Wohnmöglichkeiten',
+        apartments: 'Luxusapartments',
+        villas: 'Villen',
+        shortTerm: 'Kurzzeitmieten bei Ankunft',
+        partners: {
+          title: 'Verifizierte Wohnpartner',
+          desc: 'GlobeFlow verbindet Sie mit vertrauenswürdigen Immobilienpartnern, die auf Expat-Wohnungen spezialisiert sind.',
+          button: 'Wohnmöglichkeiten durchsuchen'
+        }
+      },
+      healthcare: {
+        title: 'Gesundheitswesen',
+        text: 'Indonesien bietet sowohl öffentliche als auch private Gesundheitsversorgung. Die meisten Expatriates nutzen Privatkliniken.',
+        hospitals: 'Internationale Krankenhäuser',
+        insurance: 'Private Krankenversicherung',
+        services: 'Medizinische Dienste in Jakarta und Bali'
+      },
+      community: {
+        title: 'Expat-Gemeinschaft',
+        text: 'In Indonesien gibt es viele internationale Gemeinschaften.',
+        events: 'Networking-Events',
+        business: 'Business-Communities',
+        schools: 'Internationale Schulen',
+        social: 'Soziale Gruppen',
+        network: {
+          title: 'GlobeFlow Expat-Netzwerk',
+          desc: 'Vernetzen Sie sich mit anderen Expats, die bereits umgezogen sind.'
+        }
+      },
+      lifestyle: {
+        title: 'Lifestyle-Highlights',
+        nature: { title: 'Natur', desc: 'Strände, Dschungel, Vulkane' },
+        food: { title: 'Essen', desc: 'Weltberühmte indonesische Küche' },
+        culture: { title: 'Kultur', desc: 'Festivals, Tempel, Kunst' },
+        business: { title: 'Wirtschaft', desc: 'Wachsendes Startup- und Investitions-Ökosystem' }
+      },
+      tips: {
+        title: 'Tipps für neue Expats',
+        visa: 'Visum vor der Ankunft sichern',
+        housing: 'Kurzzeitunterkunft für die ersten Wochen planen',
+        bank: 'Frühzeitig ein lokales Bankkonto eröffnen',
+        community: 'Expat-Communities beitreten'
+      },
+      cta: {
+        title: 'Bereit für Ihren Umzug nach Indonesien?',
+        continue: 'Einwanderung fortsetzen',
+        dashboard: 'Zurück zur Zentrale'
+      }
     }
   }
 };
