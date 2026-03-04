@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -16,15 +17,15 @@ import {
   Utensils, 
   Landmark, 
   Briefcase, 
-  Lightbulb,
-  CheckCircle2,
-  ArrowRight,
-  TrendingDown,
-  Info,
-  ShieldCheck,
-  Wallet,
-  Globe,
-  Waves
+  Lightbulb, 
+  CheckCircle2, 
+  ArrowRight, 
+  TrendingDown, 
+  Info, 
+  ShieldCheck, 
+  Wallet, 
+  Globe, 
+  Waves 
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
@@ -73,7 +74,7 @@ export default function LifeInIndonesia() {
   ];
 
   return (
-    <div className="space-y-20 pb-24 animate-in fade-in duration-200">
+    <div className="space-y-20 pb-24 animate-in fade-in duration-100">
       {/* Header */}
       <header className="space-y-6">
         <Badge variant="outline" className="text-accent border-accent px-6 py-1.5 uppercase tracking-[0.2em] font-black text-[10px] batik-pattern">
@@ -264,52 +265,58 @@ export default function LifeInIndonesia() {
       </section>
 
       {/* Section 4: Housing */}
-      <section className="bg-white rounded-[3rem] p-10 md:p-20 border border-secondary shadow-xl batik-pattern grid lg:grid-cols-2 gap-20 items-center">
-        <div className="space-y-10">
-          <h2 className="text-5xl font-black tracking-tighter leading-tight">{t.life.housing.title}</h2>
-          <div className="grid gap-6">
-            <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
-              <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                <Building className="w-8 h-8 text-accent" />
+      <section className="bg-white rounded-[3rem] p-8 md:p-16 lg:p-20 border border-secondary shadow-xl batik-pattern">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
+          <div className="space-y-10">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight">{t.life.housing.title}</h2>
+            <div className="grid gap-4 md:gap-6">
+              <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
+                <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                  <Building className="w-8 h-8 text-accent" />
+                </div>
+                <span className="text-xl font-black text-primary">{t.life.housing.apartments}</span>
               </div>
-              <span className="text-xl font-black text-primary">{t.life.housing.apartments}</span>
-            </div>
-            <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
-              <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                <Palmtree className="w-8 h-8 text-accent" />
+              <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
+                <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                  <Palmtree className="w-8 h-8 text-accent" />
+                </div>
+                <span className="text-xl font-black text-primary">{t.life.housing.villas}</span>
               </div>
-              <span className="text-xl font-black text-primary">{t.life.housing.villas}</span>
-            </div>
-            <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
-              <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                <Users className="w-8 h-8 text-accent" />
+              <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border border-secondary group hover:bg-white transition-all cursor-default">
+                <div className="p-4 ocean-gradient rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                  <Users className="w-8 h-8 text-accent" />
+                </div>
+                <span className="text-xl font-black text-primary">{t.life.housing.shortTerm}</span>
               </div>
-              <span className="text-xl font-black text-primary">{t.life.housing.shortTerm}</span>
             </div>
           </div>
+          <Card className="ocean-gradient text-white border-none shadow-[0_40px_100px_rgba(26,60,69,0.3)] rounded-[2.5rem] relative overflow-hidden flex flex-col h-full">
+            <div className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none translate-x-1/4 -translate-y-1/4">
+              <Waves className="w-full h-full text-white" />
+            </div>
+            <CardHeader className="p-8 md:p-12 pb-6 z-10">
+              <div className="flex flex-wrap items-center gap-4 mb-4">
+                <Badge variant="outline" className="bg-accent/20 text-accent border-accent/20 px-4 py-1 font-black shrink-0">NEW</Badge>
+                <CardTitle className="text-white text-3xl md:text-4xl font-black tracking-tight">
+                  {t.life.housing.partners.title}
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="px-8 md:px-12 pb-12 z-10 flex flex-col flex-1">
+              <p className="text-white/80 text-lg md:text-xl leading-relaxed mb-10 font-medium">
+                {t.life.housing.partners.desc}
+              </p>
+              <div className="mt-auto">
+                <Link href="/life/housing">
+                  <Button className="w-full bg-accent text-primary h-16 text-xl font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90 group transition-all">
+                    {t.life.housing.partners.button}
+                    <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        <Card className="ocean-gradient text-white border-none shadow-[0_40px_100px_rgba(26,60,69,0.3)] rounded-[2.5rem] relative overflow-hidden p-4">
-           <div className="absolute -top-10 -right-10 w-48 h-48 opacity-10 rotate-45 pointer-events-none">
-            <Waves className="w-full h-full text-white" />
-          </div>
-          <CardHeader className="p-10">
-            <CardTitle className="text-white text-4xl font-black flex items-center gap-4">
-              <Badge variant="outline" className="bg-accent/20 text-accent border-accent/20 px-4 py-1 font-black">NEW</Badge>
-              {t.life.housing.partners.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-10 pb-10">
-            <p className="text-white/80 text-xl leading-relaxed mb-10 font-medium">
-              {t.life.housing.partners.desc}
-            </p>
-            <Link href="/life/housing">
-              <Button className="w-full bg-accent text-primary h-16 text-xl font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90 group transition-all">
-                {t.life.housing.partners.button}
-                <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
       </section>
 
       {/* Section 5: Healthcare */}
@@ -384,15 +391,15 @@ export default function LifeInIndonesia() {
           <h2 className="text-5xl md:text-7xl font-black text-primary tracking-tighter leading-tight">{t.life.cta.title}</h2>
           <p className="text-2xl text-muted-foreground font-medium">{language === 'de' ? 'Ihr neues Kapitel wartet auf Sie.' : 'Your new chapter is waiting for you.'}</p>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center gap-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-6 px-4">
           <Link href="/documents">
-            <Button size="lg" className="bg-primary text-white h-20 px-12 text-2xl font-black rounded-2xl group shadow-2xl shadow-primary/30 transition-all">
+            <Button size="lg" className="bg-primary text-white h-20 px-12 text-2xl font-black rounded-2xl group shadow-2xl shadow-primary/30 transition-all w-full sm:w-auto">
               {t.life.cta.continue}
               <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform w-8 h-8" />
             </Button>
           </Link>
           <Link href="/dashboard">
-            <Button size="lg" variant="outline" className="h-20 px-12 text-2xl font-black rounded-2xl border-secondary border-4 text-primary bg-white hover:bg-secondary transition-all">
+            <Button size="lg" variant="outline" className="h-20 px-12 text-2xl font-black rounded-2xl border-secondary border-4 text-primary bg-white hover:bg-secondary transition-all w-full sm:w-auto">
               {t.life.cta.dashboard}
             </Button>
           </Link>

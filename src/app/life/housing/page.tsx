@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -91,7 +92,7 @@ export default function HousingSearch() {
       beds: 5,
       baths: 3,
       sqm: 350,
-      image: PlaceHolderImages.find(img => img.id === 'house-3')?.imageUrl || "https://picsum.photos/seed/house3/800/600",
+      image: PlaceHolderImages.find(img => img.id === 'house-3')?.imageUrl || "https://picsum.photos/seed/house/800/600",
       rating: 4.7,
       tags: ['Garden', 'Security']
     },
@@ -234,7 +235,7 @@ export default function HousingSearch() {
                   {listing.rating}
                 </Badge>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             </div>
             
             <CardHeader className="flex-1 p-6 space-y-3">
@@ -250,7 +251,7 @@ export default function HousingSearch() {
               </div>
             </CardHeader>
 
-            <CardFooter className="border-t border-secondary/50 p-6 flex items-center justify-between bg-white/50">
+            <CardFooter className="border-t border-secondary/50 p-6 flex items-center justify-between bg-white/50 mt-auto">
               <div className="flex flex-col">
                 <span className="text-2xl font-black text-primary">${listing.price.toLocaleString()}</span>
                 <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter leading-none">{language === 'de' ? 'pro Monat' : 'per month'}</span>
@@ -287,7 +288,7 @@ export default function HousingSearch() {
 
       {/* Trust Banner */}
       <section className="ocean-gradient rounded-[2.5rem] p-10 md:p-16 flex flex-col md:flex-row items-center gap-12 mt-12 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none">
+        <div className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none translate-x-1/4 -translate-y-1/4">
           <Waves className="w-full h-full text-white" />
         </div>
         <div className="flex-1 space-y-6 relative z-10">
@@ -296,12 +297,12 @@ export default function HousingSearch() {
             {t.life.housing.partners.desc}
           </p>
         </div>
-        <div className="shrink-0 flex gap-6 relative z-10">
-          <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl flex flex-col items-center gap-3 border border-white/20 shadow-xl group hover:bg-white/20 transition-all">
+        <div className="flex flex-wrap justify-center gap-6 relative z-10 shrink-0">
+          <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl flex flex-col items-center gap-3 border border-white/20 shadow-xl group hover:bg-white/20 transition-all min-w-[140px]">
             <ShieldCheck className="w-10 h-10 text-accent group-hover:scale-110 transition-transform" />
             <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'de' ? 'Verifiziert' : 'Verified'}</span>
           </div>
-          <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl flex flex-col items-center gap-3 border border-white/20 shadow-xl group hover:bg-white/20 transition-all">
+          <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl flex flex-col items-center gap-3 border border-white/20 shadow-xl group hover:bg-white/20 transition-all min-w-[140px]">
             <Star className="w-10 h-10 text-accent group-hover:scale-110 transition-transform" />
             <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'de' ? 'Premium' : 'Premium'}</span>
           </div>
