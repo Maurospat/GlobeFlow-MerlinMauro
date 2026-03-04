@@ -105,7 +105,7 @@ export default function CaseManagerPage() {
             <h3 className="text-xl font-bold">Sarah Hamilton</h3>
             <p className="text-sm text-accent font-semibold mb-1">{t.manager.specialist}</p>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3" />
+              <ShieldCheck className="w-3 h-3 text-accent" />
               {t.manager.certified}
             </p>
             

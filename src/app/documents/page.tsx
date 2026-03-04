@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/components/LanguageContext';
 import { useCase } from '@/components/CaseContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
@@ -12,7 +13,9 @@ import {
   CheckCircle, 
   HelpCircle,
   Loader2,
-  Globe
+  Globe,
+  Star,
+  ShieldCheck
 } from 'lucide-react';
 import { DocStatus } from '@/app/data/mockData';
 import { aiDocumentGuidance } from '@/ai/flows/ai-document-guidance-flow';
@@ -32,6 +35,11 @@ export default function DocumentsPage() {
   const [loadingAi, setLoadingAi] = useState<string | null>(null);
   const [aiGuidance, setAiGuidance] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getStatusBadge = (status: DocStatus) => {
     switch (status) {
@@ -57,7 +65,6 @@ export default function DocumentsPage() {
 
   const handleUpload = (docId: string, docTitle: string) => {
     setIsUploading(docId);
-    // Minimale Verzögerung für visuelles Feedback, dann sofortiges Update
     setTimeout(() => {
       updateDocumentStatus(docId, 'under_review');
       setIsUploading(null);
@@ -68,7 +75,8 @@ export default function DocumentsPage() {
     }, 100);
   };
 
-  const completedCount = documents.filter(d => d.status === 'approved' || d.status === 'uploaded' || d.status === 'under_review').length;
+  const completedCount = documents.filter(d => d.status !== 'not_uploaded').length;
+  const isMilestoneReached = completedCount >= 3;
 
   const getDocT = (docId: string) => {
     const keys: Record<string, string> = {
@@ -81,6 +89,8 @@ export default function DocumentsPage() {
     };
     return t.documents.items[keys[docId]];
   };
+
+  if (!mounted) return null;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-75">
@@ -141,7 +151,7 @@ export default function DocumentsPage() {
                           className="text-primary transition-all duration-75"
                           onClick={() => handleAiGuidance(trans.title)}
                         >
-                          {loadingAi === doc.title ? <Loader2 className="w-4 h-4 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
+                          {loadingAi === trans.title ? <Loader2 className="w-4 h-4 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-2xl">
@@ -155,7 +165,7 @@ export default function DocumentsPage() {
                           </DialogDescription>
                         </DialogHeader>
                         <div className="mt-4 p-4 bg-slate-50 rounded-xl border max-h-[60vh] overflow-y-auto">
-                          {loadingAi === doc.title ? (
+                          {loadingAi === trans.title ? (
                             <div className="flex flex-col items-center justify-center py-10 gap-4">
                               <Loader2 className="w-8 h-8 animate-spin text-primary" />
                               <p className="text-sm text-muted-foreground">{t.documents.aiAnalyzing}</p>
@@ -178,18 +188,53 @@ export default function DocumentsPage() {
           </div>
         </section>
 
-        <Card className="bg-primary/5 border-primary/10 mb-8">
-          <CardContent className="p-6 flex items-center gap-6">
-            <div className="hidden md:flex w-16 h-16 bg-white rounded-full items-center justify-center border shadow-sm shrink-0">
-              <CheckCircle className="w-8 h-8 text-green-500" />
+        <Dialog>
+          <DialogTrigger asChild>
+            <Card className={`border-primary/10 mb-8 cursor-pointer transition-all duration-150 hover:shadow-md ${isMilestoneReached ? 'bg-green-50 border-green-100' : 'bg-primary/5'}`}>
+              <CardContent className="p-6 flex items-center gap-6">
+                <div className={`hidden md:flex w-16 h-16 bg-white rounded-full items-center justify-center border shadow-sm shrink-0 ${isMilestoneReached ? 'border-green-200' : ''}`}>
+                  {isMilestoneReached ? <Star className="w-8 h-8 text-yellow-500 fill-yellow-500 animate-bounce" /> : <CheckCircle className="w-8 h-8 text-slate-300" />}
+                </div>
+                <div>
+                  <h3 className={`text-lg font-bold ${isMilestoneReached ? 'text-green-800' : 'text-primary'}`}>
+                    {t.documents.milestoneTitle}
+                    {isMilestoneReached && <Badge className="ml-2 bg-green-500">{t.common.active}</Badge>}
+                  </h3>
+                  <p className="text-sm text-slate-600">{t.documents.milestoneDesc}</p>
+                </div>
+                <Button className={`ml-auto shrink-0 transition-all duration-75 ${isMilestoneReached ? 'bg-green-600 hover:bg-green-700' : 'bg-primary'}`}>
+                  {t.common.view}
+                </Button>
+              </CardContent>
+            </Card>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <ShieldCheck className={`w-5 h-5 ${isMilestoneReached ? 'text-green-500' : 'text-slate-400'}`} />
+                {t.documents.milestoneTitle}
+              </DialogTitle>
+              <DialogDescription>
+                {language === 'de' ? 'Status Ihrer Vorabgenehmigung.' : 'Status of your pre-approval process.'}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <span className="text-sm">{t.documents.priority}</span>
+                <span className="font-bold">{completedCount} / {documents.length}</span>
+              </div>
+              <div className="p-4 rounded-lg border text-sm leading-relaxed">
+                {isMilestoneReached 
+                  ? (language === 'de' ? 'Hervorragend! Sie haben die Mindestanforderungen für die Vorabprüfung erfüllt. Unser Team bereitet die Unterlagen vor.' : 'Excellent! You have met the minimum requirements for pre-approval. Our team is preparing the paperwork.')
+                  : (language === 'de' ? 'Laden Sie noch mindestens 3 Dokumente hoch, um die Vorabprüfung zu aktivieren.' : 'Upload at least 3 documents to activate the pre-approval review.')
+                }
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-primary">{t.documents.milestoneTitle}</h3>
-              <p className="text-sm text-slate-600">{t.documents.milestoneDesc}</p>
+            <div className="flex justify-end">
+              <Button className="bg-primary">{t.common.close}</Button>
             </div>
-            <Button className="ml-auto bg-primary text-white shrink-0 transition-all duration-75">{t.common.view}</Button>
-          </CardContent>
-        </Card>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
