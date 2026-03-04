@@ -96,18 +96,18 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <Card className="lg:col-span-2 glass-card overflow-hidden border-none batik-pattern p-1">
-          <CardContent className="p-10 flex flex-col h-full justify-center space-y-8">
+          <CardContent className="p-8 md:p-10 flex flex-col h-full justify-center space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex-1 space-y-6">
                 <div className="flex items-center justify-between">
                   <span className="font-black text-2xl text-primary uppercase tracking-widest">{t.common.progress}</span>
                   <span className="font-black text-primary text-5xl tracking-tighter">{displayProgress}%</span>
                 </div>
-                <Progress value={displayProgress} className="h-5 bg-secondary rounded-full" />
-                <div className="flex flex-wrap gap-8 text-xs font-black text-muted-foreground uppercase tracking-widest">
-                  <span className="flex items-center gap-3"><CheckCircle2 className={`w-6 h-6 ${displayProgress > 30 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
-                  <span className="flex items-center gap-3"><Clock className={`w-6 h-6 ${displayProgress > 60 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
-                  <span className="flex items-center gap-3"><AlertCircle className={`w-6 h-6 ${displayProgress === 100 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
+                <Progress value={displayProgress} className="h-4 bg-secondary rounded-full" />
+                <div className="flex flex-wrap gap-4 md:gap-8 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                  <span className="flex items-center gap-3"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 30 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
+                  <span className="flex items-center gap-3"><Clock className={`w-5 h-5 ${displayProgress > 60 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
+                  <span className="flex items-center gap-3"><AlertCircle className={`w-5 h-5 ${displayProgress === 100 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function Dashboard() {
                     {stat.status}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-xs font-black uppercase tracking-widest">{stat.title}</p>
+                <p className="text-muted-foreground text-[10px] font-black uppercase tracking-widest">{stat.title}</p>
                 <p className="text-4xl font-black text-primary mt-2 tracking-tighter">{stat.value}</p>
               </CardContent>
             </Card>
@@ -171,7 +171,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="lg:col-span-2 glass-card border-none batik-pattern">
+        <Card className="lg:col-span-2 glass-card border-none batik-pattern overflow-hidden">
           <CardHeader className="p-8">
             <CardTitle className="text-3xl font-black tracking-tighter">{t.common.nextSteps}</CardTitle>
             <CardDescription className="text-lg font-medium">{t.dashboard.nextStepDesc}</CardDescription>
@@ -179,43 +179,43 @@ export default function Dashboard() {
           <CardContent className="p-8 pt-0 space-y-6">
             {!allDocsUploaded ? (
               <Link href="/documents" className="block">
-                <div className="flex items-center justify-between p-8 bg-secondary/30 rounded-[2rem] border border-secondary group hover:bg-white hover:shadow-xl transition-all">
-                  <div className="flex items-center gap-8">
-                    <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center border-2 border-primary/10 text-primary text-2xl font-black shadow-md group-hover:scale-110 transition-transform">1</div>
+                <div className="flex items-center justify-between p-6 md:p-8 bg-secondary/30 rounded-[2rem] border border-secondary group hover:bg-white hover:shadow-xl transition-all">
+                  <div className="flex items-center gap-6 md:gap-8">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white flex items-center justify-center border-2 border-primary/10 text-primary text-2xl font-black shadow-md group-hover:scale-110 transition-transform">1</div>
                     <div className="space-y-1">
-                      <p className="font-black text-2xl text-primary tracking-tight">{getDocTitle(nextStepDoc)}</p>
-                      <p className="text-md text-muted-foreground font-semibold leading-relaxed max-w-md">{getDocWhy(nextStepDoc)}</p>
+                      <p className="font-black text-xl md:text-2xl text-primary tracking-tight">{getDocTitle(nextStepDoc)}</p>
+                      <p className="text-sm md:text-md text-muted-foreground font-semibold leading-relaxed max-w-md line-clamp-2">{getDocWhy(nextStepDoc)}</p>
                     </div>
                   </div>
-                  <div className="p-4 bg-white rounded-2xl shadow-sm text-muted-foreground group-hover:text-accent transition-colors">
-                    <ArrowRight className="w-8 h-8" />
+                  <div className="p-3 md:p-4 bg-white rounded-2xl shadow-sm text-muted-foreground group-hover:text-accent transition-colors shrink-0">
+                    <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
               </Link>
             ) : !transferCompleted ? (
               <Link href="/transfer" className="block">
-                <div className="flex items-center justify-between p-8 bg-secondary/30 rounded-[2rem] border border-secondary group hover:bg-white hover:shadow-xl transition-all">
-                  <div className="flex items-center gap-8">
-                    <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center border-2 border-primary/10 text-primary text-2xl font-black shadow-md group-hover:scale-110 transition-transform">1</div>
+                <div className="flex items-center justify-between p-6 md:p-8 bg-secondary/30 rounded-[2rem] border border-secondary group hover:bg-white hover:shadow-xl transition-all">
+                  <div className="flex items-center gap-6 md:gap-8">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white flex items-center justify-center border-2 border-primary/10 text-primary text-2xl font-black shadow-md group-hover:scale-110 transition-transform">1</div>
                     <div className="space-y-1">
-                      <p className="font-black text-2xl text-primary tracking-tight">{t.nav.transfer}</p>
-                      <p className="text-md text-muted-foreground font-semibold leading-relaxed max-w-md">{t.dashboard.nextStepTransfer}</p>
+                      <p className="font-black text-xl md:text-2xl text-primary tracking-tight">{t.nav.transfer}</p>
+                      <p className="text-sm md:text-md text-muted-foreground font-semibold leading-relaxed max-w-md line-clamp-2">{t.dashboard.nextStepTransfer}</p>
                     </div>
                   </div>
-                  <div className="p-4 bg-white rounded-2xl shadow-sm text-muted-foreground group-hover:text-accent transition-colors">
-                    <ArrowRight className="w-8 h-8" />
+                  <div className="p-3 md:p-4 bg-white rounded-2xl shadow-sm text-muted-foreground group-hover:text-accent transition-colors shrink-0">
+                    <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center justify-between p-10 bg-emerald-50 rounded-[2rem] border border-emerald-100 animate-in fade-in">
-                <div className="flex items-center gap-8">
-                  <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center border-4 border-emerald-500 text-emerald-500 font-black shadow-xl">
-                    <CheckCircle2 className="w-12 h-12" />
+              <div className="flex items-center justify-between p-8 md:p-10 bg-emerald-50 rounded-[2rem] border border-emerald-100 animate-in fade-in">
+                <div className="flex items-center gap-6 md:gap-8">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white flex items-center justify-center border-4 border-emerald-500 text-emerald-500 font-black shadow-xl">
+                    <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12" />
                   </div>
                   <div className="space-y-1">
-                    <p className="font-black text-3xl text-emerald-800 tracking-tighter">{t.dashboard.nextStepFinished}</p>
-                    <p className="text-lg text-emerald-600 font-bold">{t.dashboard.journeyProgress.replace('{progress}', '100')}</p>
+                    <p className="font-black text-2xl md:text-3xl text-emerald-800 tracking-tighter">{t.dashboard.nextStepFinished}</p>
+                    <p className="text-md md:text-lg text-emerald-600 font-bold">{t.dashboard.journeyProgress.replace('{progress}', '100')}</p>
                   </div>
                 </div>
               </div>
@@ -224,23 +224,26 @@ export default function Dashboard() {
         </Card>
 
         <Card className="border-none ocean-gradient text-white relative overflow-hidden shadow-2xl flex flex-col h-full">
-          <div className="absolute -bottom-12 -left-12 w-64 h-64 opacity-10 rotate-12 pointer-events-none">
+          <div className="absolute -bottom-8 -left-8 w-48 h-48 opacity-10 rotate-12 pointer-events-none">
             <Waves className="w-full h-full text-white" />
           </div>
-          <CardHeader className="p-10 pb-6">
-            <CardTitle className="text-white text-3xl font-black tracking-tighter uppercase">{t.dashboard.targets}</CardTitle>
+          <CardHeader className="p-8 pb-4">
+            <CardTitle className="text-white text-2xl font-black tracking-tighter uppercase">{t.dashboard.targets}</CardTitle>
           </CardHeader>
-          <CardContent className="p-10 pt-0 space-y-10 flex-1 flex flex-col justify-center">
-            <div className="space-y-4">
-              <div className="flex justify-between items-end mb-2">
-                <span className="text-xs font-black text-accent uppercase tracking-widest">{t.dashboard.accuracy}</span>
-                <span className="text-3xl font-black text-white tracking-tighter">{displayProgress}%</span>
+          <CardContent className="p-8 pt-0 space-y-8 flex-1 flex flex-col justify-center">
+            <div className="space-y-3">
+              <div className="flex justify-between items-end">
+                <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{t.dashboard.accuracy}</span>
+                <span className="text-xl font-black text-white tracking-tighter">{displayProgress}%</span>
               </div>
-              <Progress value={displayProgress} className="h-4 bg-white/20 rounded-full" />
+              <Progress value={displayProgress} className="h-1.5 bg-white/20 rounded-full" />
             </div>
-            <p className="text-lg text-white/80 leading-relaxed font-semibold italic">
-              "Maintain high document accuracy for faster processing at the Indonesian Ministry of Law."
-            </p>
+            
+            <div className="pt-4 border-t border-white/10">
+              <p className="text-md text-white/80 leading-relaxed font-semibold italic">
+                "Maintain high document accuracy for faster processing at the Indonesian Ministry of Law."
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
