@@ -123,7 +123,7 @@ export default function AssetTransferPage() {
   if (!mounted) return null;
 
   const handleStartReview = () => {
-    if (!bankDetails.bankName || !bankDetails.swift || !bankDetails.iban || !bankDetails.customerNo) {
+    if (!bankDetails.bankName || !bankDetails.swift || !bankDetails.iban || !bankDetails.customerNo || !bankDetails.amount) {
       toast({
         variant: "destructive",
         title: language === 'de' ? 'Fehlende Informationen' : 'Missing Information',
@@ -148,7 +148,7 @@ export default function AssetTransferPage() {
       toast({
         variant: "destructive",
         title: language === 'de' ? 'Unterschrift fehlt' : 'Signature missing',
-        description: language === 'de' ? 'Bitte leisten Sie eine digitale Unterschrift im vorgesehenen Feld.' : 'Please provide a digital signature in the designated field.',
+        description: language === 'de' ? 'Bitte leisten Sie eine digitale Unterschrift im vorgesehenen Feld.' : 'Please provide a digital signature in the field.',
       });
       return;
     }
@@ -424,11 +424,14 @@ export default function AssetTransferPage() {
                 <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.amount}</Label>
                 <div className="relative">
                   <Input 
-                    value={initialTransfer.amount.toLocaleString() + " USD"} 
-                    readOnly 
-                    className="h-14 pl-12 font-black text-2xl bg-secondary/30 border-none rounded-2xl" 
+                    type="number"
+                    value={bankDetails.amount} 
+                    onChange={(e) => updateBankDetails({ amount: parseFloat(e.target.value) || 0 })}
+                    disabled={isReadOnly}
+                    className="h-14 pl-12 font-black text-2xl bg-secondary/30 border-none rounded-2xl focus-visible:ring-primary/20" 
                   />
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-primary/40 text-xl">$</div>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-primary/20 text-sm uppercase tracking-widest">USD</div>
                 </div>
               </div>
               

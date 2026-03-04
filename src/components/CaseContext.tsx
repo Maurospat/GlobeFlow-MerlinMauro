@@ -9,6 +9,7 @@ type BankDetails = {
   swift: string;
   iban: string;
   customerNo: string;
+  amount: number;
 };
 
 type CaseContextType = {
@@ -35,7 +36,8 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     bankName: initialTransfer.homeBank,
     swift: '',
     iban: '',
-    customerNo: ''
+    customerNo: '',
+    amount: initialTransfer.amount
   });
 
   const updateDocumentStatus = (id: string, status: DocStatus) => {
