@@ -1,4 +1,3 @@
-
 export type Language = 'en' | 'de';
 
 export const translations = {
@@ -145,7 +144,7 @@ export const translations = {
       title: 'Case Manager',
       subtitle: 'Your dedicated relocation expert.',
       specialist: 'Senior Relocation Manager',
-      certified: 'Zertifizierter Einwanderungsspezialist',
+      certified: 'Certified Immigration Specialist',
       responseSLA: 'Response SLA',
       book: 'Book Consultation',
       messages: 'Secure Messages',
