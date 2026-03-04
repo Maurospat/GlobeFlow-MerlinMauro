@@ -15,7 +15,8 @@ import {
   CheckCircle2,
   Clock,
   AlertCircle,
-  Waves
+  Waves,
+  Globe
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -93,27 +94,67 @@ export default function Dashboard() {
         </Link>
       </header>
 
-      <Card className="glass-card overflow-hidden relative border-none batik-pattern">
-        <div className="absolute top-0 right-0 w-32 h-32 opacity-5 pointer-events-none">
-          <Waves className="w-full h-full text-primary" />
-        </div>
-        <CardContent className="p-10">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-            <div className="flex-1 space-y-6">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-xl text-primary">{t.common.progress}</span>
-                <span className="font-black text-primary text-4xl">{displayProgress}%</span>
-              </div>
-              <Progress value={displayProgress} className="h-4 bg-secondary" />
-              <div className="flex flex-wrap gap-6 text-sm font-semibold text-muted-foreground">
-                <span className="flex items-center gap-2"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 30 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
-                <span className="flex items-center gap-2"><Clock className={`w-5 h-5 ${displayProgress > 60 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
-                <span className="flex items-center gap-2"><AlertCircle className={`w-5 h-5 ${displayProgress === 100 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
+      <div className="grid md:grid-cols-3 gap-8">
+        <Card className="md:col-span-2 glass-card overflow-hidden relative border-none batik-pattern">
+          <div className="absolute top-0 right-0 w-32 h-32 opacity-5 pointer-events-none">
+            <Waves className="w-full h-full text-primary" />
+          </div>
+          <CardContent className="p-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+              <div className="flex-1 space-y-6">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xl text-primary">{t.common.progress}</span>
+                  <span className="font-black text-primary text-4xl">{displayProgress}%</span>
+                </div>
+                <Progress value={displayProgress} className="h-4 bg-secondary" />
+                <div className="flex flex-wrap gap-6 text-sm font-semibold text-muted-foreground">
+                  <span className="flex items-center gap-2"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 30 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
+                  <span className="flex items-center gap-2"><Clock className={`w-5 h-5 ${displayProgress > 60 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
+                  <span className="flex items-center gap-2"><AlertCircle className={`w-5 h-5 ${displayProgress === 100 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card border-none ocean-gradient text-white relative overflow-hidden group">
+          <CardHeader className="pb-0">
+            <CardTitle className="text-white text-lg flex items-center gap-2">
+              <Globe className="w-5 h-5 text-accent" />
+              {language === 'de' ? 'Ihre Route' : 'Your Route'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0 h-48 relative">
+            <svg viewBox="0 0 400 200" className="w-full h-full opacity-60">
+              {/* Simplified World Map Silhouette */}
+              <path 
+                d="M50,40 Q70,20 100,30 T150,50 T200,40 T250,60 T300,50 T350,70 L350,150 Q300,170 250,150 T200,160 T150,140 T100,150 T50,130 Z" 
+                fill="currentColor" 
+                className="text-white/10"
+              />
+              {/* Dots */}
+              {/* Switzerland Approx */}
+              <circle cx="160" cy="65" r="4" fill="#ef4444" className="animate-pulse shadow-lg" />
+              {/* Indonesia Approx */}
+              <circle cx="310" cy="145" r="4" fill="#ef4444" className="animate-pulse shadow-lg" />
+              
+              {/* Curved Line */}
+              <path 
+                d="M160,65 Q235,45 310,145" 
+                fill="none" 
+                stroke="#4FB3B3" 
+                strokeWidth="2" 
+                strokeDasharray="5,5"
+                className="animate-[dash_30s_linear_infinite]"
+              />
+            </svg>
+            <div className="absolute bottom-4 left-6 right-6 flex justify-between text-[10px] font-black uppercase tracking-widest text-white/70">
+              <span>Zurich, CH</span>
+              <span>Jakarta, ID</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
@@ -210,6 +251,13 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+      <style jsx>{`
+        @keyframes dash {
+          to {
+            stroke-dashoffset: -1000;
+          }
+        }
+      `}</style>
     </div>
   );
 }
