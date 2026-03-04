@@ -25,7 +25,8 @@ import {
   Home,
   Waves,
   Star,
-  ShieldCheck
+  ShieldCheck,
+  Maximize2
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -145,37 +146,37 @@ export default function HousingSearch() {
   if (!mounted) return null;
 
   return (
-    <div className="space-y-8 pb-20 animate-in fade-in duration-100">
-      <Link href="/life" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+    <div className="space-y-8 pb-20 animate-in fade-in duration-100 max-w-7xl mx-auto">
+      <Link href="/life" className="inline-flex items-center gap-2 text-sm font-bold text-primary/60 hover:text-primary transition-colors mb-4">
         <ArrowLeft className="w-4 h-4" />
         {t.common.back}
       </Link>
 
       <header className="space-y-4">
-        <h1 className="text-4xl font-headline font-extrabold text-primary">
+        <h1 className="text-4xl md:text-5xl font-headline font-black text-primary tracking-tighter">
           {t.life.housing.searchTitle}
         </h1>
-        <p className="text-xl text-muted-foreground">
+        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-3xl">
           {t.life.housing.searchSubtitle}
         </p>
       </header>
 
       {/* Filter Section */}
-      <Card className="glass-card sticky top-20 z-10">
+      <Card className="glass-card sticky top-20 z-20 border-none batik-pattern">
         <CardContent className="p-4 md:p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input 
                 placeholder={t.common.search + "..."} 
-                className="pl-9" 
+                className="pl-9 bg-white border-secondary h-11" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
             <Select value={filterCity} onValueChange={setFilterCity}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white border-secondary h-11">
                 <SelectValue placeholder={t.life.housing.city} />
               </SelectTrigger>
               <SelectContent>
@@ -187,7 +188,7 @@ export default function HousingSearch() {
             </Select>
 
             <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white border-secondary h-11">
                 <SelectValue placeholder={t.life.housing.type} />
               </SelectTrigger>
               <SelectContent>
@@ -197,7 +198,8 @@ export default function HousingSearch() {
               </SelectContent>
             </Select>
 
-            <Button className="bg-primary hover:bg-primary/90 gap-2">
+            <Button className="bg-primary hover:bg-primary/90 h-11 text-white font-bold gap-2">
+              <Maximize2 className="w-4 h-4" />
               {t.common.filter}
             </Button>
           </div>
@@ -205,52 +207,57 @@ export default function HousingSearch() {
       </Card>
 
       {/* Results Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredListings.map((listing) => (
-          <Card key={listing.id} className="overflow-hidden border-slate-100 group hover:shadow-xl transition-all duration-150 flex flex-col">
-            <div className="relative h-64">
+          <Card key={listing.id} className="overflow-hidden border-none glass-card group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+            <div className="relative h-72 w-full overflow-hidden">
               {listing.image ? (
                 <Image 
                   src={listing.image} 
                   alt={listing.title} 
                   fill 
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               ) : (
-                <div className="w-full h-full bg-slate-200 animate-pulse" />
+                <div className="w-full h-full bg-secondary animate-pulse" />
               )}
-              <div className="absolute top-4 left-4">
-                <Badge className="bg-white/90 text-primary hover:bg-white/100 backdrop-blur-sm border-none shadow-sm">
-                  {listing.type === 'Apartment' ? <Building2 className="w-3 h-3 mr-1" /> : <Home className="w-3 h-3 mr-1" />}
+              <div className="absolute top-4 left-4 z-10">
+                <Badge className="bg-white/95 text-primary hover:bg-white backdrop-blur-md border-none shadow-lg px-3 py-1 font-bold">
+                  {listing.type === 'Apartment' ? <Building2 className="w-3 h-3 mr-1.5" /> : <Home className="w-3 h-3 mr-1.5" />}
                   {listing.type}
                 </Badge>
               </div>
-              <div className="absolute top-4 right-4">
-                <Badge className="bg-accent/90 text-accent-foreground backdrop-blur-sm border-none shadow-sm flex items-center gap-1">
+              <div className="absolute top-4 right-4 z-10">
+                <Badge className="bg-accent text-primary border-none shadow-lg flex items-center gap-1.5 px-3 py-1 font-black">
                   <Star className="w-3 h-3 fill-current" />
                   {listing.rating}
                 </Badge>
               </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <CardHeader className="flex-1">
-              <div className="flex items-center gap-1 text-xs font-bold text-accent uppercase tracking-wider mb-2">
+            
+            <CardHeader className="flex-1 p-6 space-y-3">
+              <div className="flex items-center gap-2 text-[10px] font-black text-accent uppercase tracking-widest batik-pattern bg-primary/5 w-fit px-2 py-0.5 rounded">
                 <MapPin className="w-3 h-3" />
                 {listing.city}
               </div>
-              <CardTitle className="text-xl group-hover:text-primary transition-colors">{listing.title}</CardTitle>
-              <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1"><Bed className="w-4 h-4" /> {listing.beds} {t.life.housing.bed}</span>
-                <span className="flex items-center gap-1"><Bath className="w-4 h-4" /> {listing.baths} {t.life.housing.bath}</span>
-                <span className="flex items-center gap-1"><Waves className="w-4 h-4" /> {listing.sqm} m²</span>
+              <CardTitle className="text-2xl font-black text-primary leading-tight group-hover:text-accent transition-colors">{listing.title}</CardTitle>
+              <div className="flex items-center gap-5 pt-2 text-sm font-bold text-muted-foreground">
+                <span className="flex items-center gap-1.5"><Bed className="w-4 h-4 text-primary/40" /> {listing.beds} {t.life.housing.bed}</span>
+                <span className="flex items-center gap-1.5"><Bath className="w-4 h-4 text-primary/40" /> {listing.baths} {t.life.housing.bath}</span>
+                <span className="flex items-center gap-1.5"><Waves className="w-4 h-4 text-primary/40" /> {listing.sqm} m²</span>
               </div>
             </CardHeader>
-            <CardFooter className="border-t bg-slate-50/50 p-4 flex items-center justify-between">
-              <div>
-                <span className="text-2xl font-bold text-primary">${listing.price.toLocaleString()}</span>
-                <span className="text-xs text-muted-foreground ml-1">/ {language === 'de' ? 'Monat' : 'month'}</span>
+
+            <CardFooter className="border-t border-secondary/50 p-6 flex items-center justify-between bg-white/50">
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-primary">${listing.price.toLocaleString()}</span>
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter leading-none">{language === 'de' ? 'pro Monat' : 'per month'}</span>
               </div>
-              <Button size="sm" className="bg-primary hover:bg-primary/90 transition-all duration-75">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-primary/10 group">
                 {t.common.view}
+                <ArrowLeft className="ml-2 w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
               </Button>
             </CardFooter>
           </Card>
@@ -258,38 +265,45 @@ export default function HousingSearch() {
       </div>
 
       {filteredListings.length === 0 && (
-        <div className="text-center py-20 space-y-4">
-          <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
-            <Search className="w-8 h-8 text-muted-foreground" />
-          </div>
-          <h3 className="text-xl font-bold text-primary">{language === 'de' ? 'Keine Ergebnisse gefunden' : 'No results found'}</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            {language === 'de' 
-              ? 'Leider konnten wir keine Immobilien finden, die Ihren Kriterien entsprechen. Versuchen Sie es mit anderen Filtern.' 
-              : 'We couldn\'t find any properties matching your criteria. Try adjusting your filters or search query.'}
-          </p>
-          <Button variant="outline" onClick={() => { setFilterCity('all'); setFilterType('all'); setSearchQuery(''); }}>
-            {language === 'de' ? 'Filter zurücksetzen' : 'Reset Filters'}
-          </Button>
-        </div>
+        <Card className="glass-card border-none batik-pattern py-20">
+          <CardContent className="flex flex-col items-center justify-center space-y-6 text-center">
+            <div className="w-24 h-24 bg-secondary rounded-full flex items-center justify-center">
+              <Search className="w-12 h-12 text-primary/30" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-3xl font-black text-primary tracking-tighter">{language === 'de' ? 'Keine Ergebnisse' : 'No results found'}</h3>
+              <p className="text-muted-foreground max-w-md mx-auto font-medium">
+                {language === 'de' 
+                  ? 'Leider konnten wir keine Immobilien finden, die Ihren Kriterien entsprechen.' 
+                  : 'We couldn\'t find any properties matching your criteria.'}
+              </p>
+            </div>
+            <Button variant="outline" className="h-12 px-8 border-secondary font-bold rounded-xl" onClick={() => { setFilterCity('all'); setFilterType('all'); setSearchQuery(''); }}>
+              {language === 'de' ? 'Filter zurücksetzen' : 'Reset Filters'}
+            </Button>
+          </CardContent>
+        </Card>
       )}
 
       {/* Trust Banner */}
-      <section className="bg-primary text-white rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 mt-12">
-        <div className="flex-1 space-y-4">
-          <h3 className="text-2xl font-bold">{t.life.housing.partners.title}</h3>
-          <p className="text-white/80 leading-relaxed">
+      <section className="ocean-gradient rounded-[2.5rem] p-10 md:p-16 flex flex-col md:flex-row items-center gap-12 mt-12 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none">
+          <Waves className="w-full h-full text-white" />
+        </div>
+        <div className="flex-1 space-y-6 relative z-10">
+          <h3 className="text-3xl md:text-4xl font-black text-white tracking-tighter leading-tight">{t.life.housing.partners.title}</h3>
+          <p className="text-white/80 text-lg leading-relaxed font-medium max-w-2xl">
             {t.life.housing.partners.desc}
           </p>
         </div>
-        <div className="shrink-0 flex gap-4">
-          <div className="p-4 bg-white/10 rounded-2xl flex flex-col items-center gap-2">
-            <ShieldCheck className="w-8 h-8 text-accent" />
-            <span className="text-xs font-bold uppercase">{language === 'de' ? 'Verifiziert' : 'Verified'}</span>
+        <div className="shrink-0 flex gap-6 relative z-10">
+          <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl flex flex-col items-center gap-3 border border-white/20 shadow-xl group hover:bg-white/20 transition-all">
+            <ShieldCheck className="w-10 h-10 text-accent group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'de' ? 'Verifiziert' : 'Verified'}</span>
           </div>
-          <div className="p-4 bg-white/10 rounded-2xl flex flex-col items-center gap-2">
-            <Star className="w-8 h-8 text-accent" />
-            <span className="text-xs font-bold uppercase">{language === 'de' ? 'Premium' : 'Premium'}</span>
+          <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl flex flex-col items-center gap-3 border border-white/20 shadow-xl group hover:bg-white/20 transition-all">
+            <Star className="w-10 h-10 text-accent group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'de' ? 'Premium' : 'Premium'}</span>
           </div>
         </div>
       </section>
