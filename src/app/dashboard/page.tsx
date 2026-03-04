@@ -152,18 +152,20 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href} className="flex">
-            <Card className="glass-card group hover:-translate-y-2 hover:shadow-2xl transition-all border-none flex-1">
-              <CardContent className="p-8 flex flex-col h-full">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-4 bg-secondary rounded-2xl group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
-                    <stat.icon className="w-8 h-8 text-primary group-hover:text-white" />
+            <Card className="glass-card group hover:-translate-y-2 hover:shadow-2xl transition-all border-none flex-1 overflow-hidden">
+              <CardContent className="p-6 md:p-8 flex flex-col h-full">
+                <div className="flex items-center justify-between gap-2 mb-6 h-12">
+                  <div className="p-3 bg-secondary rounded-2xl group-hover:bg-accent group-hover:text-white transition-all shadow-sm shrink-0">
+                    <stat.icon className="w-6 h-6 text-primary group-hover:text-white" />
                   </div>
-                  <span className={`text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-tighter ${stat.status === t.common.approved ? 'bg-emerald-100 text-emerald-800' : 'bg-primary/10 text-primary'}`}>
+                  <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shrink-0 whitespace-nowrap ${stat.status === t.common.approved ? 'bg-emerald-100 text-emerald-800' : 'bg-primary/10 text-primary'}`}>
                     {stat.status}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-[10px] font-black uppercase tracking-widest">{stat.title}</p>
-                <p className="text-4xl font-black text-primary mt-2 tracking-tighter">{stat.value}</p>
+                <div className="mt-auto">
+                  <p className="text-muted-foreground text-[10px] font-black uppercase tracking-widest">{stat.title}</p>
+                  <p className="text-3xl md:text-4xl font-black text-primary mt-1 tracking-tighter truncate">{stat.value}</p>
+                </div>
               </CardContent>
             </Card>
           </Link>
@@ -230,16 +232,16 @@ export default function Dashboard() {
           <CardHeader className="p-8 pb-4">
             <CardTitle className="text-white text-2xl font-black tracking-tighter uppercase">{t.dashboard.targets}</CardTitle>
           </CardHeader>
-          <CardContent className="p-8 pt-0 space-y-8 flex-1 flex flex-col justify-center">
+          <CardContent className="p-8 pt-0 space-y-10 flex-1 flex flex-col justify-center">
             <div className="space-y-3">
-              <div className="flex justify-between items-end">
+              <div className="flex justify-between items-center mb-1">
                 <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{t.dashboard.accuracy}</span>
                 <span className="text-xl font-black text-white tracking-tighter">{displayProgress}%</span>
               </div>
               <Progress value={displayProgress} className="h-1.5 bg-white/20 rounded-full" />
             </div>
             
-            <div className="pt-4 border-t border-white/10">
+            <div className="pt-6 border-t border-white/10">
               <p className="text-md text-white/80 leading-relaxed font-semibold italic">
                 "Maintain high document accuracy for faster processing at the Indonesian Ministry of Law."
               </p>
