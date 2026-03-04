@@ -53,49 +53,61 @@ export default function AssetTransferPage() {
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.strokeStyle = '#476685'; // Primary color
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
       }
     }
   }, [mounted]);
 
+  const getCoordinates = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!canvasRef.current) return { x: 0, y: 0 };
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    
+    // Get raw client coordinates
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+
+    // Scale coordinates to match canvas internal resolution
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
   const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
     if (isPoASigned) return;
     setIsDrawing(true);
     setHasSigned(true);
-    draw(e);
+    
+    const { x, y } = getCoordinates(e);
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
   };
 
   const stopDrawing = () => {
     setIsDrawing(false);
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext('2d');
-      ctx?.beginPath();
+      ctx?.closePath();
     }
   };
 
   const draw = (e: React.MouseEvent | React.TouchEvent) => {
     if (!isDrawing || !canvasRef.current || isPoASigned) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
-    let x, y;
-
-    if ('touches' in e) {
-      x = e.touches[0].clientX - rect.left;
-      y = e.touches[0].clientY - rect.top;
-    } else {
-      x = e.clientX - rect.left;
-      y = e.clientY - rect.top;
-    }
-
+    const { x, y } = getCoordinates(e);
     ctx.lineTo(x, y);
     ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
   };
 
   const clearSignature = () => {
@@ -126,7 +138,7 @@ export default function AssetTransferPage() {
         title: language === 'de' ? 'Überprüfung eingeleitet' : 'Review initiated',
         description: language === 'de' ? 'Ihre Bankdaten werden nun geprüft.' : 'Your bank details are now being reviewed.',
       });
-    }, 100);
+    }, 50);
   };
 
   const handleSignPoA = () => {
@@ -148,7 +160,7 @@ export default function AssetTransferPage() {
         title: language === 'de' ? 'Vollmacht unterzeichnet' : 'PoA Signed',
         description: t.transfer.poa.success,
       });
-    }, 150);
+    }, 100);
   };
 
   const completeTransferManual = () => {
@@ -320,11 +332,11 @@ export default function AssetTransferPage() {
               
               <div className="space-y-2">
                 <Label className="text-xs font-bold text-muted-foreground uppercase">{language === 'de' ? 'Digitale Unterschrift' : 'Digital Signature'}</Label>
-                <div className="relative group rounded-xl overflow-hidden border-2 border-slate-200 bg-white cursor-crosshair">
+                <div className="relative group rounded-xl overflow-hidden border-2 border-slate-200 bg-white cursor-crosshair shadow-inner">
                   <canvas
                     ref={canvasRef}
-                    width={400}
-                    height={128}
+                    width={800} // Higher internal resolution for smoothness
+                    height={256}
                     className="w-full h-32 block touch-none"
                     onMouseDown={startDrawing}
                     onMouseMove={draw}
@@ -343,7 +355,7 @@ export default function AssetTransferPage() {
               </div>
 
               <Button 
-                className="w-full bg-primary h-12 text-lg transition-all duration-75" 
+                className="w-full bg-primary h-12 text-lg transition-all duration-75 shadow-sm" 
                 onClick={handleSignPoA}
                 disabled={isSigning || isPoASigned || transferStatus === 'not_started' || !hasSigned}
               >
@@ -352,7 +364,7 @@ export default function AssetTransferPage() {
               </Button>
               
               {transferStatus === 'not_started' && (
-                <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 p-2 rounded-lg">
+                <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 p-2 rounded-lg border border-amber-100">
                   <AlertCircle className="w-4 h-4" />
                   {language === 'de' ? 'Bitte bestätigen Sie zuerst die Bankdaten.' : 'Please confirm bank details first.'}
                 </div>
@@ -372,14 +384,14 @@ export default function AssetTransferPage() {
               <div className="space-y-2">
                 <Label className="text-xs font-bold text-muted-foreground uppercase">{t.transfer.amount}</Label>
                 <div className="relative">
-                  <Input value={initialTransfer.amount.toLocaleString() + " USD"} readOnly className="pl-10 font-bold" />
+                  <Input value={initialTransfer.amount.toLocaleString() + " USD"} readOnly className="pl-10 font-bold bg-slate-50" />
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</div>
                 </div>
               </div>
               
               <div className="flex flex-col gap-2 pt-2">
                 <Button 
-                  className="w-full bg-primary transition-all duration-75 h-12" 
+                  className="w-full bg-primary transition-all duration-75 h-12 shadow-sm" 
                   onClick={startTransfer}
                   disabled={isStarting || (transferStatus !== 'not_started')}
                 >
