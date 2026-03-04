@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -27,22 +28,30 @@ interface Message {
 
 export default function CaseManagerPage() {
   const { t, language } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', text: t.manager.chat.m1, time: "10:15" },
-    { role: 'user', text: t.manager.chat.u1, time: "10:20" },
-    { role: 'model', text: t.manager.chat.m2, time: "10:25" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const managerImage = PlaceHolderImages.find(img => img.id === 'case-manager-portrait');
+  useEffect(() => {
+    setMounted(true);
+    setMessages([
+      { role: 'model', text: t.manager.chat.m1, time: "10:15" },
+      { role: 'user', text: t.manager.chat.u1, time: "10:20" },
+      { role: 'model', text: t.manager.chat.m2, time: "10:25" },
+    ]);
+  }, [t.manager.chat]);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  if (!mounted) return null;
+
+  const managerImage = PlaceHolderImages.find(img => img.id === 'case-manager-portrait');
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -79,7 +88,7 @@ export default function CaseManagerPage() {
   };
 
   return (
-    <div className="grid md:grid-cols-3 gap-8 pb-12">
+    <div className="grid md:grid-cols-3 gap-8 pb-12 animate-in fade-in duration-75">
       <div className="space-y-8 md:col-span-1">
         <header>
           <h1 className="text-3xl font-headline font-bold text-primary">{t.nav.manager}</h1>

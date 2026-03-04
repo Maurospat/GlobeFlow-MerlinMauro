@@ -23,14 +23,16 @@ export default function Dashboard() {
   const { t, language } = useLanguage();
   const { documents, progress: actualProgress, transferStatus } = useCase();
   const [displayProgress, setDisplayProgress] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Schnellere Animation für den Balken
+    setMounted(true);
     const timer = setTimeout(() => setDisplayProgress(actualProgress), 50);
     return () => clearTimeout(timer);
   }, [actualProgress]);
 
-  // Nächster Schritt Logik
+  if (!mounted) return null;
+
   const nextStepDoc = documents.find(d => d.status === 'not_uploaded');
   const allDocsUploaded = !nextStepDoc;
   const transferCompleted = transferStatus === 'completed';
@@ -136,7 +138,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             {!allDocsUploaded ? (
-              <Link href="/documents">
+              <Link href="/documents" className="block">
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
@@ -145,11 +147,13 @@ export default function Dashboard() {
                       <p className="text-sm text-muted-foreground">{getDocWhy(nextStepDoc)}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="transition-all duration-75"><ArrowRight className="w-4 h-4" /></Button>
+                  <div className="p-2 text-muted-foreground group-hover:text-primary transition-colors">
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
                 </div>
               </Link>
             ) : !transferCompleted ? (
-              <Link href="/transfer">
+              <Link href="/transfer" className="block">
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-all duration-75">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border text-primary font-bold shadow-sm">1</div>
@@ -158,7 +162,9 @@ export default function Dashboard() {
                       <p className="text-sm text-muted-foreground">{t.dashboard.nextStepTransfer}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="transition-all duration-75"><ArrowRight className="w-4 h-4" /></Button>
+                  <div className="p-2 text-muted-foreground group-hover:text-primary transition-colors">
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
                 </div>
               </Link>
             ) : (
