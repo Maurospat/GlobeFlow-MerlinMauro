@@ -26,6 +26,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { toast } from '@/hooks/use-toast';
 
@@ -177,7 +178,9 @@ export default function DocumentsPage() {
                           )}
                         </div>
                         <div className="mt-4 flex justify-end">
-                          <Button onClick={() => setAiGuidance(null)} className="bg-primary transition-all duration-75">{t.common.close}</Button>
+                          <DialogClose asChild>
+                            <Button onClick={() => setAiGuidance(null)} className="bg-primary transition-all duration-75">{t.common.close}</Button>
+                          </DialogClose>
                         </div>
                       </DialogContent>
                     </Dialog>
@@ -231,7 +234,9 @@ export default function DocumentsPage() {
               </div>
             </div>
             <div className="flex justify-end">
-              <Button className="bg-primary">{t.common.close}</Button>
+              <DialogClose asChild>
+                <Button className="bg-primary">{t.common.close}</Button>
+              </DialogClose>
             </div>
           </DialogContent>
         </Dialog>

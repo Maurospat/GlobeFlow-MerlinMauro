@@ -35,6 +35,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 export default function LifeInIndonesia() {
@@ -253,10 +254,10 @@ export default function LifeInIndonesia() {
                   </div>
                 </div>
 
-                <div className="p-8 pt-0 flex justify-end">
-                  <DialogTrigger asChild>
-                    <Button className="bg-primary text-white font-black px-10 h-12 rounded-xl">{t.common.close}</Button>
-                  </DialogTrigger>
+                <div className="p-10 pt-0 flex justify-end">
+                  <DialogClose asChild>
+                    <Button className="bg-primary text-white font-black px-12 h-14 rounded-2xl shadow-xl hover:bg-primary/90 transition-all">{t.common.close}</Button>
+                  </DialogClose>
                 </div>
               </DialogContent>
             </Dialog>
