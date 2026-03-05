@@ -18,7 +18,9 @@ import {
   AlertCircle,
   Waves,
   Globe,
-  Palmtree
+  Palmtree,
+  PartyPopper,
+  Sparkles
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -39,6 +41,7 @@ export default function Dashboard() {
   const nextStepDoc = documents.find(d => d.status === 'not_uploaded');
   const allDocsUploaded = !nextStepDoc;
   const transferCompleted = transferStatus === 'completed';
+  const isProcessFinished = actualProgress === 100;
 
   const uploadedDocsCount = documents.filter(d => d.status !== 'not_uploaded').length;
   const totalDocs = documents.length;
@@ -84,32 +87,40 @@ export default function Dashboard() {
             <Waves className="w-10 h-10 text-accent animate-pulse" />
             {t.dashboard.welcome} Alexander
           </h1>
-          <p className="text-muted-foreground text-xl font-medium">
-            {t.dashboard.journeyProgress.replace('{progress}', displayProgress.toString())}
+          <p className="text-xl text-muted-foreground font-medium">
+            {isProcessFinished 
+              ? (language === 'de' ? 'Ihr Umzug nach Indonesien ist bereit!' : 'Your relocation to Indonesia is ready!') 
+              : t.dashboard.journeyProgress.replace('{progress}', displayProgress.toString())}
           </p>
         </div>
-        <Link href={allDocsUploaded && transferCompleted ? "/life" : "/documents"}>
-          <Button className="bg-primary hover:bg-primary/90 text-white font-black h-14 px-10 rounded-2xl shadow-2xl shadow-primary/20 transition-all group">
-            {allDocsUploaded && transferCompleted ? t.nav.life : t.landing.cta}
-            <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
-          </Button>
-        </Link>
+        {!isProcessFinished && (
+          <Link href="/documents">
+            <Button className="bg-primary hover:bg-primary/90 text-white font-black h-14 px-10 rounded-2xl shadow-2xl shadow-primary/20 transition-all group">
+              {t.landing.cta}
+              <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
+            </Button>
+          </Link>
+        )}
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="lg:col-span-2 glass-card overflow-hidden border-none batik-pattern p-1">
+        <Card className={`lg:col-span-2 border-none batik-pattern p-1 shadow-2xl overflow-hidden transition-all duration-500 ${isProcessFinished ? 'bg-emerald-50 ring-4 ring-emerald-200' : 'glass-card'}`}>
           <CardContent className="p-8 md:p-10 flex flex-col h-full justify-center space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex-1 space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="font-black text-2xl text-primary uppercase tracking-widest">{t.common.progress}</span>
-                  <span className="font-black text-primary text-5xl tracking-tighter">{displayProgress}%</span>
+                  <span className={`font-black text-2xl uppercase tracking-widest ${isProcessFinished ? 'text-emerald-700' : 'text-primary'}`}>
+                    {isProcessFinished ? (language === 'de' ? 'STATUS: BEREIT' : 'STATUS: READY') : t.common.progress}
+                  </span>
+                  <span className={`font-black text-5xl tracking-tighter ${isProcessFinished ? 'text-emerald-600' : 'text-primary'}`}>
+                    {isProcessFinished ? <CheckCircle2 className="w-12 h-12 inline-block -mt-2" /> : displayProgress + '%'}
+                  </span>
                 </div>
-                <Progress value={displayProgress} className="h-4 bg-secondary rounded-full" />
+                <Progress value={displayProgress} className={`h-4 rounded-full ${isProcessFinished ? 'bg-emerald-100 [&>div]:bg-emerald-500' : 'bg-secondary'}`} />
                 <div className="flex flex-wrap gap-4 md:gap-8 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                  <span className="flex items-center gap-3"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 30 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
-                  <span className="flex items-center gap-3"><Clock className={`w-5 h-5 ${displayProgress > 60 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
-                  <span className="flex items-center gap-3"><AlertCircle className={`w-5 h-5 ${displayProgress === 100 ? 'text-accent' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
+                  <span className="flex items-center gap-3"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 30 ? 'text-emerald-500' : 'text-slate-200'}`} /> {t.dashboard.milestones.identity}</span>
+                  <span className="flex items-center gap-3"><CheckCircle2 className={`w-5 h-5 ${displayProgress > 60 ? 'text-emerald-500' : 'text-slate-200'}`} /> {t.dashboard.milestones.financials}</span>
+                  <span className="flex items-center gap-3"><CheckCircle2 className={`w-5 h-5 ${displayProgress === 100 ? 'text-emerald-500' : 'text-slate-200'}`} /> {t.dashboard.milestones.visa}</span>
                 </div>
               </div>
             </div>
@@ -175,12 +186,19 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="lg:col-span-2 glass-card border-none batik-pattern overflow-hidden">
+        <Card className={`lg:col-span-2 border-none overflow-hidden transition-all duration-500 ${isProcessFinished ? 'bg-emerald-500 text-white shadow-emerald-200' : 'glass-card batik-pattern'}`}>
           <CardHeader className="p-8">
-            <CardTitle className="text-3xl font-black tracking-tighter">{t.common.nextSteps}</CardTitle>
-            <CardDescription className="text-lg font-medium">
-              {allDocsUploaded && transferCompleted ? t.dashboard.nextStepFinished : t.dashboard.nextStepDesc}
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className={`text-3xl font-black tracking-tighter ${isProcessFinished ? 'text-white' : 'text-primary'}`}>
+                  {isProcessFinished ? (language === 'de' ? 'Alles bereit!' : 'All set!') : t.common.nextSteps}
+                </CardTitle>
+                <CardDescription className={`text-lg font-medium ${isProcessFinished ? 'text-white/80' : 'text-muted-foreground'}`}>
+                  {isProcessFinished ? (language === 'de' ? 'Ihre Einwanderung wurde erfolgreich abgeschlossen.' : 'Your immigration process has been successfully completed.') : t.dashboard.nextStepDesc}
+                </CardDescription>
+              </div>
+              {isProcessFinished && <PartyPopper className="w-12 h-12 text-accent" />}
+            </div>
           </CardHeader>
           <CardContent className="p-8 pt-0 space-y-6">
             {!allDocsUploaded ? (
@@ -214,22 +232,29 @@ export default function Dashboard() {
                 </div>
               </Link>
             ) : (
-              <Link href="/life" className="block">
-                <div className="flex items-center justify-between p-6 md:p-8 bg-accent/10 rounded-[2rem] border-2 border-accent border-dashed group hover:bg-white hover:border-solid hover:shadow-2xl transition-all animate-in fade-in zoom-in duration-500">
-                  <div className="flex items-center gap-6 md:gap-8">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white flex items-center justify-center border-4 border-accent text-accent shadow-xl group-hover:scale-110 transition-transform">
-                      <Palmtree className="w-8 h-8 md:w-10 md:h-10" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-black text-xl md:text-2xl text-primary tracking-tight">{t.dashboard.nextStepLife}</p>
-                      <p className="text-sm md:text-md text-muted-foreground font-semibold leading-relaxed max-w-md line-clamp-2">{t.dashboard.nextStepLifeDesc}</p>
-                    </div>
-                  </div>
-                  <div className="p-3 md:p-4 bg-white rounded-2xl shadow-sm text-accent group-hover:bg-accent group-hover:text-white transition-all shrink-0">
-                    <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
-                  </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-6 bg-white/10 rounded-3xl border border-white/20">
+                  <CheckCircle2 className="w-8 h-8 text-accent" />
+                  <p className="font-bold text-lg">{t.dashboard.nextStepFinished}</p>
                 </div>
-              </Link>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-center">{language === 'de' ? 'OPTIONAL' : 'OPTIONAL'}</p>
+                <Link href="/life" className="block">
+                  <div className="flex items-center justify-between p-6 md:p-8 bg-white/20 rounded-[2rem] border-2 border-white/40 border-dashed group hover:bg-white hover:border-solid hover:shadow-2xl transition-all">
+                    <div className="flex items-center gap-6 md:gap-8">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white flex items-center justify-center border-4 border-accent text-accent shadow-xl group-hover:scale-110 transition-transform">
+                        <Palmtree className="w-8 h-8 md:w-10 md:h-10" />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-black text-xl md:text-2xl text-white tracking-tight group-hover:text-primary transition-colors">{t.dashboard.nextStepLife}</p>
+                        <p className="text-sm md:text-md text-white/80 group-hover:text-muted-foreground font-semibold leading-relaxed max-w-md line-clamp-2">{t.dashboard.nextStepLifeDesc}</p>
+                      </div>
+                    </div>
+                    <div className="p-3 md:p-4 bg-white rounded-2xl shadow-sm text-accent group-hover:bg-accent group-hover:text-white transition-all shrink-0">
+                      <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
+                    </div>
+                  </div>
+                </Link>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -247,13 +272,20 @@ export default function Dashboard() {
                 <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{t.dashboard.accuracy}</span>
                 <span className="text-xl font-black text-white tracking-tighter">{displayProgress}%</span>
               </div>
-              <Progress value={displayProgress} className="h-1.5 bg-white/20 rounded-full" />
+              <Progress value={displayProgress} className={`h-1.5 rounded-full ${isProcessFinished ? 'bg-accent [&>div]:bg-white' : 'bg-white/20'}`} />
             </div>
             
             <div className="pt-6 border-t border-white/10">
-              <p className="text-md text-white/80 leading-relaxed font-semibold italic">
-                "Maintain high document accuracy for faster processing at the Indonesian Ministry of Law."
-              </p>
+              {isProcessFinished ? (
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-6 h-6 text-accent" />
+                  <p className="text-md text-white font-black uppercase tracking-widest">{language === 'de' ? 'Zulassung bereit' : 'Admission Ready'}</p>
+                </div>
+              ) : (
+                <p className="text-md text-white/80 leading-relaxed font-semibold italic">
+                  "Maintain high document accuracy for faster processing at the Indonesian Ministry of Law."
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
