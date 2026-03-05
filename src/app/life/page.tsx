@@ -194,6 +194,10 @@ export default function LifeInIndonesia() {
                 </Card>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 rounded-[2rem] border-none batik-pattern">
+                <DialogHeader className="sr-only">
+                  <DialogTitle>{city.title}</DialogTitle>
+                  <DialogDescription>{city.desc}</DialogDescription>
+                </DialogHeader>
                 <div className="relative h-80 w-full group">
                   <Image 
                     src={city.img?.imageUrl || "https://picsum.photos/seed/city/600/400"} 
