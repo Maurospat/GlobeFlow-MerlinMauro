@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/navigation';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageContext';
 import { 
@@ -10,8 +9,6 @@ import {
   ArrowRightLeft, 
   Wallet, 
   UserCircle, 
-  ShieldCheck,
-  Globe,
   LogOut,
   Menu,
   X,
@@ -48,7 +45,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     { name: t.nav.costs, href: '/costs', icon: Wallet },
     { name: t.nav.manager, href: '/manager', icon: UserCircle },
     { name: t.nav.life, href: '/life', icon: Palmtree },
-    { name: t.nav.admin, href: '/admin', icon: ShieldCheck },
   ];
 
   const NavItem = ({ item, isMobile = false }: { item: any, isMobile?: boolean }) => {
@@ -140,7 +136,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-secondary flex justify-around p-3 z-50 overflow-x-auto no-scrollbar shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
-        {navigation.slice(0, 6).map((item) => {
+        {navigation.map((item) => {
           const isActive = mounted && pathname === item.href;
           const Icon = item.icon;
           return (
