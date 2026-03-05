@@ -22,6 +22,7 @@ import {
   Bath, 
   Search, 
   ArrowLeft,
+  ArrowRight,
   Building2,
   Home,
   Waves,
