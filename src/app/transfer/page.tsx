@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import { 
   ArrowRightLeft, 
   Building2, 
@@ -180,24 +181,6 @@ export default function AssetTransferPage() {
     }, 1500);
   };
 
-  const steps = [
-    { key: 'not_started', label: t.common.not_started },
-    { key: 'in_review', label: t.common.under_review },
-    { key: 'in_transit', label: t.transfer.inTransit },
-    { key: 'completed', label: t.common.approved }
-  ];
-
-  const getStepStatus = (stepKey: string) => {
-    const order: TransferStatus[] = ['not_started', 'initiated', 'in_review', 'in_transit', 'completed'];
-    const currentIndex = order.indexOf(transferStatus);
-    const stepIndex = order.indexOf(stepKey as TransferStatus);
-
-    if (stepIndex < currentIndex) return 'completed';
-    if (stepIndex === currentIndex) return 'active';
-    return 'pending';
-  };
-
-  // Progression logic
   const isBankStepActive = transferStatus === 'not_started';
   const isPoAStepActive = transferStatus === 'in_review';
   const isFinalStepActive = transferStatus === 'in_transit';
@@ -210,7 +193,6 @@ export default function AssetTransferPage() {
         <p className="text-xl text-muted-foreground font-medium max-w-3xl">{t.transfer.subtitle}</p>
       </header>
 
-      {/* Vertical Guided Flow */}
       <div className="space-y-12">
         
         {/* Step 1: Bank Information & Scope */}
@@ -481,4 +463,3 @@ export default function AssetTransferPage() {
     </div>
   );
 }
-
