@@ -44,7 +44,8 @@ export const translations = {
       viewMore: 'View more slots',
       required: 'Required',
       all: 'All',
-      filter: 'Filter'
+      filter: 'Filter',
+      returnDashboard: 'Return to Dashboard'
     },
     landing: {
       heroTitle: 'Your secure path to Indonesia.',
@@ -78,6 +79,8 @@ export const translations = {
       nextStepDesc: 'Needed for initial visa pre-approval.',
       nextStepTransfer: 'Initiate or complete your asset transfer.',
       nextStepFinished: 'All relocation steps are completed!',
+      nextStepLife: 'Explore Life in Indonesia',
+      nextStepLifeDesc: 'Discover housing, healthcare, and lifestyle tips for your new home.',
       targets: 'Success Targets',
       accuracy: 'Document Accuracy',
       targetLabel: 'Target'
@@ -355,7 +358,8 @@ export const translations = {
       viewMore: 'Weitere Termine',
       required: 'Erforderlich',
       all: 'Alle',
-      filter: 'Filtern'
+      filter: 'Filtern',
+      returnDashboard: 'Zurück zur Zentrale'
     },
     landing: {
       heroTitle: 'Ihr sicherer Weg nach Indonesien.',
@@ -389,6 +393,8 @@ export const translations = {
       nextStepDesc: 'Wichtig für die erste Visum-Vorabgenehmigung.',
       nextStepTransfer: 'Kapitaltransfer einleiten oder abschließen.',
       nextStepFinished: 'Alle Schritte für Ihren Umzug sind abgeschlossen!',
+      nextStepLife: 'Leben in Indonesien entdecken',
+      nextStepLifeDesc: 'Entdecken Sie Wohnmöglichkeiten, Gesundheitsversorgung und Lifestyle-Tipps.',
       targets: 'Erfolgsziele',
       accuracy: 'Dokumentengenauigkeit',
       targetLabel: 'Ziel'

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -16,7 +17,8 @@ import {
   Clock,
   AlertCircle,
   Waves,
-  Globe
+  Globe,
+  Palmtree
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -43,7 +45,7 @@ export default function Dashboard() {
 
   const stats = [
     { title: t.dashboard.stats.docs, value: `${uploadedDocsCount}/${totalDocs}`, status: uploadedDocsCount > 0 ? t.common.active : t.common.not_started, icon: FileText, href: '/documents' },
-    { title: t.dashboard.stats.transfer, value: '$250k', status: transferCompleted ? t.common.approved : (transferStatus === 'not_started' ? t.common.not_started : t.common.active), icon: ArrowRightLeft, href: '/transfer' },
+    { title: t.dashboard.stats.transfer, value: transferCompleted ? '$250k' : '$0', status: transferCompleted ? t.common.approved : (transferStatus === 'not_started' ? t.common.not_started : t.common.active), icon: ArrowRightLeft, href: '/transfer' },
     { title: t.dashboard.stats.costs, value: '$3,420', status: t.common.pending, icon: Wallet, href: '/costs' },
     { title: t.dashboard.stats.manager, value: t.common.active, status: 'SLA Active', icon: UserCircle, href: '/manager' },
   ];
@@ -86,9 +88,9 @@ export default function Dashboard() {
             {t.dashboard.journeyProgress.replace('{progress}', displayProgress.toString())}
           </p>
         </div>
-        <Link href="/documents">
+        <Link href={allDocsUploaded && transferCompleted ? "/life" : "/documents"}>
           <Button className="bg-primary hover:bg-primary/90 text-white font-black h-14 px-10 rounded-2xl shadow-2xl shadow-primary/20 transition-all group">
-            {t.landing.cta}
+            {allDocsUploaded && transferCompleted ? t.nav.life : t.landing.cta}
             <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
           </Button>
         </Link>
@@ -176,7 +178,9 @@ export default function Dashboard() {
         <Card className="lg:col-span-2 glass-card border-none batik-pattern overflow-hidden">
           <CardHeader className="p-8">
             <CardTitle className="text-3xl font-black tracking-tighter">{t.common.nextSteps}</CardTitle>
-            <CardDescription className="text-lg font-medium">{t.dashboard.nextStepDesc}</CardDescription>
+            <CardDescription className="text-lg font-medium">
+              {allDocsUploaded && transferCompleted ? t.dashboard.nextStepFinished : t.dashboard.nextStepDesc}
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-8 pt-0 space-y-6">
             {!allDocsUploaded ? (
@@ -210,17 +214,22 @@ export default function Dashboard() {
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center justify-between p-8 md:p-10 bg-emerald-50 rounded-[2rem] border border-emerald-100 animate-in fade-in">
-                <div className="flex items-center gap-6 md:gap-8">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white flex items-center justify-center border-4 border-emerald-500 text-emerald-500 font-black shadow-xl">
-                    <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12" />
+              <Link href="/life" className="block">
+                <div className="flex items-center justify-between p-6 md:p-8 bg-accent/10 rounded-[2rem] border-2 border-accent border-dashed group hover:bg-white hover:border-solid hover:shadow-2xl transition-all animate-in fade-in zoom-in duration-500">
+                  <div className="flex items-center gap-6 md:gap-8">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white flex items-center justify-center border-4 border-accent text-accent shadow-xl group-hover:scale-110 transition-transform">
+                      <Palmtree className="w-8 h-8 md:w-10 md:h-10" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-black text-xl md:text-2xl text-primary tracking-tight">{t.dashboard.nextStepLife}</p>
+                      <p className="text-sm md:text-md text-muted-foreground font-semibold leading-relaxed max-w-md line-clamp-2">{t.dashboard.nextStepLifeDesc}</p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <p className="font-black text-2xl md:text-3xl text-emerald-800 tracking-tighter">{t.dashboard.nextStepFinished}</p>
-                    <p className="text-md md:text-lg text-emerald-600 font-bold">{t.dashboard.journeyProgress.replace('{progress}', '100')}</p>
+                  <div className="p-3 md:p-4 bg-white rounded-2xl shadow-sm text-accent group-hover:bg-accent group-hover:text-white transition-all shrink-0">
+                    <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
-              </div>
+              </Link>
             )}
           </CardContent>
         </Card>

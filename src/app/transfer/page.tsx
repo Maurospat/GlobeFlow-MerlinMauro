@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageContext';
 import { useCase } from '@/components/CaseContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
@@ -23,7 +24,8 @@ import {
   Waves,
   Lock,
   ArrowRight,
-  Calculator
+  Calculator,
+  LayoutDashboard
 } from 'lucide-react';
 import { initialTransfer, TransferStatus } from '@/app/data/mockData';
 import { toast } from '@/hooks/use-toast';
@@ -442,12 +444,20 @@ export default function AssetTransferPage() {
                   <ArrowRight className="ml-6 w-8 h-8 group-hover:translate-x-3 transition-transform" />
                 </Button>
               ) : isAllFinished ? (
-                <div className="p-10 bg-emerald-50 rounded-[2.5rem] border-4 border-emerald-500 text-center space-y-4 animate-in zoom-in">
-                  <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto text-white shadow-xl shadow-emerald-200">
-                    <CheckCircle2 className="w-12 h-12" />
+                <div className="p-10 bg-emerald-50 rounded-[2.5rem] border-4 border-emerald-500 text-center space-y-6 animate-in zoom-in shadow-2xl shadow-emerald-200">
+                  <div className="space-y-4">
+                    <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto text-white shadow-xl">
+                      <CheckCircle2 className="w-12 h-12" />
+                    </div>
+                    <h4 className="text-3xl font-black text-emerald-900 tracking-tighter uppercase">{language === 'de' ? 'Abgeschlossen' : 'Completed'}</h4>
+                    <p className="text-emerald-700 font-bold">{language === 'de' ? 'Ihr Kapital ist sicher verbucht.' : 'Your capital is safely reconciled.'}</p>
                   </div>
-                  <h4 className="text-3xl font-black text-emerald-900 tracking-tighter uppercase">{language === 'de' ? 'Abgeschlossen' : 'Completed'}</h4>
-                  <p className="text-emerald-700 font-bold">{language === 'de' ? 'Ihr Kapital ist sicher verbucht.' : 'Your capital is safely reconciled.'}</p>
+                  <Link href="/dashboard" className="block">
+                    <Button variant="outline" className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-100 h-14 font-black rounded-xl gap-3">
+                      <LayoutDashboard className="w-5 h-5" />
+                      {t.common.returnDashboard}
+                    </Button>
+                  </Link>
                 </div>
               ) : (
                 <div className="p-10 bg-slate-50 rounded-[2.5rem] border-4 border-dashed border-slate-200 flex flex-col items-center gap-4">
