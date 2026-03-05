@@ -19,7 +19,10 @@ import {
   ShieldCheck,
   AlertCircle,
   Eraser,
-  Waves
+  Waves,
+  Lock,
+  ArrowRight,
+  Calculator
 } from 'lucide-react';
 import { initialTransfer, TransferStatus } from '@/app/data/mockData';
 import { toast } from '@/hooks/use-toast';
@@ -138,7 +141,7 @@ export default function AssetTransferPage() {
       setIsStarting(false);
       toast({
         title: language === 'de' ? 'Überprüfung eingeleitet' : 'Review initiated',
-        description: language === 'de' ? 'Ihre Bankdaten werden nun geprüft.' : 'Your bank details are now being reviewed.',
+        description: language === 'de' ? 'Ihre Bankdaten werden nun geprüft. Der nächste Schritt ist nun verfügbar.' : 'Your bank details are now being reviewed. The next step is now available.',
       });
     }, 800);
   };
@@ -194,299 +197,288 @@ export default function AssetTransferPage() {
     return 'pending';
   };
 
-  const isReadOnly = transferStatus !== 'not_started';
+  // Progression logic
+  const isBankStepActive = transferStatus === 'not_started';
+  const isPoAStepActive = transferStatus === 'in_review';
+  const isFinalStepActive = transferStatus === 'in_transit';
+  const isAllFinished = transferStatus === 'completed';
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto animate-in fade-in duration-300 pb-24">
-      <header className="space-y-2">
-        <h1 className="text-4xl font-headline font-black text-primary tracking-tighter uppercase">{t.transfer.title}</h1>
-        <p className="text-lg text-muted-foreground font-medium">{t.transfer.subtitle}</p>
+    <div className="space-y-12 max-w-6xl mx-auto animate-in fade-in duration-300 pb-24">
+      <header className="space-y-4">
+        <h1 className="text-4xl md:text-5xl font-headline font-black text-primary tracking-tighter uppercase">{t.transfer.title}</h1>
+        <p className="text-xl text-muted-foreground font-medium max-w-3xl">{t.transfer.subtitle}</p>
       </header>
 
-      {/* Success Banner */}
-      {isPoASigned && transferStatus !== 'completed' && (
-        <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-[2rem] flex items-center gap-6 animate-in fade-in slide-in-from-top-4 shadow-sm">
-          <div className="p-3 bg-white rounded-2xl shadow-sm">
-            <ShieldCheck className="w-8 h-8 text-emerald-600" />
-          </div>
-          <div className="space-y-1">
-            <p className="font-black text-emerald-900 text-lg">{t.transfer.poa.success}</p>
-            <p className="text-sm text-emerald-700 font-bold uppercase tracking-widest">Transaction ID: <span className="font-mono text-emerald-900">TX-9283-ID-GF</span></p>
-          </div>
-        </div>
-      )}
-
-      {/* Progress Tracker */}
-      <Card className="glass-card border-none batik-pattern p-1 shadow-2xl">
-        <CardContent className="p-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-            <div>
-              <CardTitle className="text-2xl font-black tracking-tighter uppercase">{t.transfer.status}</CardTitle>
-              <CardDescription className="font-mono font-bold text-primary/40">TX-9283-ID-GF</CardDescription>
+      {/* Vertical Guided Flow */}
+      <div className="space-y-12">
+        
+        {/* Step 1: Bank Information & Scope */}
+        <section className={cn("transition-all duration-500", !isBankStepActive && "opacity-60 scale-[0.98]")}>
+          <div className="flex items-center gap-6 mb-8">
+            <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black text-2xl shadow-xl transition-all", isBankStepActive ? "bg-primary text-white scale-110" : "bg-emerald-500 text-white")}>
+              {isBankStepActive ? "1" : <CheckCircle2 className="w-8 h-8" />}
             </div>
-            <div className="text-right">
-              <p className="text-lg font-black text-primary tracking-tight">{t.transfer.eta.replace('{days}', initialTransfer.etaDays.toString())}</p>
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t.transfer.arrival.replace('{date}', language === 'de' ? '12. Okt 2024' : 'Oct 12, 2024')}</p>
-            </div>
+            <h2 className="text-3xl font-black tracking-tighter uppercase">{language === 'de' ? 'Bankinformationen & Umfang' : 'Bank Details & Scope'}</h2>
           </div>
 
-          <div className="relative flex justify-between">
-            <div className="absolute top-5 left-[5%] right-[5%] h-1 bg-secondary rounded-full -z-0" />
-            
-            {steps.map((step) => {
-              const status = getStepStatus(step.key);
-              return (
-                <div key={step.key} className="flex flex-col items-center gap-4 flex-1 relative">
-                  <div className={cn(
-                    "w-10 h-10 rounded-full border-4 flex items-center justify-center z-10 transition-all duration-500 shadow-lg",
-                    status === 'completed' ? 'bg-emerald-500 border-emerald-500 text-white' : 
-                    status === 'active' ? 'bg-white border-primary text-primary ring-8 ring-primary/5' : 
-                    'bg-white border-secondary text-slate-200'
-                  )}>
-                    {status === 'completed' ? <CheckCircle2 className="w-6 h-6" /> : <div className={cn("w-3 h-3 rounded-full", status === 'active' ? 'bg-primary' : 'bg-secondary')} />}
-                  </div>
-                  <span className={cn(
-                    "text-[10px] font-black text-center uppercase tracking-[0.2em] transition-colors",
-                    status === 'pending' ? 'text-slate-300' : 'text-primary'
-                  )}>
-                    {step.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid md:grid-cols-2 gap-10">
-        <div className="space-y-10">
-          {/* Source Bank Details */}
-          <Card className="glass-card border-none shadow-xl overflow-hidden">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
-                <Building2 className="w-6 h-6 text-accent" />
-                {t.transfer.sourceBank}
-              </CardTitle>
-              <CardDescription className="font-bold">{language === 'de' ? 'Alle Felder sind erforderlich.' : 'All fields are required.'}</CardDescription>
-            </CardHeader>
-            <CardContent className="p-8 pt-4 space-y-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.institution}</Label>
-                <Input 
-                  value={bankDetails.bankName} 
-                  onChange={(e) => updateBankDetails({ bankName: e.target.value })} 
-                  placeholder="e.g. Royal Bank of London" 
-                  disabled={isReadOnly}
-                  className="h-12 border-secondary font-bold"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.swift}</Label>
+          <div className="grid lg:grid-cols-5 gap-8">
+            <Card className="lg:col-span-3 glass-card border-none shadow-xl batik-pattern p-8">
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t.transfer.sourceBank}</Label>
                   <Input 
-                    value={bankDetails.swift} 
-                    onChange={(e) => updateBankDetails({ swift: e.target.value })} 
-                    placeholder="SWIFT/BIC" 
-                    disabled={isReadOnly}
-                    className="h-12 border-secondary font-bold"
+                    value={bankDetails.bankName} 
+                    onChange={(e) => updateBankDetails({ bankName: e.target.value })} 
+                    placeholder="e.g. Royal Bank of London" 
+                    disabled={!isBankStepActive}
+                    className="h-14 border-secondary font-bold text-lg bg-white/50 focus:bg-white transition-all rounded-xl"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.customerNo}</Label>
-                  <Input 
-                    value={bankDetails.customerNo} 
-                    onChange={(e) => updateBankDetails({ customerNo: e.target.value })} 
-                    placeholder="Account No" 
-                    disabled={isReadOnly}
-                    className="h-12 border-secondary font-bold"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.iban}</Label>
-                <Input 
-                  value={bankDetails.iban} 
-                  onChange={(e) => updateBankDetails({ iban: e.target.value })} 
-                  placeholder="IBAN" 
-                  disabled={isReadOnly}
-                  className="h-12 border-secondary font-bold"
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Transfer Scope */}
-          <Card className="glass-card border-none shadow-xl">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
-                <ArrowRightLeft className="w-6 h-6 text-accent" />
-                {t.transfer.scope.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 pt-4 space-y-4">
-              <div className="grid gap-4">
-                {[
-                  { id: 'cash', label: t.transfer.scope.cash },
-                  { id: 'securities', label: t.transfer.scope.securities },
-                  { id: 'pension', label: t.transfer.scope.pension },
-                  { id: 'total', label: t.transfer.scope.total },
-                ].map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4 p-4 bg-secondary/30 rounded-2xl hover:bg-white transition-all cursor-pointer border border-transparent hover:border-secondary group">
-                    <Checkbox id={item.id} disabled={isReadOnly} className="w-5 h-5 border-2" />
-                    <Label htmlFor={item.id} className="text-sm font-bold cursor-pointer flex-1 group-hover:text-primary transition-colors">{item.label}</Label>
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t.transfer.swift}</Label>
+                    <Input 
+                      value={bankDetails.swift} 
+                      onChange={(e) => updateBankDetails({ swift: e.target.value })} 
+                      placeholder="SWIFT/BIC" 
+                      disabled={!isBankStepActive}
+                      className="h-14 border-secondary font-bold bg-white/50 focus:bg-white transition-all rounded-xl"
+                    />
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-10">
-          {/* Digital Power of Attorney */}
-          <Card className={cn("glass-card border-none shadow-xl transition-opacity", (isPoASigned || transferStatus === 'completed') && "opacity-60")}>
-            <CardHeader className="p-8 pb-4">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
-                  <FileSignature className="w-6 h-6 text-accent" />
-                  {t.transfer.poa.title}
-                </CardTitle>
-                {!isPoASigned && hasSigned && transferStatus !== 'completed' && (
-                  <Button variant="ghost" size="sm" onClick={clearSignature} className="text-[10px] font-black h-8 gap-2 uppercase tracking-widest">
-                    <Eraser className="w-3 h-3" />
-                    {language === 'de' ? 'Löschen' : 'Clear'}
-                  </Button>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent className="p-8 pt-4 space-y-8">
-              <div className="p-6 bg-secondary/20 rounded-[2rem] border border-secondary/50 text-sm leading-relaxed text-primary/80 font-medium italic relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                  <Waves className="w-12 h-12" />
+                  <div className="space-y-4">
+                    <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t.transfer.customerNo}</Label>
+                    <Input 
+                      value={bankDetails.customerNo} 
+                      onChange={(e) => updateBankDetails({ customerNo: e.target.value })} 
+                      placeholder="Account No" 
+                      disabled={!isBankStepActive}
+                      className="h-14 border-secondary font-bold bg-white/50 focus:bg-white transition-all rounded-xl"
+                    />
+                  </div>
                 </div>
-                "{t.transfer.poa.text}"
-              </div>
-              
-              <div className="space-y-4">
-                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{language === 'de' ? 'Digitale Unterschrift' : 'Digital Signature'}</Label>
-                <div className="relative group rounded-[2rem] overflow-hidden border-4 border-secondary bg-white cursor-crosshair shadow-inner transition-all hover:border-primary/20">
-                  <canvas
-                    ref={canvasRef}
-                    width={800}
-                    height={256}
-                    className="w-full h-40 block touch-none"
-                    onMouseDown={startDrawing}
-                    onMouseMove={draw}
-                    onMouseUp={stopDrawing}
-                    onMouseOut={stopDrawing}
-                    onTouchStart={startDrawing}
-                    onTouchMove={draw}
-                    onTouchEnd={stopDrawing}
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t.transfer.iban}</Label>
+                  <Input 
+                    value={bankDetails.iban} 
+                    onChange={(e) => updateBankDetails({ iban: e.target.value })} 
+                    placeholder="IBAN" 
+                    disabled={!isBankStepActive}
+                    className="h-14 border-secondary font-bold bg-white/50 focus:bg-white transition-all rounded-xl"
                   />
-                  {!hasSigned && !isPoASigned && transferStatus !== 'completed' && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-slate-200 text-sm font-black uppercase tracking-[0.2em]">
-                      {language === 'de' ? 'Hier unterschreiben' : 'Sign here'}
+                </div>
+              </div>
+            </Card>
+
+            <div className="lg:col-span-2 space-y-8">
+              <Card className="glass-card border-none shadow-xl p-8">
+                <div className="space-y-6">
+                  <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t.transfer.amount}</Label>
+                  <div className="relative">
+                    <Input 
+                      type="number"
+                      value={bankDetails.amount} 
+                      onChange={(e) => updateBankDetails({ amount: parseFloat(e.target.value) || 0 })}
+                      disabled={!isBankStepActive}
+                      className="h-20 pl-14 font-black text-4xl bg-primary/5 border-none rounded-2xl text-primary" 
+                    />
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-primary/40 text-3xl">$</div>
+                  </div>
+                  
+                  {isBankStepActive && (
+                    <Button 
+                      className="w-full bg-primary hover:bg-primary/90 h-20 text-xl font-black rounded-2xl shadow-2xl shadow-primary/20 transition-all group" 
+                      onClick={handleStartReview}
+                      disabled={isStarting}
+                    >
+                      {isStarting ? <Loader2 className="w-8 h-8 animate-spin mr-4" /> : <Calculator className="w-8 h-8 mr-4" />}
+                      {t.transfer.begin}
+                      <ArrowRight className="ml-4 w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                    </Button>
+                  )}
+                  
+                  {!isBankStepActive && (
+                    <div className="flex items-center gap-4 p-5 bg-emerald-50 rounded-2xl border border-emerald-100">
+                      <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                      <p className="font-bold text-emerald-900">{language === 'de' ? 'Bankdaten bestätigt' : 'Bank details confirmed'}</p>
                     </div>
                   )}
                 </div>
-              </div>
+              </Card>
 
-              <Button 
-                className="w-full bg-primary hover:bg-primary/90 h-16 text-xl font-black rounded-2xl shadow-2xl shadow-primary/10 transition-all" 
-                onClick={handleSignPoA}
-                disabled={isSigning || isPoASigned || transferStatus === 'not_started' || transferStatus === 'completed' || !hasSigned}
-              >
-                {isSigning ? <Loader2 className="w-6 h-6 animate-spin mr-3" /> : <FileSignature className="w-6 h-6 mr-3" />}
-                {t.transfer.poa.sign}
-              </Button>
-              
-              {transferStatus === 'not_started' && (
-                <div className="flex items-center gap-3 text-xs font-bold text-amber-700 bg-amber-50 p-4 rounded-2xl border border-amber-100">
-                  <AlertCircle className="w-5 h-5 shrink-0" />
-                  {language === 'de' ? 'Bitte bestätigen Sie zuerst die Bankdaten.' : 'Please confirm bank details first.'}
+              <Card className="glass-card border-none shadow-xl p-8 bg-slate-50/50">
+                <CardTitle className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] mb-6">{t.transfer.scope.title}</CardTitle>
+                <div className="grid grid-cols-2 gap-4">
+                  {['cash', 'securities', 'pension', 'total'].map((item) => (
+                    <div key={item} className="flex items-center space-x-3">
+                      <Checkbox id={item} disabled={!isBankStepActive} className="w-5 h-5 rounded-lg border-2" />
+                      <Label htmlFor={item} className="text-xs font-bold text-primary/60">{t.transfer.scope[item]}</Label>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Final Action - Setup or Finalize */}
-          <Card className="glass-card border-none shadow-xl overflow-hidden relative">
-            <div className="absolute bottom-0 right-0 w-32 h-32 opacity-5 pointer-events-none translate-x-1/4 translate-y-1/4">
-               <Waves className="w-full h-full text-primary" />
+              </Card>
             </div>
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
-                <ArrowRightLeft className="w-6 h-6 text-accent" />
-                {t.transfer.setup}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 pt-4 space-y-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.amount}</Label>
-                <div className="relative">
-                  <Input 
-                    type="number"
-                    value={bankDetails.amount} 
-                    onChange={(e) => updateBankDetails({ amount: parseFloat(e.target.value) || 0 })}
-                    disabled={isReadOnly}
-                    className="h-14 pl-12 font-black text-2xl bg-secondary/30 border-none rounded-2xl focus-visible:ring-primary/20" 
-                  />
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-primary/40 text-xl">$</div>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-primary/20 text-sm uppercase tracking-widest">USD</div>
+          </div>
+        </section>
+
+        {/* Step 2: Digital Power of Attorney */}
+        <section className={cn("transition-all duration-500", !isPoAStepActive && !isFinalStepActive && !isAllFinished && "opacity-30 grayscale pointer-events-none")}>
+          <div className="flex items-center gap-6 mb-8">
+            <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black text-2xl shadow-xl transition-all", isPoAStepActive ? "bg-primary text-white scale-110" : isBankStepActive ? "bg-slate-200 text-slate-400" : "bg-emerald-500 text-white")}>
+              {isPoASigned ? <CheckCircle2 className="w-8 h-8" /> : "2"}
+            </div>
+            <h2 className="text-3xl font-black tracking-tighter uppercase">{t.transfer.poa.title}</h2>
+          </div>
+
+          <Card className="glass-card border-none shadow-2xl overflow-hidden batik-pattern">
+            <div className="grid lg:grid-cols-2 gap-0">
+              <div className="p-10 md:p-14 space-y-10 bg-primary/5">
+                <div className="space-y-6">
+                  <Badge className="bg-accent text-primary font-black uppercase tracking-widest text-[10px] px-4 py-1.5">Legal Authorization</Badge>
+                  <p className="text-2xl font-black text-primary leading-tight italic">"{t.transfer.poa.text}"</p>
+                  <p className="text-lg text-muted-foreground font-medium leading-relaxed">
+                    {language === 'de' 
+                      ? 'Dies autorisiert GlobeFlow, den Prozess direkt mit Ihrer Hausbank zu koordinieren, um Zeit zu sparen.' 
+                      : 'This authorizes GlobeFlow to coordinate the process directly with your home bank to save you time.'}
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-4 p-6 bg-white rounded-3xl border border-secondary shadow-sm">
+                  <ShieldCheck className="w-10 h-10 text-accent shrink-0" />
+                  <p className="text-sm font-bold text-primary/60 leading-relaxed italic">{t.transfer.guarantee}</p>
                 </div>
               </div>
-              
-              <div className="flex flex-col gap-4 pt-4">
-                {transferStatus === 'not_started' ? (
+
+              <div className="p-10 md:p-14 space-y-10 flex flex-col justify-center">
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center">
+                    <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{language === 'de' ? 'Digitale Unterschrift' : 'Digital Signature'}</Label>
+                    {!isPoASigned && hasSigned && (
+                      <Button variant="ghost" size="sm" onClick={clearSignature} className="text-[10px] font-black h-8 gap-2 uppercase tracking-widest text-rose-500">
+                        <Eraser className="w-3 h-3" />
+                        {language === 'de' ? 'Löschen' : 'Clear'}
+                      </Button>
+                    )}
+                  </div>
+                  
+                  <div className={cn("relative rounded-[2.5rem] overflow-hidden border-4 border-dashed transition-all", isPoAStepActive ? "bg-white border-primary/20 cursor-crosshair hover:border-primary/40" : "bg-slate-100 border-slate-200 cursor-not-allowed")}>
+                    <canvas
+                      ref={canvasRef}
+                      width={800}
+                      height={320}
+                      className="w-full h-48 block touch-none"
+                      onMouseDown={startDrawing}
+                      onMouseMove={draw}
+                      onMouseUp={stopDrawing}
+                      onTouchStart={startDrawing}
+                      onTouchMove={draw}
+                      onTouchEnd={stopDrawing}
+                    />
+                    {!hasSigned && !isPoASigned && (
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-slate-300 text-sm font-black uppercase tracking-[0.3em]">
+                        {language === 'de' ? 'Hier unterschreiben' : 'Sign here'}
+                      </div>
+                    )}
+                    {isPoASigned && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+                        <Badge className="bg-emerald-500 text-white font-black px-6 py-2 text-sm uppercase tracking-widest">{t.common.approved}</Badge>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {!isPoASigned && (
                   <Button 
-                    className="w-full bg-primary hover:bg-primary/90 h-16 text-xl font-black rounded-2xl shadow-2xl shadow-primary/10 transition-all" 
-                    onClick={handleStartReview}
-                    disabled={isStarting}
+                    className="w-full bg-primary hover:bg-primary/90 h-20 text-xl font-black rounded-2xl shadow-2xl shadow-primary/20 transition-all group" 
+                    onClick={handleSignPoA}
+                    disabled={isSigning || !hasSigned || !isPoAStepActive}
                   >
-                    {isStarting && <Loader2 className="w-6 h-6 animate-spin mr-3" />}
-                    {t.transfer.begin}
-                  </Button>
-                ) : transferStatus === 'in_transit' ? (
-                  <Button 
-                    className="w-full bg-accent text-primary hover:bg-accent/90 h-16 text-xl font-black rounded-2xl shadow-2xl shadow-accent/20 transition-all" 
-                    onClick={handleFinalizeTransfer}
-                    disabled={isCompleting}
-                  >
-                    {isCompleting ? <Loader2 className="w-6 h-6 animate-spin mr-3" /> : <CheckCircle2 className="w-6 h-6 mr-3" />}
-                    {language === 'de' ? 'Transfer abschließen' : 'Finalize Transfer'}
-                  </Button>
-                ) : (
-                   <Button 
-                    className="w-full bg-emerald-500 text-white h-16 text-xl font-black rounded-2xl shadow-2xl shadow-emerald-500/20 cursor-default opacity-100" 
-                    disabled
-                  >
-                    <CheckCircle2 className="w-6 h-6 mr-3" />
-                    {transferStatus === 'completed' ? (language === 'de' ? 'Erfolgreich verbucht' : 'Successfully Reconciled') : t.transfer.processing}
+                    {isSigning ? <Loader2 className="w-8 h-8 animate-spin mr-4" /> : <FileSignature className="w-8 h-8 mr-4" />}
+                    {t.transfer.poa.sign}
                   </Button>
                 )}
+                
+                {isPoASigned && (
+                  <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100 text-center animate-in fade-in zoom-in">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-3" />
+                    <p className="font-black text-emerald-900 text-lg">{t.transfer.poa.success}</p>
+                  </div>
+                )}
               </div>
-            </CardContent>
+            </div>
           </Card>
+        </section>
 
-          {/* Cost Transparency */}
-          <Card className="glass-card border-none shadow-xl batik-pattern">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xs font-black flex items-center gap-3 text-muted-foreground uppercase tracking-[0.2em]">
-                <Info className="w-4 h-4 text-accent" />
-                {t.transfer.transparency}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 pt-4">
-              <div className="space-y-2 mb-6">
-                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t.transfer.midMarket}</p>
-                <p className="text-3xl font-black text-primary tracking-tighter">1 USD = 15.650,45 IDR</p>
+        {/* Step 3: Finalize & Summary */}
+        <section className={cn("transition-all duration-500", !isFinalStepActive && !isAllFinished && "opacity-30 grayscale pointer-events-none")}>
+          <div className="flex items-center gap-6 mb-8">
+            <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black text-2xl shadow-xl transition-all", isFinalStepActive ? "bg-primary text-white scale-110" : isAllFinished ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-400")}>
+              {isAllFinished ? <CheckCircle2 className="w-8 h-8" /> : "3"}
+            </div>
+            <h2 className="text-3xl font-black tracking-tighter uppercase">{language === 'de' ? 'Abschluss' : 'Finalize'}</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12">
+            <Card className="ocean-gradient text-white border-none shadow-2xl p-10 flex flex-col justify-between min-h-[300px] rounded-[2.5rem] relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-48 h-48 opacity-10 pointer-events-none">
+                 <Waves className="w-full h-full text-white" />
+               </div>
+               <div className="space-y-6 relative z-10">
+                 <CardTitle className="text-3xl font-black uppercase tracking-tighter">{t.transfer.transparency}</CardTitle>
+                 <div className="space-y-2">
+                   <p className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{t.transfer.midMarket}</p>
+                   <p className="text-5xl font-black text-white tracking-tighter">1 USD = 15.650,45 IDR</p>
+                 </div>
+               </div>
+               <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 relative z-10">
+                 <div className="flex justify-between items-center mb-1">
+                   <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Status</span>
+                   <Badge className="bg-accent text-primary font-black uppercase tracking-widest text-[8px]">{transferStatus.replace('_', ' ')}</Badge>
+                 </div>
+                 <p className="text-lg font-black">{t.transfer.eta.replace('{days}', '3-5')}</p>
+               </div>
+            </Card>
+
+            <div className="flex flex-col justify-center space-y-10">
+              <div className="space-y-6">
+                <h3 className="text-2xl font-black text-primary tracking-tighter uppercase">{language === 'de' ? 'Bereit zum Abschluss?' : 'Ready to Finalize?'}</h3>
+                <p className="text-lg text-muted-foreground font-medium leading-relaxed">
+                  {language === 'de' 
+                    ? 'Sobald Sie den Transfer abschließen, wird unser Team die Mittelabgleichung einleiten. Dies ist der finale Schritt für Ihren Umzug.' 
+                    : 'Once you finalize the transfer, our team will initiate the capital reconciliation. This is the final step for your relocation.'}
+                </p>
               </div>
-              <div className="p-5 bg-white rounded-2xl text-[10px] font-bold text-muted-foreground border-2 border-secondary italic leading-relaxed">
-                "{t.transfer.guarantee}"
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+
+              {isFinalStepActive ? (
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90 h-24 text-2xl font-black rounded-3xl shadow-[0_20px_60px_rgba(26,60,69,0.3)] transition-all group" 
+                  onClick={handleFinalizeTransfer}
+                  disabled={isCompleting}
+                >
+                  {isCompleting ? <Loader2 className="w-10 h-10 animate-spin mr-6" /> : <ArrowRightLeft className="w-10 h-10 mr-6" />}
+                  {language === 'de' ? 'Transfer jetzt abschließen' : 'Finalize Transfer Now'}
+                  <ArrowRight className="ml-6 w-8 h-8 group-hover:translate-x-3 transition-transform" />
+                </Button>
+              ) : isAllFinished ? (
+                <div className="p-10 bg-emerald-50 rounded-[2.5rem] border-4 border-emerald-500 text-center space-y-4 animate-in zoom-in">
+                  <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto text-white shadow-xl shadow-emerald-200">
+                    <CheckCircle2 className="w-12 h-12" />
+                  </div>
+                  <h4 className="text-3xl font-black text-emerald-900 tracking-tighter uppercase">{language === 'de' ? 'Abgeschlossen' : 'Completed'}</h4>
+                  <p className="text-emerald-700 font-bold">{language === 'de' ? 'Ihr Kapital ist sicher verbucht.' : 'Your capital is safely reconciled.'}</p>
+                </div>
+              ) : (
+                <div className="p-10 bg-slate-50 rounded-[2.5rem] border-4 border-dashed border-slate-200 flex flex-col items-center gap-4">
+                  <Lock className="w-10 h-10 text-slate-300" />
+                  <p className="text-slate-400 font-black uppercase tracking-widest text-sm">{language === 'de' ? 'Gesperrt' : 'Locked'}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   );
 }
+
