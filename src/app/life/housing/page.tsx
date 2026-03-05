@@ -295,13 +295,14 @@ export default function HousingSearch() {
               </CardFooter>
 
               {/* Detailed View Modal Content */}
-              <DialogContent className="max-w-4xl p-0 rounded-[2.5rem] border-none overflow-hidden batik-pattern">
+              <DialogContent className="max-w-4xl p-0 rounded-[2.5rem] border-none overflow-hidden bg-white">
                 <DialogHeader className="sr-only">
                   <DialogTitle>{listing.title}</DialogTitle>
                   <DialogDescription>{listing.description}</DialogDescription>
                 </DialogHeader>
 
-                <div className="grid md:grid-cols-2">
+                <div className="grid md:grid-cols-2 h-full">
+                  {/* Left: Hero Image */}
                   <div className="relative h-full min-h-[400px]">
                     <Image 
                       src={listing.image} 
@@ -311,61 +312,65 @@ export default function HousingSearch() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <div className="absolute bottom-10 left-10 right-10 space-y-4">
-                      <Badge className="bg-accent text-primary font-black uppercase tracking-widest text-[10px] px-4 py-1.5">Premium Listing</Badge>
+                      <Badge className="bg-accent text-primary font-black uppercase tracking-widest text-[10px] px-4 py-1.5 border-none shadow-lg">Premium Listing</Badge>
                       <h3 className="text-4xl font-black text-white tracking-tighter leading-tight">{listing.title}</h3>
                     </div>
                   </div>
 
-                  <div className="p-10 space-y-10 max-h-[90vh] overflow-y-auto no-scrollbar">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
-                        <Badge className="status-badge-neutral font-black px-4 py-1.5 text-[10px] uppercase tracking-widest">{listing.city}</Badge>
-                        <Badge className="bg-emerald-500 text-white font-black px-4 py-1.5 text-[10px] uppercase tracking-widest">Verified Partner</Badge>
+                  {/* Right: Info Area */}
+                  <div className="p-10 space-y-8 max-h-[90vh] overflow-y-auto no-scrollbar bg-white">
+                    <div className="space-y-6">
+                      <div className="flex flex-wrap gap-3">
+                        <Badge className="status-badge-neutral font-black px-4 py-1.5 text-[10px] uppercase tracking-widest border-none">{listing.city}</Badge>
+                        <Badge className="bg-emerald-500 text-white font-black px-4 py-1.5 text-[10px] uppercase tracking-widest border-none shadow-sm">Verified Partner</Badge>
                       </div>
-                      <p className="text-xl text-primary/80 font-medium leading-relaxed italic">
+                      <p className="text-xl text-primary font-semibold leading-relaxed italic">
                         "{listing.description}"
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-6">
-                      <div className="p-6 bg-secondary/50 rounded-3xl border border-secondary text-center space-y-2">
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="p-6 bg-secondary/50 rounded-3xl border border-secondary/50 text-center space-y-2">
                         <Bed className="w-6 h-6 text-accent mx-auto" />
-                        <p className="text-sm font-black text-primary">{listing.beds} {t.life.housing.bed}</p>
+                        <p className="text-sm font-black text-primary uppercase tracking-tight">{listing.beds} {t.life.housing.bed}</p>
                       </div>
-                      <div className="p-6 bg-secondary/50 rounded-3xl border border-secondary text-center space-y-2">
+                      <div className="p-6 bg-secondary/50 rounded-3xl border border-secondary/50 text-center space-y-2">
                         <Bath className="w-6 h-6 text-accent mx-auto" />
-                        <p className="text-sm font-black text-primary">{listing.baths} {t.life.housing.bath}</p>
+                        <p className="text-sm font-black text-primary uppercase tracking-tight">{listing.baths} {t.life.housing.bath}</p>
                       </div>
-                      <div className="p-6 bg-secondary/50 rounded-3xl border border-secondary text-center space-y-2">
+                      <div className="p-6 bg-secondary/50 rounded-3xl border border-secondary/50 text-center space-y-2">
                         <Waves className="w-6 h-6 text-accent mx-auto" />
-                        <p className="text-sm font-black text-primary">{listing.sqm} m²</p>
+                        <p className="text-sm font-black text-primary uppercase tracking-tight">{listing.sqm} m²</p>
                       </div>
                     </div>
 
+                    {/* Amenities */}
                     <div className="space-y-6">
-                      <h4 className="text-lg font-black uppercase tracking-widest text-primary/40">Amenities</h4>
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{language === 'de' ? 'AUSSTATTUNG' : 'AMENITIES'}</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {listing.amenities.map((item, i) => (
                           <div key={i} className="flex items-center gap-3">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                            <span className="font-bold text-primary/70">{item}</span>
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                            <span className="font-bold text-primary text-sm">{item}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="p-8 ocean-gradient rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
+                    {/* Pricing Footer in Modal */}
+                    <div className="p-8 ocean-gradient rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden mt-8">
                       <div className="absolute -right-8 -bottom-8 w-32 h-32 opacity-10 pointer-events-none">
                         <Info className="w-full h-full text-white" />
                       </div>
-                      <div className="flex justify-between items-end relative z-10">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 relative z-10">
                         <div className="space-y-1">
                           <p className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{language === 'de' ? 'Gesamtpreis' : 'Total Price'}</p>
                           <p className="text-4xl font-black text-white tracking-tighter">${listing.price.toLocaleString()}</p>
                           <p className="text-xs text-white/60 font-medium">{language === 'de' ? 'Keine versteckten Gebühren' : 'No hidden fees'}</p>
                         </div>
                         <DialogClose asChild>
-                           <Button className="bg-accent text-primary h-14 px-8 text-lg font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90">
+                           <Button className="w-full sm:w-auto bg-accent text-primary h-14 px-8 text-lg font-black rounded-2xl shadow-2xl shadow-accent/20 hover:bg-accent/90 border-none">
                              {language === 'de' ? 'Besichtigung anfragen' : 'Request Viewing'}
                            </Button>
                         </DialogClose>
